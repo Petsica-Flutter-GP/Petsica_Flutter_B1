@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:petsica/features/registeration/presentation/views/welcome_back.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../../core/utils/app_router.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,17 +15,15 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      navigatetohome();
+      navigateToOnboarding();
     });
   }
 
-  navigatetohome() async {
+  navigateToOnboarding() async {
     await Future.delayed(const Duration(seconds: 3));
 
     if (mounted) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context) {
-        return const WelcomeBack();
-      })));
+      context.go(AppRouter.kOnboarding); // ✅ الانتقال إلى شاشة الـ Onboarding
     }
   }
 
@@ -33,7 +32,12 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Image.asset('assets/images/splash.png', width: double.infinity),
+        child: Image.asset(
+          'assets/images/splash.png',
+          width: MediaQuery.of(context).size.width * 0.8, // ✅ تقليل العرض
+          height: MediaQuery.of(context).size.height * 0.5, // ✅ تقليل الارتفاع
+          fit: BoxFit.contain, // ✅ الحفاظ على الأبعاد الأصلية للصورة
+        ),
       ),
     );
   }

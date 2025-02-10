@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../../core/constants.dart';
 import '../../../../../core/utils/styles.dart';
 
-class Log_Sign extends StatelessWidget {
-  const Log_Sign({super.key, required this.text1, required this.text2});
+class LogSign extends StatelessWidget {
+  const LogSign({super.key, required this.text1, required this.text2});
   final String text1;
   final String text2;
   @override

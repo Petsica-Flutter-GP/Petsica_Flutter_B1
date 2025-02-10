@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-
 import 'widgets/welcome_back_body.dart';
 
 class WelcomeBack extends StatelessWidget {
-  const WelcomeBack({super.key});
+  final String selectedOption; // ✅ استلام الخيار المختار
+
+  const WelcomeBack({super.key, required this.selectedOption});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: WelcomeBackBody(),
+    return Scaffold(
+      body: WelcomeBackBody(selectedOption: selectedOption), // ✅ تمريره للـ Body
     );
   }
 }
