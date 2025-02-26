@@ -5,14 +5,14 @@ import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/who/presentation/views/widgets/who_are_you_box.dart';
 
-class WhoBody extends StatefulWidget {
-  const WhoBody({super.key});
+class WhoViewBody extends StatefulWidget {
+  const WhoViewBody({super.key});
 
   @override
-  State<WhoBody> createState() => _WhoBodyState();
+  State<WhoViewBody> createState() => _WhoViewBodyState();
 }
 
-class _WhoBodyState extends State<WhoBody> {
+class _WhoViewBodyState extends State<WhoViewBody> {
   String? selectedOption;
 
   void _navigateToWelcomeBack(String option) {
@@ -20,7 +20,8 @@ class _WhoBodyState extends State<WhoBody> {
       selectedOption = option;
     });
 
-    context.go(AppRouter.kWelcomeBack, extra: option); // ✅ الانتقال إلى WelcomeBack
+    context.go(AppRouter.kWelcomeBack,
+        extra: option); // ✅ الانتقال إلى WelcomeBack
   }
 
   @override
