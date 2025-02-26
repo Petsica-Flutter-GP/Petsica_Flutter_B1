@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_router.dart';
-import 'package:petsica/features/splash/presentation/views/widgets/splach_screen.dart';
-import 'package:petsica/features/who/presentation/views/who.dart';
 
 void main() {
-  runApp(const Petsica());
+  runApp(
+    DevicePreview(
+      enabled: false, // تفعيل معاينة الجهاز
+      builder: (context) => const Petsica(),
+    ),
+  );
 }
 
 class Petsica extends StatelessWidget {
@@ -17,12 +21,13 @@ class Petsica extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routerConfig: AppRouter.router,
 
+      // دعم Device Preview
+      builder: DevicePreview.appBuilder,
+      useInheritedMediaQuery: true,
+
       theme: ThemeData(
         scaffoldBackgroundColor: kAppColor,
       ),
-
     );
   }
 }
-
-

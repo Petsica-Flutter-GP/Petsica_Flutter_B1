@@ -9,12 +9,15 @@ environment:
   sdk: ^3.5.1
 
 dependencies:
+  device_preview: ^1.2.0
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.14.3
   flutter_native_splash: ^2.4.4
+  flutter_profile_picture: ^2.0.0
   go_router: ^14.8.0
   google_fonts: ^6.2.1
+  shared_preferences_android: ^2.4.6
 
 dev_dependencies:
   flutter_lints: ^4.0.0
