@@ -19,7 +19,7 @@
             "name": "petsica (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "debug"
         }
     ]
 }
