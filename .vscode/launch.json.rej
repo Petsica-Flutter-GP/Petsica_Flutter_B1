@@ -1,0 +1,11 @@
+diff a/.vscode/launch.json b/.vscode/launch.json	(rejected hunks)
+@@ -19,7 +19,7 @@
+             "name": "petsica (release mode)",
+             "request": "launch",
+             "type": "dart",
+-            "flutterMode": "release"
++            "flutterMode": "debug"
+         }
+     ]
+ }
+\ No newline at end of file
