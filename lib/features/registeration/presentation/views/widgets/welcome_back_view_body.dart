@@ -81,6 +81,7 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
           ),
         ],
       ),
+    
     );
   }
 }
