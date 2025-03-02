@@ -1,8 +1,8 @@
 import 'package:go_router/go_router.dart';
-import 'package:petsica/features/signup/presentation/views/widgets/clinic/clinic_signup_view.dart';
-import 'package:petsica/features/signup/presentation/views/widgets/seller/seller_signup_view.dart';
-import 'package:petsica/features/signup/presentation/views/widgets/sitter/sitter_signup_view.dart';
-import 'package:petsica/features/signup/presentation/views/widgets/user/user_signup_view.dart';
+import 'package:petsica/features/signup/presentation/widgets/clinic/clinic_signup_view.dart';
+import 'package:petsica/features/signup/presentation/widgets/seller/seller_signup_view.dart';
+import 'package:petsica/features/signup/presentation/widgets/sitter/sitter_signup_view.dart';
+import 'package:petsica/features/signup/presentation/widgets/user/user_signup_view.dart';
 
 import 'package:petsica/features/splash/presentation/views/widgets/splach_screen.dart';
 import 'package:petsica/features/onboarding/presentation/views/onboarding.dart';

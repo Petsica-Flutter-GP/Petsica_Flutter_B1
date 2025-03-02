@@ -7,16 +7,16 @@ import 'package:petsica/features/registeration/presentation/views/widgets/passwo
 
 import '../../../../../core/constants.dart';
 
-class WelcomeBackViewBody extends StatefulWidget {
+class WelcomeBackBody extends StatefulWidget {
   final String selectedOption; // ✅ استقبال الخيار المختار
 
-  const WelcomeBackViewBody({super.key, required this.selectedOption});
+  const WelcomeBackBody({super.key, required this.selectedOption});
 
   @override
-  State<WelcomeBackViewBody> createState() => _WelcomeBackViewBodyState();
+  State<WelcomeBackBody> createState() => _WelcomeBackBodyState();
 }
 
-class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
+class _WelcomeBackBodyState extends State<WelcomeBackBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,17 +71,17 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
                     const SizedBox(height: 33),
                     const AppButton(text: "Login"),
                     SignupWord(
-                        text1: "Don’t have an account?",
-                        text2: "Sign Up",
-                        userType: widget.selectedOption),
+                      text1: "Don’t have an account?",
+                      text2: "Sign Up",
+                      userType: widget.selectedOption,
+                    ),
                   ],
                 ),
               ),
             ),
-          ),
+          )
         ],
       ),
-    
     );
   }
 }

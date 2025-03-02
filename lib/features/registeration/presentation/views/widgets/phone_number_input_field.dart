@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../../../../core/constants.dart';
-
-class InputField extends StatelessWidget {
-  const InputField({super.key, required this.label});
+import 'package:petsica/core/constants.dart';
+//added
+class PhoneNumberInputField extends StatelessWidget {
   final String label;
+  final TextInputType? inputType;
+  final List<TextInputFormatter>? inputFormatters;
+  final int? maxLength;
+
+  const PhoneNumberInputField({
+    super.key,
+    required this.label,
+    this.inputType,
+    this.inputFormatters,
+    this.maxLength,
+  });
+
   @override
   Widget build(BuildContext context) {
     return TextField(
+      keyboardType: inputType ?? TextInputType.text,
+      inputFormatters: inputFormatters,
+      maxLength: maxLength,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: GoogleFonts.comfortaa(
-          // ✅ تصحيح الخطأ هنا
           fontSize: 16,
           fontWeight: FontWeight.normal,
           color: kInputWordColor, // ✅ اللون الافتراضي
@@ -36,6 +49,14 @@ class InputField extends StatelessWidget {
             width: 1,
           ),
         ),
+
+        counterText: "", // إخفاء العداد السفلي
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.brown.shade300),
+        ),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
     );
   }
