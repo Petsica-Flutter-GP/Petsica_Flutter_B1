@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petsica/features/signup/presentation/views/widgets/user/user_signup_view_body.dart';
+import 'package:petsica/features/signup/presentation/widgets/user/user_signup_view_body.dart';
 
 class UserSignUpView extends StatelessWidget {
   const UserSignUpView({super.key});

@@ -5,8 +5,8 @@ import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
 
-class LogSign extends StatelessWidget {
-  const LogSign(
+class LoginWord extends StatelessWidget {
+  const LoginWord(
       {super.key,
       required this.text1,
       required this.text2,
@@ -28,15 +28,7 @@ class LogSign extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              if (userType == "Pet Parent") {
-                context.go(AppRouter.kUserSignUp); // ✅ ينتقل بدون تكديس الصفحات
-              } else if (userType == "Pet Sitter") {
-                context.go(AppRouter.kSitterSignUp);
-              } else if (userType == "Pet Seller") {
-                context.go(AppRouter.kSellerSignUp);
-              } else {
-                context.go(AppRouter.kClinicSignUp);
-              }
+              context.go(AppRouter.kWelcomeBack);
             },
             child: Text(
               text2,

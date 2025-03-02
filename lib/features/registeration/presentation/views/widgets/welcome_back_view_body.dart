@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
-import 'package:petsica/features/registeration/presentation/views/widgets/log_or_sign_word.dart';
+import 'package:petsica/features/registeration/presentation/views/widgets/sign_word.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/login_button.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/password_field.dart';
 
@@ -54,7 +54,7 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
                 child: Column(
                   children: [
                     const SizedBox(height: 37),
-                    const InputField(text: 'User name'),
+                    const InputField(label: 'User name'),
                     const SizedBox(height: 29),
                     const PasswordField(text: 'Password'),
                     Align(
@@ -70,7 +70,7 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
                     ),
                     const SizedBox(height: 33),
                     const AppButton(text: "Login"),
-                    LogSign(
+                    SignupWord(
                         text1: "Don’t have an account?",
                         text2: "Sign Up",
                         userType: widget.selectedOption),
@@ -81,6 +81,7 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
           ),
         ],
       ),
+    
     );
   }
 }
