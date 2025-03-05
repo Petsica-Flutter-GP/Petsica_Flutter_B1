@@ -17,7 +17,8 @@ class CircleProfileImagePicker extends StatefulWidget {
   });
 
   @override
-  _CircleProfileImagePickerState createState() => _CircleProfileImagePickerState();
+  _CircleProfileImagePickerState createState() =>
+      _CircleProfileImagePickerState();
 }
 
 class _CircleProfileImagePickerState extends State<CircleProfileImagePicker> {
@@ -33,19 +34,21 @@ class _CircleProfileImagePickerState extends State<CircleProfileImagePicker> {
     try {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
-      setState(() {
-        _profileImage = File(image.path);
-      });
-      widget.onImageSelected(_profileImage);
+
+      final newImage = File(image.path);
+      if (mounted) {
+        setState(() => _profileImage = newImage);
+        widget.onImageSelected(newImage);
+      }
     } catch (error) {
-      print(error);
+      debugPrint("Error picking image: ${error.toString()}");
     }
   }
 
   void _deleteImage() {
-    setState(() {
-      _profileImage = null;
-    });
+    if (_profileImage == null) return;
+
+    setState(() => _profileImage = null);
     widget.onImageSelected(null);
     Navigator.pop(context); // إغلاق النافذة بعد الحذف
   }
@@ -53,35 +56,36 @@ class _CircleProfileImagePickerState extends State<CircleProfileImagePicker> {
   void _showImageSourceDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (context) {
-        return Wrap(
-          children: [
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => Wrap(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.camera_alt),
+            title: const Text('Take a Photo'),
+            onTap: () {
+              Navigator.pop(context);
+              _pickImage(ImageSource.camera);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.photo_library),
+            title: const Text('Upload From Gallery'),
+            onTap: () {
+              Navigator.pop(context);
+              _pickImage(ImageSource.gallery);
+            },
+          ),
+          if (_profileImage != null)
             ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text('Take a Photo'),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.camera);
-              },
+              leading: const Icon(Icons.delete, color: Colors.red),
+              title: const Text('Delete Image',
+                  style: TextStyle(color: Colors.red)),
+              onTap: _deleteImage,
             ),
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: const Text('Upload From Gallery'),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.gallery);
-              },
-            ),
-            if (_profileImage != null)
-              ListTile(
-                leading: const Icon(Icons.delete, color: Colors.red),
-                title: const Text('Delete Image',
-                    style: TextStyle(color: Colors.red)),
-                onTap: _deleteImage,
-              ),
-          ],
-        );
-      },
+        ],
+      ),
     );
   }
 
@@ -106,14 +110,14 @@ class _CircleProfileImagePickerState extends State<CircleProfileImagePicker> {
         Positioned(
           bottom: 0,
           right: 0,
-          child: GestureDetector(
+          child: InkWell(
             onTap: () => _showImageSourceDialog(context),
+            borderRadius: BorderRadius.circular(50),
             child: Container(
               padding: const EdgeInsets.all(5),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
-                // border: Border.all(color: Colors.grey),
               ),
               child: const Icon(
                 Icons.border_color,

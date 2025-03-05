@@ -1,15 +1,15 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:petsica/core/utils/arrow_back.dart';
 import 'package:petsica/core/utils/styles.dart';
+import 'package:petsica/core/utils/snackbar_helper.dart'; // ✅ استيراد SnackbarHelper
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
 import 'package:petsica/features/signup/presentation/widgets/phone_number_input_field.dart';
 import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
 import 'package:petsica/features/signup/presentation/widgets/verification_id_input_field.dart';
 import 'package:petsica/features/signup/presentation/widgets/working_hours_input_field.dart';
-
 import '../../../../../core/constants.dart';
 import '../../../../registeration/presentation/views/widgets/login_button.dart';
 import '../../../../registeration/presentation/views/widgets/login_word.dart';
@@ -24,6 +24,56 @@ class ClinicSignUpViewBody extends StatefulWidget {
 
 class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
   File? _profileImage;
+  File? _verificationImage; // لتخزين صورة التحقق
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) {
+        SnackbarHelper.show(context, "No image selected", isError: true);
+        return;
+      }
+
+      setState(() => _verificationImage = File(image.path));
+
+      // ✅ عرض رسالة نجاح عند اختيار صورة
+      SnackbarHelper.show(context, "Image selected successfully",
+          isError: false);
+    } catch (error) {
+      // ✅ عرض رسالة خطأ عند الفشل في اختيار الصورة
+      SnackbarHelper.show(context, "Error picking image: ${error.toString()}",
+          isError: true);
+    }
+  }
+
+  void _showImageSourceDialog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => Wrap(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.camera_alt),
+            title: const Text('Take a Photo'),
+            onTap: () {
+              Navigator.pop(context);
+              _pickImage(ImageSource.camera);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.photo_library),
+            title: const Text('Upload From Gallery'),
+            onTap: () {
+              Navigator.pop(context);
+              _pickImage(ImageSource.gallery);
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +123,12 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                           setState(() {
                             _profileImage = image;
                           });
+
+                          if (image != null) {
+                            SnackbarHelper.show(
+                                context, "Profile picture updated successfully",
+                                isError: false);
+                          }
                         },
                       ),
                       const SizedBox(height: 20),
@@ -101,7 +157,9 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                       const SizedBox(height: 20),
                       IdField(
                         label: "Verification ID",
-                        onSelectImage: () {},
+                        onSelectImage: () {
+                          _showImageSourceDialog(context);
+                        },
                       ),
                       const SizedBox(height: 20),
                       const InputField(
