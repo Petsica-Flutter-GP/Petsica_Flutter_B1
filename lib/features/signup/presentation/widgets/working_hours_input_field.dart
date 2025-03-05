@@ -86,7 +86,7 @@ class _WorkingHoursFieldState extends State<WorkingHoursField> {
           borderRadius: BorderRadius.circular(10),
         ),
         suffixIcon: IconButton(
-          icon: const Icon(Icons.access_time, color: Colors.black54),
+          icon: const Icon(Icons.access_time, color: kIconsColor),
           onPressed: () async {
             await _selectTime(context, true); // اختيار وقت البداية
             await _selectTime(context, false); // اختيار وقت النهاية
