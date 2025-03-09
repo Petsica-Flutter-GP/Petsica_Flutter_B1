@@ -8,4 +8,5 @@ class AssetData {
   static const oBsitterImage = 'assets/images/oBsitter.png';
   static const oBsellerImage = 'assets/images/oBseller.png';
   static const oBclinicImage = 'assets/images/oBclinic.png';
+  static const productImage = 'assets/images/product.png';
 }
