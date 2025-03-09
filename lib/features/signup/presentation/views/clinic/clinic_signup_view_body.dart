@@ -78,41 +78,44 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         leading: const ArrowBack(),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(
-            child: Column(
-              children: [
-                Text(
-                  "Sign Up",
-                  style: Styles.textStyleQu28.copyWith(color: kWordColor),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    Text(
+                      "Sign Up",
+                      style: Styles.textStyleQu28.copyWith(color: kWordColor),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Please enter the details to continue",
+                      style: Styles.textStyleCom18.copyWith(color: kWordColor),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  "Please enter the details to continue",
-                  style: Styles.textStyleCom18.copyWith(color: kWordColor),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              alignment: Alignment.topCenter,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SingleChildScrollView(
+              const SizedBox(height: 20),
+              Container(
+                width: double.infinity,
+                alignment: Alignment.topCenter,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: [
                       const SizedBox(height: 26),
@@ -182,9 +185,9 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

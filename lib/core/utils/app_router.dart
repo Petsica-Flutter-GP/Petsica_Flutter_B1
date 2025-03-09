@@ -2,14 +2,15 @@ import 'package:go_router/go_router.dart';
 import 'package:petsica/features/signup/presentation/views/seller/seller_signup_view.dart';
 import 'package:petsica/features/signup/presentation/views/user/user_signup_view.dart';
 
-
 import 'package:petsica/features/splash/presentation/views/widgets/splach_screen.dart';
 import 'package:petsica/features/onboarding/presentation/views/onboarding.dart';
 import 'package:petsica/features/registeration/presentation/views/welcome_back_view.dart';
+import 'package:petsica/features/store/views/store_view_body.dart';
 import 'package:petsica/features/who/presentation/views/who_view.dart';
 
 import '../../features/signup/presentation/views/clinic/clinic_signup_view.dart';
 import '../../features/signup/presentation/views/sitter/sitter_signup_view.dart';
+import '../../features/store/store_view.dart';
 
 abstract class AppRouter {
   static const kOnboarding = '/onboarding';
@@ -19,10 +20,16 @@ abstract class AppRouter {
   static const kClinicSignUp = '/clinicSignUp';
   static const kSitterSignUp = '/sitterSignUp';
   static const kSellerSignUp = '/sellerSignUp';
+  static const kStore = '/store';
 
   static final router = GoRouter(
-    initialLocation: '/', // البداية من SplashScreen
+    // initialLocation: '/', // البداية من SplashScreen
+    initialLocation: kStore,
     routes: [
+      GoRoute(
+        path: kStore,
+        builder: (context, state) => const StoreView(),
+      ),
       GoRoute(
         path: '/',
         builder: (context, state) => const SplashScreen(),
