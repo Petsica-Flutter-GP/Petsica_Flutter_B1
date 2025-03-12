@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsica/core/utils/app_router.dart';
 
-class ArrowBack extends StatelessWidget {
-  const ArrowBack({
+class SignUpArrowBack extends StatelessWidget {
+  const SignUpArrowBack({
     super.key,
   });
 
