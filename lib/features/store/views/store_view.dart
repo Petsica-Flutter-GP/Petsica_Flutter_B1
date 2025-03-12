@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petsica/features/store/views/store_view_body.dart';
+import 'package:petsica/features/store/widgets/store_view_body.dart';
 
 class StoreView extends StatelessWidget {
   const StoreView({super.key});

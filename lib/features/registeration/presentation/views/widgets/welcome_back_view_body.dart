@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/sign_word.dart';
-import 'package:petsica/features/registeration/presentation/views/widgets/login_button.dart';
+import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/password_field.dart';
 
 import '../../../../../core/constants.dart';
@@ -69,7 +69,7 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
                       ),
                     ),
                     const SizedBox(height: 33),
-                    const AppButton(text: "Login"),
+                     AppButton(text: "Login",border: 20,),
                     SignupWord(
                         text1: "Don’t have an account?",
                         text2: "Sign Up",

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:petsica/core/utils/arrow_back.dart';
+import 'package:petsica/core/utils/sign_up_arrow_back.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
 import 'package:petsica/features/signup/presentation/widgets/phone_number_input_field.dart';
@@ -8,7 +8,7 @@ import 'package:petsica/features/signup/presentation/widgets/circle_image_picker
 import 'package:petsica/features/signup/presentation/widgets/verification_id_input_field.dart';
 
 import '../../../../../core/constants.dart';
-import '../../../../registeration/presentation/views/widgets/login_button.dart';
+import '../../../../../core/utils/app_button.dart';
 import '../../../../registeration/presentation/views/widgets/login_word.dart';
 import '../../../../registeration/presentation/views/widgets/password_field.dart';
 
@@ -27,7 +27,7 @@ class _SellerSignUpViewBodyState extends State<SellerSignUpViewBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: const ArrowBack(),
+        leading: const SignUpArrowBack(),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(), // تمرير سلس
@@ -88,7 +88,7 @@ class _SellerSignUpViewBodyState extends State<SellerSignUpViewBody> {
                     const SizedBox(height: 20),
                     const PasswordField(text: 'Confirm password'),
                     const SizedBox(height: 20),
-                    const AppButton(text: "Create Account"),
+                     AppButton(text: "Create Account",border: 20,),
                     const LoginWord(
                       text1: 'Already have an account?',
                       text2: 'Login',

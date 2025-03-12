@@ -36,12 +36,16 @@ class ProductCard extends StatelessWidget {
               child: Center(
                 child: Container(
                   width: 160,
-                  height: 160,
+                  height: 140,
                   decoration: BoxDecoration(
+                    // border: Border.all(
+                    //   color: Colors.grey, // لون الحدود
+                    //   width: 2, // سماكة الحدود
+                    // ),
                     borderRadius: BorderRadius.circular(8),
                     image: const DecorationImage(
                       image: AssetImage(AssetData.productImage),
-                      fit: BoxFit.fill,
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:petsica/core/constants.dart';
-import 'package:petsica/core/utils/asset_data.dart';
+import 'package:go_router/go_router.dart';
+import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/store/widgets/product_card.dart';
+import 'package:petsica/features/store/views/product_details_view.dart';
 
+import '../../../core/utils/asset_data.dart';
 import '../widgets/category_drawer.dart';
 
 class StoreViewBody extends StatelessWidget {
@@ -13,7 +15,15 @@ class StoreViewBody extends StatelessWidget {
     "Product Name 1",
     "Product Name 2",
     "Product Name 3",
-    "Product Name 4"
+    "Product Name 4",
+    "Product Name 5",
+    "Product Name 6",
+    "Product Name 7",
+    "Product Name 8",
+    "Product Name 9",
+    "Product Name 10",
+    "Product Name 11",
+    "Product Name 12",
   ];
 
   @override
@@ -48,12 +58,26 @@ class StoreViewBody extends StatelessWidget {
           itemCount: products.length,
           itemBuilder: (context, index) {
             return GestureDetector(
-              onTap: () {},
+              onTap: () {
+                GoRouter.of(context).go(
+                  AppRouter.kProductDetails,
+                  extra: {
+                    "name": products[index], // اسم المنتج (مؤقتًا)
+                    "price": "\$500", // السعر (قيمة تجريبية)
+                    "image": AssetData.productImage // صورة المنتج من الأصول
+                  },
+                );
+              },
               child: ProductCard(productName: products[index]),
             );
           },
         ),
       ),
+    );
+  }
+}
+
+
       // bottomNavigationBar: BottomNavigationBar(
       //   type: BottomNavigationBarType.fixed,
       //   items: const [
@@ -67,6 +91,3 @@ class StoreViewBody extends StatelessWidget {
       //         icon: Icon(Icons.notifications), label: "Alarm"),
       //   ],
       // ),
-    );
-  }
-}
