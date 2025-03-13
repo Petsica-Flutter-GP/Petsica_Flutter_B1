@@ -1,19 +1,16 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:petsica/core/utils/arrow_back.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
-import 'package:petsica/features/signup/presentation/widgets/phone_number_input_field.dart';
 import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
-import 'package:petsica/features/signup/presentation/widgets/verification_id_input_field.dart';
-import 'package:petsica/features/signup/presentation/widgets/working_hours_input_field.dart';
-
-import '../../../../../core/constants.dart';
 import '../../../../registeration/presentation/views/widgets/login_button.dart';
 import '../../../../registeration/presentation/views/widgets/login_word.dart';
 import '../../../../registeration/presentation/views/widgets/password_field.dart';
+import '../../../../../core/constants.dart';
+
+// Import the API service
+import 'package:petsica/services/auth_service_user.dart';
 
 class UserSignUpViewBody extends StatefulWidget {
   const UserSignUpViewBody({super.key});
@@ -24,6 +21,44 @@ class UserSignUpViewBody extends StatefulWidget {
 
 class _UserSignUpViewBodyState extends State<UserSignUpViewBody> {
   File? _profileImage;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  Future<void> _signUpUser() async {
+    String email = _emailController.text.trim();
+    String username = _usernameController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if (email.isEmpty || username.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("All fields are required")),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final result = await AuthService.registerUser(
+      email: email,
+      userName: username,
+      password: password,
+    );
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(result["message"]),
+        backgroundColor: result["success"] ? Colors.green : Colors.red,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,15 +111,29 @@ class _UserSignUpViewBodyState extends State<UserSignUpViewBody> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      const InputField(label: 'Email address'),
+                      InputField(
+                        label: 'Email address',
+                        controller: _emailController, // ✅ Added controller
+                      ),
                       const SizedBox(height: 20),
-                      const InputField(label: "User Name"),
+                      InputField(
+                        label: "User Name",
+                        controller: _usernameController, // ✅ Added controller
+                      ),
                       const SizedBox(height: 20),
-                      const PasswordField(text: 'Password'),
+                      PasswordField(
+                        text: 'Password',
+                        controller: _passwordController, // ✅ Added controller
+                      ),
                       const SizedBox(height: 20),
-                      const PasswordField(text: 'Confirm password'),
+                      _isLoading
+                          ? const CircularProgressIndicator()
+                          : AppButton(
+                              text: "Create Account",
+                              border: 20, 
+                              onTap: _signUpUser, // ✅ Uses onPressed
+                            ),
                       const SizedBox(height: 20),
-                      const AppButton(text: "Create Account"),
                       const LoginWord(
                         text1: 'Already have an account?',
                         text2: 'Login',

@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../../../../core/constants.dart';
 
 class InputField extends StatelessWidget {
   final String label;
-  final Widget? icon; // 🆕 جعل الأيقونة اختيارية
+  final TextEditingController? controller; // ✅ Added controller
+  final Widget? icon; // ✅ Optional icon
+  final bool isPassword; // ✅ Support password fields
+  final TextInputType keyboardType; // ✅ Allow different keyboard types
 
   const InputField({
     super.key,
     required this.label,
-    this.icon, // 🆕 إضافة معامل اختياري للأيقونة
+    this.controller,
+    this.icon,
+    this.isPassword = false, // Default: not a password field
+    this.keyboardType = TextInputType.text, // Default: normal text input
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller, // ✅ Attach controller
+      keyboardType: keyboardType, // ✅ Set keyboard type
+      obscureText: isPassword, // ✅ Hide text if password
       decoration: InputDecoration(
         labelText: label,
         labelStyle: GoogleFonts.comfortaa(
@@ -42,7 +50,7 @@ class InputField extends StatelessWidget {
             width: 1,
           ),
         ),
-        suffixIcon: icon, 
+        suffixIcon: icon, // ✅ Show optional icon
       ),
     );
   }

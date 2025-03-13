@@ -5,25 +5,27 @@ import 'package:petsica/core/constants.dart';
 
 class PhoneNumberInputField extends StatelessWidget {
   final String label;
+  final TextEditingController? controller; // ✅ Added controller
   final TextInputType? inputType;
   final List<TextInputFormatter>? inputFormatters;
   final int? maxLength;
-  final VoidCallback?
-      onPhoneIconPressed; // دالة يتم تمريرها عند الضغط على الأيقونة
+  final VoidCallback? onPhoneIconPressed; // ✅ Handles phone icon press
 
   const PhoneNumberInputField({
     super.key,
     required this.label,
+    this.controller, // ✅ Accept controller
     this.inputType,
     this.inputFormatters,
     this.maxLength,
-    this.onPhoneIconPressed, // استقبال الدالة
+    this.onPhoneIconPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      keyboardType: inputType ?? TextInputType.text,
+      controller: controller, // ✅ Use controller
+      keyboardType: inputType ?? TextInputType.phone,
       inputFormatters: inputFormatters,
       maxLength: maxLength,
       decoration: InputDecoration(
@@ -57,13 +59,12 @@ class PhoneNumberInputField extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.brown.shade300),
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
 
-        // ✅ إضافة أيقونة الهاتف
+        // ✅ Phone icon button
         suffixIcon: IconButton(
           icon: const Icon(Icons.phone, color: kIconsColor),
-          onPressed: onPhoneIconPressed, // تنفيذ الدالة عند الضغط
+          onPressed: onPhoneIconPressed, // ✅ Trigger callback
         ),
       ),
     );

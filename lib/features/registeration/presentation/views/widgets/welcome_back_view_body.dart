@@ -69,7 +69,7 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
                       ),
                     ),
                     const SizedBox(height: 33),
-                    const AppButton(text: "Login"),
+                    const AppButton(text: "Login", border: 20,),
                     SignupWord(
                         text1: "Don’t have an account?",
                         text2: "Sign Up",

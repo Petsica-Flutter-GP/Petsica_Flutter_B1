@@ -1,22 +1,34 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../core/constants.dart';
-import '../../../../../core/utils/styles.dart';
+import 'package:petsica/core/constants.dart';
+import 'package:petsica/core/utils/styles.dart';
 
 class AppButton extends StatelessWidget {
-  const AppButton({super.key, required this.text});
+  const AppButton({
+    super.key,
+    required this.text,
+    required this.border,
+    this.onTap,
+    this.width, // عرض الزر
+    this.height, // ارتفاع الزر
+  });
 
   final String text;
+  final double border;
+  final double? width;
+  final double? height;
+  final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 262,
+      width: width ?? 262,
+      height: height,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: onTap ?? () {},
         style: ElevatedButton.styleFrom(
           backgroundColor: kBurgColor, // لون الزر
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(border),
           ),
           padding: const EdgeInsets.symmetric(vertical: 16),
         ),
