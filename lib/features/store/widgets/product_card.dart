@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:petsica/core/utils/styles.dart';
+import 'package:petsica/features/store/widgets/image_box.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/utils/asset_data.dart';
@@ -32,25 +33,7 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Center(
-                child: Container(
-                  width: 160,
-                  height: 140,
-                  decoration: BoxDecoration(
-                    // border: Border.all(
-                    //   color: Colors.grey, // لون الحدود
-                    //   width: 2, // سماكة الحدود
-                    // ),
-                    borderRadius: BorderRadius.circular(8),
-                    image: const DecorationImage(
-                      image: AssetImage(AssetData.productImage),
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+ImageBox(imagePath: "assets/images/product1.png"), // 🟢 تمرير الصورة ديناميكيًا
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(

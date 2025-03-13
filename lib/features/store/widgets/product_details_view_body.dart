@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:petsica/core/utils/app_button.dart';
+import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/features/store/widgets/product_card.dart';
 import '../../../core/constants.dart';
 import '../../../core/utils/asset_data.dart';
@@ -107,7 +109,12 @@ class ProductDetailsViewBody extends StatelessWidget {
                     AppButton(
                       text: 'Add To Cart',
                       border: 10,
-                      onTap: () {},
+                      onTap: () {
+                         GoRouter.of(context).go(
+                  AppRouter.kCheckOut,
+                  
+                );
+                      },
                     ),
                     const SizedBox(height: 20),
                   ],
