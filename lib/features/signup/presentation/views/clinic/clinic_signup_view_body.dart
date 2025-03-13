@@ -158,7 +158,7 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      IdField(
+                      VerificationIdInputField(
                         label: "Verification ID",
                         onSelectImage: () {
                           _showImageSourceDialog(context);
@@ -174,7 +174,10 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                       const SizedBox(height: 20),
                       const PasswordField(text: 'Confirm password'),
                       const SizedBox(height: 20),
-                       AppButton(text: "Create Account",border: 20,),
+                      const AppButton(
+                        text: "Create Account",
+                        border: 20,
+                      ),
                       const LoginWord(
                         text1: 'Already have an account?',
                         text2: 'Login',

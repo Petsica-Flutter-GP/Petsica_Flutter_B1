@@ -6,9 +6,7 @@ import 'package:petsica/features/registeration/presentation/views/widgets/input_
 import 'package:petsica/features/signup/presentation/widgets/phone_number_input_field.dart';
 import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
 import 'package:petsica/features/signup/presentation/widgets/verification_id_input_field.dart';
-
 import '../../../../../core/constants.dart';
-import '../../../../../core/utils/app_button.dart';
 import '../../../../registeration/presentation/views/widgets/login_word.dart';
 import '../../../../registeration/presentation/views/widgets/password_field.dart';
 
@@ -21,6 +19,71 @@ class SitterSignUpViewBody extends StatefulWidget {
 
 class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
   File? _profileImage;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  bool _isLoading = false;
+
+  Future<void> _signUpSitter() async {
+    print("Attempting sitter sign-up...");
+    String email = _emailController.text.trim();
+    String username = _usernameController.text.trim();
+    String phone = _phoneController.text.trim();
+    String nationalId = _idController.text.trim();
+    String location = _locationController.text.trim();
+    String password = _passwordController.text.trim();
+    String confirmPassword = _confirmPasswordController.text.trim();
+
+    if (email.isEmpty ||
+        username.isEmpty ||
+        phone.isEmpty ||
+        nationalId.isEmpty ||
+        location.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("All fields are required")),
+      );
+      return;
+    }
+
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Passwords do not match")),
+      );
+      return;
+    }
+
+    try {
+      setState(() => _isLoading = true);
+
+      final result = await AuthService.registerSitter(
+        email: email,
+        userName: username,
+        phone: phone,
+        nationalId: nationalId,
+        location: location,
+        password: password,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(result["message"]),
+            backgroundColor: result["success"] ? Colors.green : Colors.red),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e"), backgroundColor: Colors.red),
+      );
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +101,11 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
             Center(
               child: Column(
                 children: [
-                  Text(
-                    "Sign Up",
-                    style: Styles.textStyleQu28.copyWith(color: kWordColor),
-                  ),
+                  Text("Sign Up",
+                      style: Styles.textStyleQu28.copyWith(color: kWordColor)),
                   const SizedBox(height: 8),
-                  Text(
-                    "Please enter the details to continue",
-                    style: Styles.textStyleCom18.copyWith(color: kWordColor),
-                  ),
+                  Text("Please enter the details to continue",
+                      style: Styles.textStyleCom18.copyWith(color: kWordColor)),
                 ],
               ),
             ),
@@ -66,41 +125,48 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
                       name: 'user',
                       image: _profileImage,
                       onImageSelected: (File? image) {
-                        setState(() {
-                          _profileImage = image;
-                        });
+                        setState(() => _profileImage = image);
                       },
                     ),
                     const SizedBox(height: 20),
-                    const InputField(label: 'Email address'),
+                    InputField(
+                        label: 'Email address', controller: _emailController),
                     const SizedBox(height: 20),
-                    const InputField(label: "User Name"),
+                    InputField(
+                        label: "User Name", controller: _usernameController),
                     const SizedBox(height: 20),
-                    const PhoneNumberInputField(label: 'Phone number'),
+                    PhoneNumberInputField(
+                        label: 'Phone number', controller: _phoneController),
                     const SizedBox(height: 20),
-                    IdField(
-                      label: 'National ID',
-                      onSelectImage: () {},
-                    ),
+                    VerificationIdInputField(
+                        label: 'National ID',
+                        onSelectImage: () {},
+                        controller: _idController),
                     const SizedBox(height: 20),
-                    const InputField(
-                      label: 'Location',
-                      icon: Icon(Icons.place, color: kIconsColor),
-                    ),
+                    InputField(
+                        label: 'Location',
+                        controller: _locationController,
+                        icon: const Icon(Icons.place, color: kIconsColor)),
                     const SizedBox(height: 20),
-                    const PasswordField(text: 'Password'),
+                    PasswordField(
+                        text: 'Password', controller: _passwordController),
                     const SizedBox(height: 20),
-                    const PasswordField(text: 'Confirm password'),
+                    PasswordField(
+                        text: 'Confirm password',
+                        controller: _confirmPasswordController),
                     const SizedBox(height: 20),
-                     AppButton(text: "Create Account",border: 20,),
+                    _isLoading
+                        ? const CircularProgressIndicator()
+                        : AppButton(
+                            text: "Create Account",
+                            border: 20,
+                            onTap: _signUpSitter),
                     const SizedBox(height: 20),
                     const LoginWord(
-                      text1: 'Already have an account?',
-                      text2: 'Login',
-                      userType: 'Pet Sitter',
-                    ),
-                    const SizedBox(
-                        height: 40), // زيادة المسافة السفلى لمنع القطع
+                        text1: 'Already have an account?',
+                        text2: 'Login',
+                        userType: 'Pet Sitter'),
+                    const SizedBox(height: 40),
                   ],
                 ),
               ),
