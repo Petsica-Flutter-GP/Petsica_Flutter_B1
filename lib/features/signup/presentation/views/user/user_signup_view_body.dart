@@ -5,11 +5,11 @@ import 'package:petsica/core/utils/sign_up_arrow_back.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
 import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
+import 'package:petsica/services/signup/auth_service_user.dart';
 import '../../../../registeration/presentation/views/widgets/login_word.dart';
 import '../../../../registeration/presentation/views/widgets/password_field.dart';
 import '../../../../../core/constants.dart';
 
-// Import the API service
 
 class UserSignUpViewBody extends StatefulWidget {
   const UserSignUpViewBody({super.key});
