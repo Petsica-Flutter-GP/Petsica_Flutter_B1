@@ -20,6 +20,10 @@ abstract class Styles {
       GoogleFonts.comfortaa(fontSize: 12, fontWeight: FontWeight.w600);
   static var textStyleQui20 =
       GoogleFonts.quicksand(fontSize: 20, fontWeight: FontWeight.bold);
+  static var textStyleQui16 =
+      GoogleFonts.quicksand(fontSize: 16, fontWeight: FontWeight.bold);
+  static var textStyleQui18 =
+      GoogleFonts.quicksand(fontSize: 18, fontWeight: FontWeight.bold);
   static var textStyleCom14 =
       GoogleFonts.comfortaa(fontSize: 14, fontWeight: FontWeight.normal);
   static var textStyleCom16 =
