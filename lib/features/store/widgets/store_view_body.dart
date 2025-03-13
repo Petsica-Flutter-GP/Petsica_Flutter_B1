@@ -39,7 +39,9 @@ class StoreViewBody extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_cart_outlined, size: 35),
-            onPressed: () {},
+            onPressed: () {
+              GoRouter.of(context).go(AppRouter.kCheckOut);
+            },
           ),
         ],
       ),

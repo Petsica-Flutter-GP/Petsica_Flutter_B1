@@ -110,10 +110,16 @@ class ProductDetailsViewBody extends StatelessWidget {
                       text: 'Add To Cart',
                       border: 10,
                       onTap: () {
-                         GoRouter.of(context).go(
-                  AppRouter.kCheckOut,
-                  
-                );
+                        GoRouter.of(context).go(
+                          AppRouter.kStore,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Added successfully!"),
+                            backgroundColor: Colors.green,
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
                       },
                     ),
                     const SizedBox(height: 20),

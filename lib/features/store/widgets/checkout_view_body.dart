@@ -3,7 +3,8 @@ import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/core/utils/store_arrow_back.dart';
 import 'package:petsica/core/utils/styles.dart';
-import 'package:petsica/features/store/widgets/cart_item_card.dart';
+
+import 'cart_item_card.dart';
 
 class CheckOutViewBody extends StatefulWidget {
   const CheckOutViewBody({super.key});
@@ -15,19 +16,13 @@ class CheckOutViewBody extends StatefulWidget {
 class _CheckOutViewBodyState extends State<CheckOutViewBody> {
   List<Map<String, dynamic>> cartItems = [
     {
-      "name": "Product Name",
-      "price": 50,
-      "quantity": 2,
-      "image": AssetData.productImage,
-    },
-    {
-      "name": "Product Name",
+      "name": "P",
       "price": 30,
       "quantity": 1,
       "image": AssetData.productImage,
     },
     {
-      "name": "Product Name",
+      "name": "Productttttttttttttttttttttt",
       "price": 30,
       "quantity": 1,
       "image": AssetData.productImage,
@@ -37,6 +32,10 @@ class _CheckOutViewBodyState extends State<CheckOutViewBody> {
   double getTotalPrice() {
     return cartItems.fold(
         0, (total, item) => total + (item['price'] * item['quantity']));
+  }
+
+  void updateTotalPrice() {
+    setState(() {}); // ✅ إجبار الواجهة على إعادة البناء لحساب السعر الجديد
   }
 
   @override
@@ -65,15 +64,12 @@ class _CheckOutViewBodyState extends State<CheckOutViewBody> {
                 ],
               ),
             ),
-
-            // ✅ قائمة المنتجات ✅
             Expanded(
               child: ListView.builder(
                 itemCount: cartItems.length,
                 itemBuilder: (context, index) {
                   final item = cartItems[index];
                   return SizedBox(
-                    height: 140,
                     child: Stack(
                       children: [
                         CartItemCard(
@@ -83,6 +79,8 @@ class _CheckOutViewBodyState extends State<CheckOutViewBody> {
                               cartItems.removeAt(index);
                             });
                           },
+                          onQuantityChanged:
+                              updateTotalPrice, // ✅ تمرير الكول باك
                         ),
                       ],
                     ),
@@ -90,8 +88,6 @@ class _CheckOutViewBodyState extends State<CheckOutViewBody> {
                 },
               ),
             ),
-
-            // ✅ يضع الزر دائمًا في الأسفل ✅
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: AppButton(

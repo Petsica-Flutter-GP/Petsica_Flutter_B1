@@ -33,42 +33,57 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-ImageBox(imagePath: "assets/images/product1.png"), // 🟢 تمرير الصورة ديناميكيًا
+            const ImageBox(imagePath: AssetData.productImage),
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    productName,
-                    style:
-                        Styles.textStyleCom18.copyWith(color: kProductTxtColor),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "Sold by ..",
-                    style:
-                        Styles.textStyleCom16.copyWith(color: kProductTxtColor),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "Product Details",
-                    style:
-                        Styles.textStyleCom16.copyWith(color: kProductTxtColor),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "\$100",
-                    style: Styles.textStyleCom16
-                        .copyWith(color: kProducPriceColor),
-                  ),
-                ],
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      productName,
+                      style: Styles.textStyleCom18
+                          .copyWith(color: kProductTxtColor),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "Sold by ..",
+                      style: Styles.textStyleCom16
+                          .copyWith(color: kProductTxtColor),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Tooltip(
+                      message:
+                          "Product Details Product Details Product Details Product Details",
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.black87,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      textStyle: const TextStyle(color: Colors.white),
+                      child: Text(
+                        "Product Details...",
+                        style: Styles.textStyleCom16
+                            .copyWith(color: kProductTxtColor),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text("\$100",
+                        style: Styles.textStyleQui18
+                            .copyWith(color: kProducPriceColor)),
+                  ],
+                ),
               ),
             ),
           ],
