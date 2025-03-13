@@ -13,3 +13,4 @@ const kProductTxtColor = Color(0xff07060B);
 const kLightProductTxtColor = Color(0xffaeb5ab);
 const kProducPriceColor = Color(0xff788373);
 const kStoreContainerColor = Color(0xfff9f7fa);
+const kRemoveColor = Color(0xffe22c3c);
