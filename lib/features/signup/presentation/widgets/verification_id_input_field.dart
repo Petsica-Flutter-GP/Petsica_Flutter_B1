@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:petsica/core/constants.dart';
 
-class IdField extends StatelessWidget {
+class VerificationIdInputField extends StatelessWidget {
   final VoidCallback onSelectImage;
   final String label;
+  final TextEditingController? controller; // ✅ Added controller
 
-  const IdField({
+  const VerificationIdInputField({
     super.key,
     required this.onSelectImage,
     required this.label,
+    this.controller, // ✅ Accept controller
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      readOnly: true,
+      controller: controller, // ✅ Use controller
+      readOnly: true, // Prevent manual input
       decoration: InputDecoration(
         labelText: label,
         labelStyle: GoogleFonts.comfortaa(
@@ -48,7 +51,7 @@ class IdField extends StatelessWidget {
         ),
         suffixIcon: IconButton(
           icon: const Icon(Icons.camera_alt, color: kIconsColor),
-          onPressed: onSelectImage, // يتم استدعاء الدالة مباشرة بدون تكرار
+          onPressed: onSelectImage, // ✅ Open camera/gallery
         ),
       ),
     );

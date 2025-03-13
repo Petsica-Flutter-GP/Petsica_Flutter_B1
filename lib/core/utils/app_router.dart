@@ -28,8 +28,8 @@ abstract class AppRouter {
   static const kCheckOut = '/checkOut';
 
   static final router = GoRouter(
-    // initialLocation: '/', // البداية من SplashScreen
-    initialLocation: kStore,
+    initialLocation: '/', // البداية من SplashScreen
+    // initialLocation: kStore,
     routes: [
       GoRoute(
         path: '/',
