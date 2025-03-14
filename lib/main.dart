@@ -11,7 +11,7 @@ void main() {
     ),
   );
 }
-
+//حااافلاااااا
 class Petsica extends StatelessWidget {
   const Petsica({super.key});
 
@@ -24,7 +24,7 @@ class Petsica extends StatelessWidget {
       // دعم Device Preview
       builder: DevicePreview.appBuilder,
       useInheritedMediaQuery: true,
-
+//jijijijijiijij
       theme: ThemeData(
         scaffoldBackgroundColor: kAppColor,
       ),
