@@ -24,7 +24,7 @@ class Petsica extends StatelessWidget {
       // دعم Device Preview
       builder: DevicePreview.appBuilder,
       useInheritedMediaQuery: true,
-//jijijijijiijij
+
       theme: ThemeData(
         scaffoldBackgroundColor: kAppColor,
       ),
