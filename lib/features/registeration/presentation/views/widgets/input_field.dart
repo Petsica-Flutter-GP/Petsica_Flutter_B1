@@ -25,6 +25,9 @@ class InputField extends StatelessWidget {
       keyboardType: keyboardType, // ✅ Set keyboard type
       obscureText: isPassword, // ✅ Hide text if password
       decoration: InputDecoration(
+        filled: true, // ✅ يجعل الخلفية مملوءة باللون
+        fillColor:
+            kInputFieldBackgroundColor, // ✅ تحديد لون الخلفية (يمكنك تغييره)
         labelText: label,
         labelStyle: GoogleFonts.comfortaa(
           fontSize: 16,
