@@ -5,7 +5,7 @@ import 'package:petsica/features/signup/presentation/views/user/user_signup_view
 import 'package:petsica/features/splash/presentation/views/widgets/splach_screen.dart';
 import 'package:petsica/features/onboarding/presentation/views/onboarding.dart';
 import 'package:petsica/features/registeration/presentation/views/welcome_back_view.dart';
-import 'package:petsica/features/store/views/checkout_view.dart';
+import 'package:petsica/features/store/views/cart_view.dart';
 import 'package:petsica/features/store/views/product_details_view.dart';
 import 'package:petsica/features/store/widgets/product_details_view_body.dart';
 import 'package:petsica/features/store/widgets/store_view_body.dart';
@@ -25,11 +25,11 @@ abstract class AppRouter {
   static const kSellerSignUp = '/sellerSignUp';
   static const kStore = '/store';
   static const kProductDetails = '/productDetails';
-  static const kCheckOut = '/checkOut';
+  static const kCart = '/cart';
 
   static final router = GoRouter(
-    initialLocation: '/', // البداية من SplashScreen
-    // initialLocation: kStore,
+    // initialLocation: '/', // البداية من SplashScreen
+    initialLocation: kStore,
     routes: [
       GoRoute(
         path: '/',
@@ -78,8 +78,8 @@ abstract class AppRouter {
         },
       ),
       GoRoute(
-        path: kCheckOut,
-        builder: (context, state) =>  CheckOutView(),
+        path: kCart,
+        builder: (context, state) =>  CartView(),
       ),
     ],
   );

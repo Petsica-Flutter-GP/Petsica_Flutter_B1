@@ -9,7 +9,7 @@ import '../../../core/utils/styles.dart';
 class CartItemCard extends StatefulWidget {
   final Map<String, dynamic> item;
   final VoidCallback onDelete;
-  final VoidCallback onQuantityChanged;
+  final void Function(int) onQuantityChanged; // 👈 استبدلي VoidCallback
 
   const CartItemCard({
     super.key,
@@ -97,7 +97,8 @@ class _CartItemCardState extends State<CartItemCard> {
                           setState(() {
                             if (widget.item["quantity"] > 1) {
                               widget.item["quantity"]--;
-                              widget.onQuantityChanged(); // تحديث السعر الكلي
+                              widget.onQuantityChanged(
+                                  widget.item["quantity"]); // تحديث السعر الكلي
                             }
                           });
                         },
@@ -107,7 +108,7 @@ class _CartItemCardState extends State<CartItemCard> {
                           ),
                           side: const BorderSide(color: kBurgColor, width: 1.5),
                           padding: const EdgeInsets.all(4),
-                          minimumSize: const Size(35, 35),
+                          minimumSize: const Size(30, 30),
                         ),
                         child: const Icon(Icons.remove,
                             color: kBurgColor, size: 18),
@@ -126,7 +127,8 @@ class _CartItemCardState extends State<CartItemCard> {
                         onPressed: () {
                           setState(() {
                             widget.item["quantity"]++;
-                            widget.onQuantityChanged(); // تحديث السعر الكلي
+                            widget.onQuantityChanged(
+                                widget.item["quantity"]); // تحديث السعر الكلي
                           });
                         },
                         style: ElevatedButton.styleFrom(
@@ -135,7 +137,7 @@ class _CartItemCardState extends State<CartItemCard> {
                           ),
                           backgroundColor: kBurgColor,
                           padding: const EdgeInsets.all(6),
-                          minimumSize: const Size(35, 35),
+                          minimumSize: const Size(30, 30),
                         ),
                         child: const Icon(Icons.add,
                             color: Colors.white, size: 18),

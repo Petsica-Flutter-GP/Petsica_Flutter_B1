@@ -40,7 +40,7 @@ class StoreViewBody extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.shopping_cart_outlined, size: 35),
             onPressed: () {
-              GoRouter.of(context).go(AppRouter.kCheckOut);
+              GoRouter.of(context).go(AppRouter.kCart);
             },
           ),
         ],
@@ -49,7 +49,7 @@ class StoreViewBody extends StatelessWidget {
         categories: ["Category1", "Category2", "Category3", "Category4"],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(10.0),
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
