@@ -5,7 +5,7 @@ import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/features/store/widgets/product_card.dart';
 import '../../../core/constants.dart';
 import '../../../core/utils/asset_data.dart';
-import '../../../core/utils/store_arrow_back.dart';
+import '../../../core/utils/app_arrow_back.dart';
 import '../../../core/utils/styles.dart';
 
 class ProductDetailsViewBody extends StatelessWidget {
@@ -25,7 +25,7 @@ class ProductDetailsViewBody extends StatelessWidget {
           style: Styles.textStyleQu28,
         ),
         centerTitle: true,
-        leading: const StoreArrowBack(),
+          leading: AppArrowBack(destination: AppRouter.kStore),
       ),
       body: SingleChildScrollView(
         child: Padding(

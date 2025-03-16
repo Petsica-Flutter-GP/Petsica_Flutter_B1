@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsica/core/utils/app_button.dart';
-import 'package:petsica/core/utils/store_arrow_back.dart';
+import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/store/logic/cubit/cart_cubit.dart';
 import 'package:petsica/features/store/widgets/confirm_address_show_dialog.dart';
@@ -21,7 +21,7 @@ class CartViewBody extends StatelessWidget {
         appBar: AppBar(
           title: Text("Cart", style: Styles.textStyleQu28),
           centerTitle: true,
-          leading: const StoreArrowBack(),
+          leading: AppArrowBack(destination: AppRouter.kStore),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),

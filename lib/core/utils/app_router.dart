@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:petsica/features/profiles/user/views/user_profile_view.dart';
 import 'package:petsica/features/signup/presentation/views/seller/seller_signup_view.dart';
 import 'package:petsica/features/signup/presentation/views/user/user_signup_view.dart';
 
@@ -26,10 +27,11 @@ abstract class AppRouter {
   static const kStore = '/store';
   static const kProductDetails = '/productDetails';
   static const kCart = '/cart';
+  static const kUserProfile = '/userProfile';
 
   static final router = GoRouter(
     // initialLocation: '/', // البداية من SplashScreen
-    initialLocation: kStore,
+    initialLocation: kUserProfile,
     routes: [
       GoRoute(
         path: '/',
@@ -80,6 +82,10 @@ abstract class AppRouter {
       GoRoute(
         path: kCart,
         builder: (context, state) =>  CartView(),
+      ),
+      GoRoute(
+        path: kUserProfile,
+        builder: (context, state) =>  UserProfileView(),
       ),
     ],
   );

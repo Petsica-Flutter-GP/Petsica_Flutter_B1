@@ -11,7 +11,7 @@ void main() {
     ),
   );
 }
-//حااافلاااااا
+
 class Petsica extends StatelessWidget {
   const Petsica({super.key});
 
@@ -20,10 +20,6 @@ class Petsica extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: AppRouter.router,
-// اخر حاجه 
-// اخر حاجه 
-// اخر حاجه 
-// اخر حاجه 
       // دعم Device Preview
       builder: DevicePreview.appBuilder,
       useInheritedMediaQuery: true,
