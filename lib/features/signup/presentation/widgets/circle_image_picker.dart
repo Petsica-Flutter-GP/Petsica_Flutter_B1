@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/features/signup/presentation/widgets/my_profile_picture_package.dart';
-
 class CircleProfileImagePicker extends StatefulWidget {
   final File? image;
-  final Function(File?) onImageSelected;
+  final String? assetImage; // دعم الصور من assets
+  final Function(File?)? onImageSelected;
   final String name;
 
   const CircleProfileImagePicker({
     super.key,
-    required this.image,
+    this.image,
+    this.assetImage, // جديد
     required this.name,
-    required this.onImageSelected,
+     this.onImageSelected,
   });
 
   @override
@@ -38,7 +39,7 @@ class _CircleProfileImagePickerState extends State<CircleProfileImagePicker> {
       final newImage = File(image.path);
       if (mounted) {
         setState(() => _profileImage = newImage);
-        widget.onImageSelected(newImage);
+        widget.onImageSelected!(newImage);
       }
     } catch (error) {
       debugPrint("Error picking image: ${error.toString()}");
@@ -49,8 +50,8 @@ class _CircleProfileImagePickerState extends State<CircleProfileImagePicker> {
     if (_profileImage == null) return;
 
     setState(() => _profileImage = null);
-    widget.onImageSelected(null);
-    Navigator.pop(context); // إغلاق النافذة بعد الحذف
+    widget.onImageSelected!(null);
+    Navigator.pop(context);
   }
 
   void _showImageSourceDialog(BuildContext context) {
@@ -96,9 +97,12 @@ class _CircleProfileImagePickerState extends State<CircleProfileImagePicker> {
         CircleAvatar(
           radius: 60,
           backgroundColor: Colors.grey[300],
-          backgroundImage:
-              _profileImage != null ? FileImage(_profileImage!) : null,
-          child: _profileImage == null
+          backgroundImage: _profileImage != null
+              ? FileImage(_profileImage!) // ✅ إذا كانت الصورة من المعرض أو الكاميرا
+              : (widget.assetImage != null
+                  ? AssetImage(widget.assetImage!) as ImageProvider // ✅ إذا كانت الصورة من `assets`
+                  : null),
+          child: (_profileImage == null && widget.assetImage == null)
               ? MProfilePicture(
                   name: widget.name,
                   backgroundColor: kBurgColor,

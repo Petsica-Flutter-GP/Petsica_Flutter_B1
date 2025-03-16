@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/sign_up_arrow_back.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/core/utils/snackbar_helper.dart'; // ✅ استيراد SnackbarHelper
@@ -12,6 +13,7 @@ import 'package:petsica/features/signup/presentation/widgets/verification_id_inp
 import 'package:petsica/features/signup/presentation/widgets/working_hours_input_field.dart';
 import '../../../../../core/constants.dart';
 import '../../../../../core/utils/app_button.dart';
+import '../../../../../core/utils/app_arrow_back.dart';
 import '../../../../registeration/presentation/views/widgets/login_word.dart';
 import '../../../../registeration/presentation/views/widgets/password_field.dart';
 
@@ -80,7 +82,7 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: const SignUpArrowBack(),
+          leading: AppArrowBack(destination: AppRouter.kWhoAreYou),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),

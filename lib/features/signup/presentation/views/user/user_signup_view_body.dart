@@ -6,10 +6,11 @@ import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
 import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
 import 'package:petsica/services/signup/auth_service_user.dart';
+import '../../../../../core/utils/app_router.dart';
+import '../../../../../core/utils/app_arrow_back.dart';
 import '../../../../registeration/presentation/views/widgets/login_word.dart';
 import '../../../../registeration/presentation/views/widgets/password_field.dart';
 import '../../../../../core/constants.dart';
-
 
 class UserSignUpViewBody extends StatefulWidget {
   const UserSignUpViewBody({super.key});
@@ -64,7 +65,7 @@ class _UserSignUpViewBodyState extends State<UserSignUpViewBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: const SignUpArrowBack(),
+          leading: AppArrowBack(destination: AppRouter.kWhoAreYou),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -129,7 +130,7 @@ class _UserSignUpViewBodyState extends State<UserSignUpViewBody> {
                           ? const CircularProgressIndicator()
                           : AppButton(
                               text: "Create Account",
-                              border: 20, 
+                              border: 20,
                               onTap: _signUpUser, // ✅ Uses onPressed
                             ),
                       const SizedBox(height: 20),

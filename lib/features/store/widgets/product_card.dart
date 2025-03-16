@@ -41,7 +41,7 @@ class ProductCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(
-                      height: 5,
+                      height: 20,
                     ),
                     Text(
                       productName,

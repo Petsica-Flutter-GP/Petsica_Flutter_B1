@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 import 'styles.dart';
-
 class AppButton extends StatelessWidget {
   const AppButton({
-    super.key,
+    Key? key,
     required this.text,
     required this.border,
+    this.width,
+    this.height,
     this.onTap,
-    this.width, // عرض الزر
-    this.height, // ارتفاع الزر
-  });
+    this.style, 
+  }) : super(key: key);
 
   final String text;
   final double border;
   final double? width;
   final double? height;
   final VoidCallback? onTap;
-
+  final TextStyle? style; 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -27,16 +27,18 @@ class AppButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onTap ?? () {},
         style: ElevatedButton.styleFrom(
-          backgroundColor: kBurgColor, // لون الزر
+          backgroundColor: kBurgColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(border),
           ),
           padding: const EdgeInsets.symmetric(vertical: 16),
         ),
-        child: Text(
-          text,
-          style: Styles.textStyleQui20.copyWith(color: Colors.white),
-          textAlign: TextAlign.center, // ✅ توسيط النص
+        child: FittedBox(
+          child: Text(
+            text,
+            style: style ?? Styles.textStyleQui20.copyWith(color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );
