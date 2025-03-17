@@ -14,4 +14,8 @@ class AssetData {
   static const settingsIcon = 'assets/icon/settings.svg';
   static const logoutIcon = 'assets/icon/logout.svg';
   static const aboutUsIcon = 'assets/icon/aboutUs.svg';
+  static const orderIcon = 'assets/icon/order.svg';
+  static const storeIcon = 'assets/icon/store.svg';
+  static const clinicIcon = 'assets/icon/clinic.svg';
+  static const serviceIcon = 'assets/icon/service.svg';
 }

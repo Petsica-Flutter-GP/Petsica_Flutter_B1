@@ -1,5 +1,8 @@
 import 'package:go_router/go_router.dart';
+import 'package:petsica/features/profiles/adminn/view/admin_profile_view.dart';
+import 'package:petsica/features/profiles/sitter/view/sitter_profile_view.dart';
 import 'package:petsica/features/profiles/user/views/user_profile_view.dart';
+import 'package:petsica/features/profiles/where.dart';
 import 'package:petsica/features/signup/presentation/views/seller/seller_signup_view.dart';
 import 'package:petsica/features/signup/presentation/views/user/user_signup_view.dart';
 
@@ -12,6 +15,8 @@ import 'package:petsica/features/store/widgets/product_details_view_body.dart';
 import 'package:petsica/features/store/widgets/store_view_body.dart';
 import 'package:petsica/features/who/presentation/views/who_view.dart';
 
+import '../../features/profiles/clinic/view/clinic_profile_view.dart';
+import '../../features/profiles/seller/view/seller_profile_view.dart';
 import '../../features/signup/presentation/views/clinic/clinic_signup_view.dart';
 import '../../features/signup/presentation/views/sitter/sitter_signup_view.dart';
 import '../../features/store/views/store_view.dart';
@@ -28,10 +33,15 @@ abstract class AppRouter {
   static const kProductDetails = '/productDetails';
   static const kCart = '/cart';
   static const kUserProfile = '/userProfile';
+  static const kSitterProfile = '/sitterProfile';
+  static const kSellerProfile = '/sellerProfile';
+  static const kClinicProfile = '/clinicProfile';
+  static const kAdminProfile = '/adminProfile';
+  static const kWhereProfile = '/whereProfile';
 
   static final router = GoRouter(
     // initialLocation: '/', // البداية من SplashScreen
-    initialLocation: kUserProfile,
+    initialLocation: kWhereProfile,
     routes: [
       GoRoute(
         path: '/',
@@ -81,11 +91,31 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: kCart,
-        builder: (context, state) =>  CartView(),
+        builder: (context, state) => const CartView(),
       ),
       GoRoute(
         path: kUserProfile,
-        builder: (context, state) =>  UserProfileView(),
+        builder: (context, state) => const UserProfileView(),
+      ),
+      GoRoute(
+        path: kSitterProfile,
+        builder: (context, state) => const SitterProfileView(),
+      ),
+      GoRoute(
+        path: kSellerProfile,
+        builder: (context, state) => const SellerProfileView(),
+      ),
+      GoRoute(
+        path: kClinicProfile,
+        builder: (context, state) => const ClinicProfileView(),
+      ),
+      GoRoute(
+        path: kAdminProfile,
+        builder: (context, state) => const AdminProfileView(),
+      ),
+      GoRoute(
+        path: kWhereProfile,
+        builder: (context, state) => const WhereProf(),
       ),
     ],
   );

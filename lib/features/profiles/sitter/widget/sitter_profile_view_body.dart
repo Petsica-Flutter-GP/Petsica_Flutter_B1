@@ -1,23 +1,20 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:petsica/core/constants.dart';
-import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/app_button.dart';
-import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/asset_data.dart';
-import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
+import 'package:petsica/core/utils/styles.dart';
+import 'package:petsica/features/profiles/user/cubit/profile_image_cubit.dart';
+import 'package:petsica/features/profiles/widgets/profile_list_tile.dart';
 
-import '../../../../core/utils/styles.dart';
-import '../cubit/profile_image_cubit.dart';
-import '../../widgets/profile_list_tile.dart';
+import '../../../../core/utils/app_arrow_back.dart';
+import '../../../../core/utils/app_router.dart';
+import '../../../signup/presentation/widgets/circle_image_picker.dart';
 
-class UserProfileViewBody extends StatelessWidget {
-  const UserProfileViewBody({super.key});
+class SitterProfileViewBody extends StatelessWidget {
+  const SitterProfileViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +89,16 @@ class UserProfileViewBody extends StatelessWidget {
             const Column(
               children: [
                 ProfileListTile(
+                  iconasset: AssetData.serviceIcon,
+                  label: 'My services',
+                  height: 50,
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                ProfileListTile(
                   iconasset: AssetData.petIcon,
-                  label: 'Add Pet',
+                  label: 'Add pet',
                   height: 50,
                 ),
                 SizedBox(
