@@ -10,6 +10,7 @@ class AssetData {
   static const oBclinicImage = 'assets/images/oBclinic.png';
   static const productImage = 'assets/images/product.png';
   static const profileImage = 'assets/images/profile.png';
+  static const petImage = 'assets/images/pet.png';
   static const petIcon = 'assets/icon/pet.svg';
   static const settingsIcon = 'assets/icon/settings.svg';
   static const logoutIcon = 'assets/icon/logout.svg';

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
@@ -89,12 +90,15 @@ class UserProfileViewBody extends StatelessWidget {
             ),
 
             /// 🔹 القائمة الجانبية
-            const Column(
+            Column(
               children: [
                 ProfileListTile(
                   iconasset: AssetData.petIcon,
                   label: 'Add Pet',
                   height: 50,
+                  onTap: () {
+                    GoRouter.of(context).go(AppRouter.kUserAddPet);
+                  },
                 ),
                 SizedBox(
                   height: 30,
