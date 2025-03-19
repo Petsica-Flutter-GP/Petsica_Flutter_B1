@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_profile_view.dart';
 import 'package:petsica/features/profiles/sitter/view/sitter_profile_view.dart';
 import 'package:petsica/features/profiles/user/views/user_profile_view.dart';
+import 'package:petsica/features/profiles/user/widgets/user_add_pet_view_body.dart';
 import 'package:petsica/features/profiles/where.dart';
 import 'package:petsica/features/signup/presentation/views/seller/seller_signup_view.dart';
 import 'package:petsica/features/signup/presentation/views/user/user_signup_view.dart';
@@ -17,6 +18,7 @@ import 'package:petsica/features/who/presentation/views/who_view.dart';
 
 import '../../features/profiles/clinic/view/clinic_profile_view.dart';
 import '../../features/profiles/seller/view/seller_profile_view.dart';
+import '../../features/profiles/user/views/user_add_pet_view.dart';
 import '../../features/signup/presentation/views/clinic/clinic_signup_view.dart';
 import '../../features/signup/presentation/views/sitter/sitter_signup_view.dart';
 import '../../features/store/views/store_view.dart';
@@ -37,6 +39,7 @@ abstract class AppRouter {
   static const kSellerProfile = '/sellerProfile';
   static const kClinicProfile = '/clinicProfile';
   static const kAdminProfile = '/adminProfile';
+  static const kUserAddPet = '/userAddPet';
   static const kWhereProfile = '/whereProfile';
 
   static final router = GoRouter(
@@ -116,6 +119,10 @@ abstract class AppRouter {
       GoRoute(
         path: kWhereProfile,
         builder: (context, state) => const WhereProf(),
+      ),
+      GoRoute(
+        path: kUserAddPet,
+        builder: (context, state) =>  UserAddPetView(),
       ),
     ],
   );
