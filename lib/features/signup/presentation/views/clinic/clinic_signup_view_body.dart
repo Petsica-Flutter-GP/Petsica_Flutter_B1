@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:petsica/core/utils/app_router.dart';
-import 'package:petsica/core/utils/sign_up_arrow_back.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/core/utils/snackbar_helper.dart'; // ✅ استيراد SnackbarHelper
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
@@ -82,7 +81,7 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-          leading: AppArrowBack(destination: AppRouter.kWhoAreYou),
+          leading:const AppArrowBack(destination: AppRouter.kWhoAreYou),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),

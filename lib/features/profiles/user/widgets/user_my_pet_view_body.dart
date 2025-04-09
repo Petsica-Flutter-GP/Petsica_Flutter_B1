@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsica/core/constants.dart';
-import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/features/profiles/user/cubit/add_pet_cubit.dart';
 import 'package:petsica/features/profiles/widgets/pet_container.dart';
 
@@ -10,8 +9,8 @@ import '../../../../core/utils/app_arrow_back.dart';
 import '../../../../core/utils/app_router.dart';
 import '../../../../core/utils/styles.dart';
 
-class UserAddPetViewBody extends StatelessWidget {
-  const UserAddPetViewBody({super.key});
+class UserMyPetViewBody extends StatelessWidget {
+  const UserMyPetViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +45,11 @@ class UserAddPetViewBody extends StatelessWidget {
                       (context, index) {
                         final pet = pets[index];
                         return GestureDetector(
-                            onTap: () {
-  GoRouter.of(context).push(
-    AppRouter.kUserPetDetails,
-    extra: pet.toMap(),
-  );
-
-
+                          onTap: () {
+                            GoRouter.of(context).push(
+                              AppRouter.kUserPetDetails,
+                              extra: pet.toMap(),
+                            );
                           },
                           child: PetContainer(pet: pet),
                         );

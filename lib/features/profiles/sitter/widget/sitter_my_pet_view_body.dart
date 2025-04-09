@@ -10,8 +10,8 @@ import '../../../../core/utils/app_arrow_back.dart';
 import '../../../../core/utils/app_router.dart';
 import '../../../../core/utils/styles.dart';
 
-class SitterAddPetViewBody extends StatelessWidget {
-  const SitterAddPetViewBody({super.key});
+class SitterMyPetViewBody extends StatelessWidget {
+  const SitterMyPetViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +47,10 @@ class SitterAddPetViewBody extends StatelessWidget {
                         final pet = pets[index];
                         return GestureDetector(
                           onTap: () {
-                             GoRouter.of(context).push(
-    AppRouter.kSitterPetDetails,
-    extra: pet.toMap(),
-  );
+                            GoRouter.of(context).push(
+                              AppRouter.kSitterPetDetails,
+                              extra: pet.toMap(),
+                            );
                           },
                           child: PetContainer(pet: pet),
                         );

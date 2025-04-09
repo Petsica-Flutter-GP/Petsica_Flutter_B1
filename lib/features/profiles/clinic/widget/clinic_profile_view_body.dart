@@ -108,7 +108,7 @@ class ClinicProfileViewBody extends StatelessWidget {
                     label: 'Add Pet',
                     height: 50,
                     onTap: () {
-                      GoRouter.of(context).go(AppRouter.kClinicAddPet);
+                      GoRouter.of(context).go(AppRouter.kClinicMyPet);
                       print("clinic add pet");
                     }),
                 const SizedBox(

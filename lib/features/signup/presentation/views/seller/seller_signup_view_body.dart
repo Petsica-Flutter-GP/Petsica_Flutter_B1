@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:petsica/core/utils/app_router.dart';
-import 'package:petsica/core/utils/sign_up_arrow_back.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
@@ -29,7 +28,7 @@ class _SellerSignUpViewBodyState extends State<SellerSignUpViewBody> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.transparent,
-          leading: AppArrowBack(destination: AppRouter.kWhoAreYou),
+          leading:const AppArrowBack(destination: AppRouter.kWhoAreYou),
           ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(), // تمرير سلس

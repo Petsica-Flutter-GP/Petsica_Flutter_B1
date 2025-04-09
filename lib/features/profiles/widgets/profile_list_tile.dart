@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../core/utils/asset_data.dart';
 import '../../../core/utils/styles.dart';
 
 class ProfileListTile extends StatelessWidget {
