@@ -1,11 +1,8 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/app_button.dart';
@@ -101,26 +98,26 @@ class UserProfileViewBody extends StatelessWidget {
                     print("user add pet");
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
-                ProfileListTile(
+                const ProfileListTile(
                   iconasset: AssetData.settingsIcon,
                   label: 'Settings',
                   height: 50,
                 ),
-                SizedBox(
+             const   SizedBox(
                   height: 30,
                 ),
-                ProfileListTile(
+             const   ProfileListTile(
                   iconasset: AssetData.aboutUsIcon,
                   label: 'About us',
                   height: 45,
                 ),
-                SizedBox(
+              const  SizedBox(
                   height: 30,
                 ),
-                ProfileListTile(
+             const   ProfileListTile(
                   iconasset: AssetData.logoutIcon,
                   label: 'Log out',
                   height: 37,

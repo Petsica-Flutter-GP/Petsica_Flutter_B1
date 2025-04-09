@@ -10,8 +10,8 @@ import '../../../../core/utils/app_arrow_back.dart';
 import '../../../../core/utils/app_router.dart';
 import '../../../../core/utils/styles.dart';
 
-class ClinicAddPetViewBody extends StatelessWidget {
-  const ClinicAddPetViewBody({super.key});
+class ClinicMyPetViewBody extends StatelessWidget {
+  const ClinicMyPetViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {

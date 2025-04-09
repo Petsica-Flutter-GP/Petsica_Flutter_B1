@@ -113,15 +113,13 @@ class SellerProfileViewBody extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   ProfileListTile(
-                    iconasset: AssetData.petIcon,
-                    label: 'Add Pet',
-                    height: 50,
-                    onTap: () {
-                    GoRouter.of(context).go(AppRouter.kSellerAddPet);
-                                        print("seller add pet");
-
-                  }
-                  ),
+                      iconasset: AssetData.petIcon,
+                      label: 'Add Pet',
+                      height: 50,
+                      onTap: () {
+                        GoRouter.of(context).go(AppRouter.kSellerMyPet);
+                        print("seller add pet");
+                      }),
                   const SizedBox(height: 30),
                   const ProfileListTile(
                     iconasset: AssetData.settingsIcon,
