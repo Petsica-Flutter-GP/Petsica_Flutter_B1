@@ -6,27 +6,31 @@ class Pet {
   final String name;
 
   Pet({required this.image, required this.name});
+
+  factory Pet.fromMap(Map<String, dynamic> map) {
+    return Pet(
+      image: map['image'],
+      name: map['name'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'image': image,
+      'name': name,
+    };
+  }
 }
 
-/// 🔹 Cubit لإدارة حالة قائمة الحيوانات
 class AddPetCubit extends Cubit<List<Pet>> {
   AddPetCubit() : super([]);
 
-  /// 🔹 محاكاة جلب البيانات من API
   Future<void> fetchPets() async {
-    emit([]); // تهيئة القائمة فارغة أولًا
-    await Future.delayed(const Duration(seconds: 2)); // محاكاة التأخير
-
-    List<Pet> pets = [
+    emit([]);
+    await Future.delayed(const Duration(seconds: 2));
+    emit([
       Pet(image: AssetData.petImage, name: 'Bella'),
       Pet(image: AssetData.petImage, name: 'Charlie'),
-      Pet(image: AssetData.petImage, name: 'Max'),
-      Pet(image: AssetData.petImage, name: 'Max'),
-      Pet(image: AssetData.petImage, name: 'Max'),
-      Pet(image: AssetData.petImage, name: 'Max'),
-    
-    ];
-
-    emit(pets); // تحديث الحالة بالبيانات
+    ]);
   }
 }

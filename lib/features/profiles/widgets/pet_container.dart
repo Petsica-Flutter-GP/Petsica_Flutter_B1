@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/features/profiles/user/cubit/add_pet_cubit.dart';
 
-import '../../../../core/utils/styles.dart';
+import '../../../core/utils/styles.dart';
 
 class PetContainer extends StatelessWidget {
   const PetContainer({

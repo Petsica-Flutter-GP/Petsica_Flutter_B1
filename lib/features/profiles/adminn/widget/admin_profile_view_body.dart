@@ -118,12 +118,6 @@ class AdminProfileViewBody extends StatelessWidget {
                   ),
                   SizedBox(height: 30),
                   ProfileListTile(
-                    iconasset: AssetData.petIcon,
-                    label: 'Add pet',
-                    height: 50,
-                  ),
-                  SizedBox(height: 30),
-                  ProfileListTile(
                     iconasset: AssetData.settingsIcon,
                     label: 'Settings',
                     height: 50,
