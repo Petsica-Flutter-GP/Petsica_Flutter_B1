@@ -98,6 +98,7 @@ class UserProfileViewBody extends StatelessWidget {
                   height: 50,
                   onTap: () {
                     GoRouter.of(context).go(AppRouter.kUserAddPet);
+                    print("user add pet");
                   },
                 ),
                 SizedBox(
