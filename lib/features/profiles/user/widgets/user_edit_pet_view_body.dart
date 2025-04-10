@@ -1,9 +1,10 @@
-
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
+import 'package:petsica/features/profiles/user/cubit/add_pet_cubit.dart';
 import 'package:petsica/features/profiles/widgets/app_drop_down_button.dart';
 import 'package:petsica/features/profiles/widgets/pet_camera_placeholder.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
@@ -24,7 +25,7 @@ class _UserEditPetPageViewBodyState extends State<UserEditPetPageViewBody> {
   String selectedGender = 'Female';
   String selectedAge = '1';
 
-  final _formKey = GlobalKey<FormState>(); // مفتاح الفورم
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -86,24 +87,6 @@ class _UserEditPetPageViewBodyState extends State<UserEditPetPageViewBody> {
                 },
               ),
               const SizedBox(height: 60),
-              //   ElevatedButton(
-              //     onPressed: () {
-              //       if (_formKey.currentState!.validate()) {
-              //         ScaffoldMessenger.of(context).showSnackBar(
-              //           const SnackBar(content: Text('Saving pet info...')),
-              //         );
-              //       }
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       padding: const EdgeInsets.symmetric(vertical: 15),
-              //       backgroundColor: kProducPriceColor,
-              //       textStyle: const TextStyle(fontSize: 18),
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(10),
-              //       ),
-              //     ),
-              //     child: const Text('Save'),
-              //   ),
               const Align(
                 alignment: Alignment.bottomRight,
                 child: AppButton(
@@ -113,10 +96,6 @@ class _UserEditPetPageViewBodyState extends State<UserEditPetPageViewBody> {
                   backgroundColor: kProducPriceColor,
                 ),
               ),
-              const Text(
-                'user',
-                style: TextStyle(fontSize: 40),
-              )
             ],
           ),
         ),

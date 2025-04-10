@@ -48,7 +48,7 @@ abstract class AppRouter {
   static const kSellerProfile = '/sellerProfile';
   static const kClinicProfile = '/clinicProfile';
   static const kAdminProfile = '/adminProfile';
-  static const kUserAddPet = '/userAddPet';
+  static const kUserMyPet = '/userMyPet';
   static const kClinicMyPet = '/clinicMyPet';
   static const kSellerMyPet = '/sellerMyPet';
   static const kSitterMyPet = '/sitterMyPet';
@@ -65,7 +65,7 @@ abstract class AppRouter {
 
   static final router = GoRouter(
     // initialLocation: '/', // البداية من SplashScreen
-    initialLocation: kWhoEdit,
+    initialLocation: kWhereProfile,
     routes: [
       GoRoute(
         path: '/',
@@ -142,7 +142,7 @@ abstract class AppRouter {
         builder: (context, state) => const WhereProf(),
       ),
       GoRoute(
-        path: kUserAddPet,
+        path: kUserMyPet,
         builder: (context, state) => const UserMyPetView(),
       ),
       GoRoute(
@@ -163,31 +163,24 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: kUserPetDetails,
-        builder: (context, state) {
-          final pet = Pet.fromMap(state.extra as Map<String, dynamic>);
-          return UserPetDetailsView(pet: pet);
-        },
+        builder: (context, state) =>const  UserPetDetailsView()
+        
       ),
       GoRoute(
         path: kSitterPetDetails,
-        builder: (context, state) {
-          final pet = Pet.fromMap(state.extra as Map<String, dynamic>);
-          return SitterPetDetailsView(pet: pet);
-        },
+        builder: (context, state) =>
+           SitterPetDetailsView()
       ),
       GoRoute(
         path: kSellerPetDetails,
-        builder: (context, state) {
-          final pet = Pet.fromMap(state.extra as Map<String, dynamic>);
-          return SellerPetDetailsView(pet: pet);
-        },
+        builder: (context, state) =>
+           SellerPetDetailsView()
+        
       ),
       GoRoute(
         path: kClinicPetDetails,
-        builder: (context, state) {
-          final pet = Pet.fromMap(state.extra as Map<String, dynamic>);
-          return ClinicPetDetailsView(pet: pet);
-        },
+        builder: (context, state) =>
+           ClinicPetDetailsView()
       ),
       GoRoute(
         path: kUserEditPet,

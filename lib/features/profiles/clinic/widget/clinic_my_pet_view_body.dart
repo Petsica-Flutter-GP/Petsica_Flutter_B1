@@ -7,6 +7,7 @@ import 'package:petsica/features/profiles/user/cubit/add_pet_cubit.dart';
 import 'package:petsica/features/profiles/widgets/pet_container.dart';
 
 import '../../../../core/utils/app_arrow_back.dart';
+import '../../../../core/utils/app_floating_button.dart';
 import '../../../../core/utils/app_router.dart';
 import '../../../../core/utils/styles.dart';
 
@@ -24,7 +25,15 @@ class ClinicMyPetViewBody extends StatelessWidget {
           title: Text("My pets", style: Styles.textStyleQu28),
           centerTitle: true,
           leading: const AppArrowBack(destination: AppRouter.kUserProfile),
+        ), floatingActionButton: const AppFloatingButton(
+          color: kProducPriceColor,
+          icon: Icon(
+            Icons.add,
+            size: 35,
+            color: kWhiteGroundColor,
+          ),
         ),
+       
         body: BlocBuilder<AddPetCubit, List<Pet>>(
           builder: (context, pets) {
             if (pets.isEmpty) {

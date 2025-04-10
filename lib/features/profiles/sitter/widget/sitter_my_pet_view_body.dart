@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsica/core/constants.dart';
+import 'package:petsica/core/utils/app_floating_button.dart';
 import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/features/profiles/user/cubit/add_pet_cubit.dart';
 import 'package:petsica/features/profiles/widgets/pet_container.dart';
@@ -24,7 +25,15 @@ class SitterMyPetViewBody extends StatelessWidget {
           title: Text("My pets", style: Styles.textStyleQu28),
           centerTitle: true,
           leading: const AppArrowBack(destination: AppRouter.kUserProfile),
+        ), floatingActionButton: const AppFloatingButton(
+          color: kProducPriceColor,
+          icon: Icon(
+            Icons.add,
+            size: 35,
+            color: kWhiteGroundColor,
+          ),
         ),
+       
         body: BlocBuilder<AddPetCubit, List<Pet>>(
           builder: (context, pets) {
             if (pets.isEmpty) {

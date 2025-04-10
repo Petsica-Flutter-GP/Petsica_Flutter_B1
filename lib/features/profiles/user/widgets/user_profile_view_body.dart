@@ -94,7 +94,7 @@ class UserProfileViewBody extends StatelessWidget {
                   label: 'Add Pet',
                   height: 50,
                   onTap: () {
-                    GoRouter.of(context).go(AppRouter.kUserAddPet);
+                    GoRouter.of(context).go(AppRouter.kUserMyPet);
                     print("user add pet");
                   },
                 ),
@@ -106,18 +106,18 @@ class UserProfileViewBody extends StatelessWidget {
                   label: 'Settings',
                   height: 50,
                 ),
-             const   SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
-             const   ProfileListTile(
+                const ProfileListTile(
                   iconasset: AssetData.aboutUsIcon,
                   label: 'About us',
                   height: 45,
                 ),
-              const  SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
-             const   ProfileListTile(
+                const ProfileListTile(
                   iconasset: AssetData.logoutIcon,
                   label: 'Log out',
                   height: 37,
