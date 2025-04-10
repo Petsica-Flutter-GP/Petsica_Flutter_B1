@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // import 'package:flutter/material.dart';
 // import 'package:go_router/go_router.dart';
 // import 'package:petsica/core/utils/app_router.dart';
@@ -29,14 +30,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:petsica/features/profiles/user/cubit/add_pet_cubit.dart';
 class AppArrowBack extends StatelessWidget {
-  final String destination; // 🔹 الوجهة التي سيذهب إليها الزر
-
+  final String destination; // الوجهة التي سيذهب إليها الزر
+  final Pet? extra; // تعديل لتكون من نوع Pet بدلاً من String؟
+  
   const AppArrowBack({
-    super.key,
-    required this.destination, // 🔹 مطلوب تحديد الوجهة عند الاستدعاء
-  });
+    Key? key,
+    required this.destination,
+    this.extra,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +51,12 @@ class AppArrowBack extends StatelessWidget {
       child: IconButton(
         icon: const Icon(Icons.arrow_back_ios_new),
         onPressed: () {
-          context.go(destination); // ✅ يذهب مباشرة إلى الوجهة بدون تكديس
+          // عند الضغط، إذا كانت extra موجودة، يتم تمريرها إلى الوجهة المحددة
+          if (extra != null) {
+            context.go(destination, extra: extra); // تمرير extra هنا
+          } else {
+            context.go(destination);
+          }
         },
       ),
     );

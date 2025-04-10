@@ -1,7 +1,9 @@
+import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsica/core/constants.dart';
+import 'package:petsica/core/utils/app_floating_button.dart';
 import 'package:petsica/features/profiles/user/cubit/add_pet_cubit.dart';
 import 'package:petsica/features/profiles/widgets/pet_container.dart';
 
@@ -15,8 +17,7 @@ class UserMyPetViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          AddPetCubit()..fetchPets(), // تشغيل `fetchPets` عند تحميل الصفحة
+      create: (context) => AddPetCubit()..fetchPets(),
       child: Scaffold(
         backgroundColor: kWhiteGroundColor,
         appBar: AppBar(
@@ -24,20 +25,27 @@ class UserMyPetViewBody extends StatelessWidget {
           centerTitle: true,
           leading: const AppArrowBack(destination: AppRouter.kUserProfile),
         ),
+        floatingActionButton: const AppFloatingButton(
+          color: kProducPriceColor,
+          icon: Icon(
+            Icons.add,
+            size: 35,
+            color: kWhiteGroundColor,
+          ),
+        ),
         body: BlocBuilder<AddPetCubit, List<Pet>>(
           builder: (context, pets) {
             if (pets.isEmpty) {
               return const Center(
-                  child: CircularProgressIndicator(
-                color: kBurgColor,
-                strokeWidth: 5,
-              ));
+                child: CircularProgressIndicator(
+                  color: kBurgColor,
+                  strokeWidth: 5,
+                ),
+              );
             }
 
             return Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 15,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 15),
               child: CustomScrollView(
                 slivers: [
                   SliverList(
