@@ -100,16 +100,26 @@ class SellerProfileViewBody extends StatelessWidget {
               /// 🔹 القائمة الجانبية
               Column(
                 children: [
-                  const ProfileListTile(
+                   ProfileListTile(
                     iconasset: AssetData.orderIcon,
                     label: 'My order',
                     height: 50,
+                    onTap: () {
+                      GoRouter.of(context).go(
+            AppRouter.kSellerOrders,
+          );
+                    },
                   ),
                   const SizedBox(height: 30),
-                  const ProfileListTile(
+                  ProfileListTile(
                     iconasset: AssetData.storeIcon,
                     label: 'My store',
                     height: 35,
+                    onTap: () {
+                      GoRouter.of(context).go(
+                        AppRouter.kSellerMyStore,
+                      );
+                    },
                   ),
                   const SizedBox(height: 30),
                   ProfileListTile(
@@ -121,13 +131,13 @@ class SellerProfileViewBody extends StatelessWidget {
                         print("seller add pet");
                       }),
                   const SizedBox(height: 30),
-                   ProfileListTile(
+                  ProfileListTile(
                     iconasset: AssetData.settingsIcon,
                     label: 'Settings',
                     height: 50,
                     onTap: () {
-                    GoRouter.of(context).go(AppRouter.kSellerSettings);
-                  },
+                      GoRouter.of(context).go(AppRouter.kSellerSettings);
+                    },
                   ),
                   const SizedBox(height: 30),
                   const ProfileListTile(

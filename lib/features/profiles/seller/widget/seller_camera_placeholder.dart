@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:petsica/core/constants.dart';
 
-class PetCameraPlaceholder extends StatefulWidget {
-  const PetCameraPlaceholder({super.key});
+class SellerCameraPlaceholder extends StatefulWidget {
+  const SellerCameraPlaceholder({super.key});
 
   @override
-  State<PetCameraPlaceholder> createState() => _PetCameraPlaceholderState();
+  State<SellerCameraPlaceholder> createState() =>
+      _SellerCameraPlaceholderState();
 }
 
-class _PetCameraPlaceholderState extends State<PetCameraPlaceholder> {
+class _SellerCameraPlaceholderState extends State<SellerCameraPlaceholder> {
   File? _imageFile;
 
   Future<void> _pickImage() async {
@@ -31,9 +32,9 @@ class _PetCameraPlaceholderState extends State<PetCameraPlaceholder> {
         onTap: _pickImage,
         child: Container(
           width: double.infinity,
-          height: 180,
+          height: 230,
           decoration: BoxDecoration(
-            color: Colors.grey[300],
+            color: kLightContainerColor,
             borderRadius: BorderRadius.circular(10),
             image: _imageFile != null
                 ? DecorationImage(
@@ -46,7 +47,7 @@ class _PetCameraPlaceholderState extends State<PetCameraPlaceholder> {
               ? const Icon(
                   Icons.image_rounded,
                   size: 90,
-                  color: kInputWordColor,
+                  color: kIconsColor,
                 )
               : null,
         ),
