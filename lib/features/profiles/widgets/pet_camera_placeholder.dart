@@ -44,7 +44,7 @@ class _PetCameraPlaceholderState extends State<PetCameraPlaceholder> {
           ),
           child: _imageFile == null
               ? const Icon(
-                  Icons.camera,
+                  Icons.image_rounded,
                   size: 90,
                   color: kAccountColor,
                 )

@@ -101,10 +101,13 @@ class UserProfileViewBody extends StatelessWidget {
                 const SizedBox(
                   height: 30,
                 ),
-                const ProfileListTile(
+                ProfileListTile(
                   iconasset: AssetData.settingsIcon,
                   label: 'Settings',
                   height: 50,
+                  onTap: () {
+                    GoRouter.of(context).go(AppRouter.kUserSettings);
+                  },
                 ),
                 const SizedBox(
                   height: 30,

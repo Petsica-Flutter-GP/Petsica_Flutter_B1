@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
-import 'package:petsica/features/profiles/user/cubit/add_pet_cubit.dart';
 import 'package:petsica/features/profiles/widgets/app_drop_down_button.dart';
 import 'package:petsica/features/profiles/widgets/pet_camera_placeholder.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
 
 import '../../../../core/utils/app_arrow_back.dart';
 
-class UserEditPetPageViewBody extends StatefulWidget {
-  const UserEditPetPageViewBody({super.key});
+class SitterEditPetPageViewBody extends StatefulWidget {
+  const SitterEditPetPageViewBody({super.key});
 
   @override
-  State<UserEditPetPageViewBody> createState() =>
-      _UserEditPetPageViewBodyState();
+  State<SitterEditPetPageViewBody> createState() =>
+      _SitterEditPetPageViewBodyState();
 }
 
-class _UserEditPetPageViewBodyState extends State<UserEditPetPageViewBody> {
+class _SitterEditPetPageViewBodyState extends State<SitterEditPetPageViewBody> {
   String selectedPetName = 'Cat';
   String selectedType = 'Cat';
   String selectedGender = 'Female';
@@ -32,9 +30,10 @@ class _UserEditPetPageViewBodyState extends State<UserEditPetPageViewBody> {
     return Scaffold(
       backgroundColor: kWhiteGroundColor,
       appBar: AppBar(
-        title: Text("UEdit Your Pet Information", style: Styles.textStyleQui24),
+        title:
+            Text("SI Edit Your Pet Information", style: Styles.textStyleQui24),
         centerTitle: true,
-        leading: const AppArrowBack(destination: AppRouter.kUserPetDetails),
+        leading: const AppArrowBack(destination: AppRouter.kSitterPetDetails),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),

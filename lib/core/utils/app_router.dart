@@ -1,13 +1,26 @@
 import 'package:go_router/go_router.dart';
+import 'package:petsica/core/utils/app_nav_bar.dart';
+import 'package:petsica/core/utils/home.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_profile_view.dart';
+import 'package:petsica/features/profiles/clinic/view/clinic_edit_pet_view.dart';
 import 'package:petsica/features/profiles/clinic/view/clinic_my_pet_view.dart';
+import 'package:petsica/features/profiles/clinic/view/clinic_add_pet_view.dart';
+import 'package:petsica/features/profiles/clinic/widget/clinic_settings_page.dart';
 import 'package:petsica/features/profiles/edit.dart';
+import 'package:petsica/features/profiles/seller/view/seller_edit_pet_view.dart';
 import 'package:petsica/features/profiles/seller/view/seller_my_pet_view.dart';
 import 'package:petsica/features/profiles/seller/view/seller_pet_details_view.dart';
+import 'package:petsica/features/profiles/seller/view/seller_add_pet_view.dart';
+import 'package:petsica/features/profiles/seller/widget/seller_settings_page.dart';
+import 'package:petsica/features/profiles/sitter/view/sitter_edit_pet_view.dart';
 import 'package:petsica/features/profiles/sitter/view/sitter_my_pet_view.dart';
 import 'package:petsica/features/profiles/sitter/view/sitter_pet_details_view.dart';
 import 'package:petsica/features/profiles/sitter/view/sitter_profile_view.dart';
+import 'package:petsica/features/profiles/sitter/widget/sitter_add_pet_view.dart';
+import 'package:petsica/features/profiles/sitter/widget/sitter_settings_page.dart';
+import 'package:petsica/features/profiles/user/views/user_add_pet_view.dart';
 import 'package:petsica/features/profiles/user/views/user_profile_view.dart';
+import 'package:petsica/features/profiles/user/widgets/user_settings_page.dart';
 
 import 'package:petsica/features/profiles/where.dart';
 import 'package:petsica/features/signup/presentation/views/seller/seller_signup_view.dart';
@@ -24,7 +37,6 @@ import 'package:petsica/features/who/presentation/views/who_view.dart';
 import '../../features/profiles/clinic/view/clinic_pet_details_view.dart';
 import '../../features/profiles/clinic/view/clinic_profile_view.dart';
 import '../../features/profiles/seller/view/seller_profile_view.dart';
-import '../../features/profiles/user/cubit/add_pet_cubit.dart';
 import '../../features/profiles/user/views/user_my_pet_view.dart';
 import '../../features/profiles/user/views/user_edit_pet_view.dart';
 import '../../features/profiles/user/views/user_pet_details_view.dart';
@@ -60,12 +72,21 @@ abstract class AppRouter {
   static const kSellerEditPet = '/sellerEditPet';
   static const kSitterEditPet = '/sitterEditPet';
   static const kClinicEditPet = '/clinicEditPet';
+  static const kUserAddPet = '/userAddPet';
+  static const kSellerAddPet = '/sellerAddPet';
+  static const kSitterAddPet = '/sitterAddPet';
+  static const kClinicAddPet = '/clinicAddPet';
+  static const kUserSettings = '/userSettings';
+  static const kSitterSettings = '/sitterSettings';
+  static const kSellerSettings = '/sellerSettings';
+  static const kClinicSettings = '/clinicSettings';
   static const kWhereProfile = '/whereProfile';
   static const kWhoEdit = '/whoEdit';
+  static const kHomeScreen = '/homeScreen';
 
   static final router = GoRouter(
     // initialLocation: '/', // البداية من SplashScreen
-    initialLocation: kWhereProfile,
+    initialLocation: kHomeScreen,
     routes: [
       GoRoute(
         path: '/',
@@ -74,6 +95,10 @@ abstract class AppRouter {
       GoRoute(
         path: kOnboarding,
         builder: (context, state) => const Onboarding(),
+      ),
+      GoRoute(
+        path: kHomeScreen,
+        builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(
         path: kWhoAreYou,
@@ -162,46 +187,69 @@ abstract class AppRouter {
         builder: (context, state) => const SitterMyPetView(),
       ),
       GoRoute(
-        path: kUserPetDetails,
-        builder: (context, state) =>const  UserPetDetailsView()
-        
-      ),
+          path: kUserPetDetails,
+          builder: (context, state) => const UserPetDetailsView()),
       GoRoute(
-        path: kSitterPetDetails,
-        builder: (context, state) =>
-           SitterPetDetailsView()
-      ),
+          path: kSitterPetDetails,
+          builder: (context, state) => const SitterPetDetailsView()),
       GoRoute(
-        path: kSellerPetDetails,
-        builder: (context, state) =>
-           SellerPetDetailsView()
-        
-      ),
+          path: kSellerPetDetails,
+          builder: (context, state) => const SellerPetDetailsView()),
       GoRoute(
-        path: kClinicPetDetails,
-        builder: (context, state) =>
-           ClinicPetDetailsView()
+          path: kClinicPetDetails,
+          builder: (context, state) => const ClinicPetDetailsView()),
+      GoRoute(
+        path: kWhoEdit,
+        builder: (context, state) => const WhereEdit(),
       ),
       GoRoute(
         path: kUserEditPet,
         builder: (context, state) => const UserEditPetView(),
       ),
       GoRoute(
-        path: kWhoEdit,
-        builder: (context, state) => const WhereEdit(),
+        path: kSitterEditPet,
+        builder: (context, state) => const SitterEditPetView(),
       ),
-      // GoRoute(
-      //   path: kSellerEditPet,
-      //   builder: (context, state) =>  SellerEditPetView(),
-      // ),
-      // GoRoute(
-      //   path: kSitterEditPet,
-      //   builder: (context, state) =>  SitterEditPetView(),
-      // ),
-      // GoRoute(
-      //   path: kClinicEditPet,
-      //   builder: (context, state) =>  ClinicEditPetView(),
-      // ),
+      GoRoute(
+        path: kSellerEditPet,
+        builder: (context, state) => const SellerEditPetView(),
+      ),
+      GoRoute(
+        path: kClinicEditPet,
+        builder: (context, state) => const ClinicEditPetView(),
+      ),
+      GoRoute(
+        path: kUserAddPet,
+        builder: (context, state) => const UserAddPetView(),
+      ),
+      GoRoute(
+        path: kSitterAddPet,
+        builder: (context, state) => const SitterAddPetView(),
+      ),
+      GoRoute(
+        path: kSellerAddPet,
+        builder: (context, state) => const SellerAddPetView(),
+      ),
+      GoRoute(
+        path: kClinicAddPet,
+        builder: (context, state) => const ClinicAddPetView(),
+      ),
+      GoRoute(
+        path: kUserSettings,
+        builder: (context, state) => const UserSettingsScreen(),
+      ),
+      GoRoute(
+        path: kSitterSettings,
+        builder: (context, state) => const SitterSettingsScreen(),
+      ),
+      GoRoute(
+        path: kSellerSettings,
+        builder: (context, state) => const SellerSettingsScreen(),
+      ),
+      GoRoute(
+        path: kClinicSettings,
+        builder: (context, state) => const ClinicSettingsScreen(),
+      ),
     ],
   );
 }

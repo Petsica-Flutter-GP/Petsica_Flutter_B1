@@ -10,11 +10,10 @@ import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/profiles/widgets/app_switch.dart';
 
 class SitterPetDetailsViewBody extends StatelessWidget {
-  const SitterPetDetailsViewBody({Key? key}) : super(key: key);
+  const SitterPetDetailsViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // 🐾 بيانات الحيوان الأليف ثابتة هنا
     const petName = "Luna";
     const petImage = AssetData.petImage;
     const petAge = "2";
@@ -27,7 +26,7 @@ class SitterPetDetailsViewBody extends StatelessWidget {
         title: Text(petName, style: Styles.textStyleQu28),
         centerTitle: true,
         leading: const AppArrowBack(
-          destination: AppRouter.kUserMyPet,
+          destination: AppRouter.kSitterMyPet,
         ),
       ),
       body: Padding(
@@ -66,8 +65,8 @@ class SitterPetDetailsViewBody extends StatelessWidget {
                   children: [
                     Text(
                       "Adoption",
-                      style:
-                          Styles.textStyleCom28.copyWith(color: kAddPetTextColor),
+                      style: Styles.textStyleCom28
+                          .copyWith(color: kAddPetTextColor),
                     ),
                     const Spacer(),
                     const AppSwitch()
@@ -78,15 +77,15 @@ class SitterPetDetailsViewBody extends StatelessWidget {
                   children: [
                     Text(
                       "Mating",
-                      style:
-                          Styles.textStyleCom28.copyWith(color: kAddPetTextColor),
+                      style: Styles.textStyleCom28
+                          .copyWith(color: kAddPetTextColor),
                     ),
                     const Spacer(),
                     const AppSwitch()
                   ],
                 ),
                 const Text(
-                  'User',
+                  'sitter',
                   style: TextStyle(fontSize: 40),
                 ),
               ],
@@ -97,15 +96,14 @@ class SitterPetDetailsViewBody extends StatelessWidget {
               child: AppButton(
                 text: 'Edit',
                 border: 10,
-                backgroundColor: kAddPetTextColor,
+                backgroundColor: kProducPriceColor,
                 width: 120,
                 style: Styles.textStyleQui24.copyWith(color: Colors.white),
                 onTap: () {
-                  // ⚠️ لا يتم تمرير pet لأننا نستخدم بيانات ثابتة
-                  GoRouter.of(context).go(AppRouter.kUserEditPet);
+                  GoRouter.of(context).go(AppRouter.kSitterEditPet);
                 },
               ),
-            )
+            ),
           ],
         ),
       ),

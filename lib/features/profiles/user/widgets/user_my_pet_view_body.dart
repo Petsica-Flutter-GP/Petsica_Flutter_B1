@@ -21,17 +21,22 @@ class UserMyPetViewBody extends StatelessWidget {
       child: Scaffold(
         backgroundColor: kWhiteGroundColor,
         appBar: AppBar(
-          title: Text("My pets", style: Styles.textStyleQu28),
+          title: Text("My pets user", style: Styles.textStyleQu28),
           centerTitle: true,
           leading: const AppArrowBack(destination: AppRouter.kUserProfile),
         ),
-        floatingActionButton: const AppFloatingButton(
+        floatingActionButton: AppFloatingButton(
           color: kProducPriceColor,
-          icon: Icon(
+          icon: const Icon(
             Icons.add,
             size: 35,
             color: kWhiteGroundColor,
           ),
+          onPressed: () {
+            GoRouter.of(context).go(
+              AppRouter.kUserAddPet,
+            );
+          },
         ),
         body: BlocBuilder<AddPetCubit, List<Pet>>(
           builder: (context, pets) {
@@ -54,7 +59,7 @@ class UserMyPetViewBody extends StatelessWidget {
                         final pet = pets[index];
                         return GestureDetector(
                           onTap: () {
-                            GoRouter.of(context).push(
+                            GoRouter.of(context).go(
                               AppRouter.kUserPetDetails,
                               extra: pet.toMap(),
                             );
