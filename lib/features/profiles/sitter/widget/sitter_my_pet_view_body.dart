@@ -39,6 +39,7 @@ class SitterMyPetViewBody extends StatelessWidget {
             );
           },
         ),
+     
         body: BlocBuilder<AddPetCubit, List<Pet>>(
           builder: (context, pets) {
             if (pets.isEmpty) {

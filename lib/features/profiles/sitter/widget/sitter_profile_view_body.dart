@@ -89,11 +89,13 @@ class SitterProfileViewBody extends StatelessWidget {
             /// 🔹 القائمة الجانبية
             Column(
               children: [
-                const ProfileListTile(
-                  iconasset: AssetData.serviceIcon,
-                  label: 'My services',
-                  height: 50,
-                ),
+                ProfileListTile(
+                    iconasset: AssetData.serviceIcon,
+                    label: 'My services',
+                    height: 50,
+                    onTap: () {
+                      GoRouter.of(context).go(AppRouter.kSitterMyServices);
+                    }),
                 const SizedBox(
                   height: 30,
                 ),
@@ -108,7 +110,7 @@ class SitterProfileViewBody extends StatelessWidget {
                 const SizedBox(
                   height: 30,
                 ),
-                 ProfileListTile(
+                ProfileListTile(
                   iconasset: AssetData.settingsIcon,
                   label: 'Settings',
                   height: 50,

@@ -7,13 +7,21 @@ import 'package:petsica/features/profiles/clinic/view/clinic_my_pet_view.dart';
 import 'package:petsica/features/profiles/clinic/view/clinic_add_pet_view.dart';
 import 'package:petsica/features/profiles/clinic/widget/clinic_settings_page.dart';
 import 'package:petsica/features/profiles/edit.dart';
+import 'package:petsica/features/profiles/seller/view/seller_add_product_view.dart';
 import 'package:petsica/features/profiles/seller/view/seller_edit_pet_view.dart';
+import 'package:petsica/features/profiles/seller/view/seller_edit_product_view.dart';
 import 'package:petsica/features/profiles/seller/view/seller_my_pet_view.dart';
+import 'package:petsica/features/profiles/seller/view/seller_my_store_view.dart';
+import 'package:petsica/features/profiles/seller/view/seller_order_details_view.dart';
+import 'package:petsica/features/profiles/seller/view/seller_orders_view.dart';
 import 'package:petsica/features/profiles/seller/view/seller_pet_details_view.dart';
 import 'package:petsica/features/profiles/seller/view/seller_add_pet_view.dart';
 import 'package:petsica/features/profiles/seller/widget/seller_settings_page.dart';
 import 'package:petsica/features/profiles/sitter/view/sitter_edit_pet_view.dart';
 import 'package:petsica/features/profiles/sitter/view/sitter_my_pet_view.dart';
+import 'package:petsica/features/profiles/sitter/view/sitter_my_services_view.dart';
+import 'package:petsica/features/profiles/sitter/view/sitter_new_services_view.dart';
+import 'package:petsica/features/profiles/sitter/view/sitter_edit_services_view.dart';
 import 'package:petsica/features/profiles/sitter/view/sitter_pet_details_view.dart';
 import 'package:petsica/features/profiles/sitter/view/sitter_profile_view.dart';
 import 'package:petsica/features/profiles/sitter/widget/sitter_add_pet_view.dart';
@@ -80,13 +88,21 @@ abstract class AppRouter {
   static const kSitterSettings = '/sitterSettings';
   static const kSellerSettings = '/sellerSettings';
   static const kClinicSettings = '/clinicSettings';
+  static const kSitterMyServices = '/sitterMyServices';
+  static const kSitterNewServices = '/sitterNewServices';
+  static const kSitterEditServices = '/sitterEditServices';
+  static const kSellerMyStore = '/sellerMyStore';
+  static const kSellerAddProduct = '/sellerAddProduct';
+  static const kSellerEditProduct = '/sellerEditProduct';
+  static const kSellerOrders = '/sellerOrders';
+  static const kSellerOrderDetails = '/sellerOrderDetails';
   static const kWhereProfile = '/whereProfile';
   static const kWhoEdit = '/whoEdit';
   static const kHomeScreen = '/homeScreen';
 
   static final router = GoRouter(
     // initialLocation: '/', // البداية من SplashScreen
-    initialLocation: kHomeScreen,
+    initialLocation: kSellerProfile,
     routes: [
       GoRoute(
         path: '/',
@@ -249,6 +265,38 @@ abstract class AppRouter {
       GoRoute(
         path: kClinicSettings,
         builder: (context, state) => const ClinicSettingsScreen(),
+      ),
+      GoRoute(
+        path: kSitterMyServices,
+        builder: (context, state) => const SitterMyServicesView(),
+      ),
+      GoRoute(
+        path: kSitterNewServices,
+        builder: (context, state) => const SitterNewServicesView(),
+      ),
+      GoRoute(
+        path: kSitterEditServices,
+        builder: (context, state) => const SitterEditServicesView(),
+      ),
+      GoRoute(
+        path: kSellerMyStore,
+        builder: (context, state) => const SellerMyStoreView(),
+      ),
+      GoRoute(
+        path: kSellerEditProduct,
+        builder: (context, state) => const SellerEditProductView(),
+      ),
+      GoRoute(
+        path: kSellerAddProduct,
+        builder: (context, state) => const SellerAddProductView(),
+      ),
+      GoRoute(
+        path: kSellerOrders,
+        builder: (context, state) => const SellerOrdersView(),
+      ),
+      GoRoute(
+        path: kSellerOrderDetails,
+        builder: (context, state) => const SellerOrdersDetailsView(),
       ),
     ],
   );
