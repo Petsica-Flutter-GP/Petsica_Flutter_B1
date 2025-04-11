@@ -10,7 +10,7 @@ import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/profiles/widgets/app_switch.dart';
 
 class UserPetDetailsViewBody extends StatelessWidget {
-  const UserPetDetailsViewBody({Key? key}) : super(key: key);
+  const UserPetDetailsViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +66,8 @@ class UserPetDetailsViewBody extends StatelessWidget {
                   children: [
                     Text(
                       "Adoption",
-                      style:
-                          Styles.textStyleCom28.copyWith(color: kAddPetTextColor),
+                      style: Styles.textStyleCom28
+                          .copyWith(color: kAddPetTextColor),
                     ),
                     const Spacer(),
                     const AppSwitch()
@@ -78,8 +78,8 @@ class UserPetDetailsViewBody extends StatelessWidget {
                   children: [
                     Text(
                       "Mating",
-                      style:
-                          Styles.textStyleCom28.copyWith(color: kAddPetTextColor),
+                      style: Styles.textStyleCom28
+                          .copyWith(color: kAddPetTextColor),
                     ),
                     const Spacer(),
                     const AppSwitch()
@@ -97,7 +97,7 @@ class UserPetDetailsViewBody extends StatelessWidget {
               child: AppButton(
                 text: 'Edit',
                 border: 10,
-                backgroundColor: kAddPetTextColor,
+                backgroundColor: kProducPriceColor,
                 width: 120,
                 style: Styles.textStyleQui24.copyWith(color: Colors.white),
                 onTap: () {

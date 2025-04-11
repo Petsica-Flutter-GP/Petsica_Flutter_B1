@@ -10,7 +10,7 @@ import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/profiles/widgets/app_switch.dart';
 
 class SellerPetDetailsViewBody extends StatelessWidget {
-  const SellerPetDetailsViewBody({Key? key}) : super(key: key);
+  const SellerPetDetailsViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class SellerPetDetailsViewBody extends StatelessWidget {
         title: Text(petName, style: Styles.textStyleQu28),
         centerTitle: true,
         leading: const AppArrowBack(
-          destination: AppRouter.kUserMyPet,
+          destination: AppRouter.kSellerMyPet,
         ),
       ),
       body: Padding(
@@ -66,8 +66,8 @@ class SellerPetDetailsViewBody extends StatelessWidget {
                   children: [
                     Text(
                       "Adoption",
-                      style:
-                          Styles.textStyleCom28.copyWith(color: kAddPetTextColor),
+                      style: Styles.textStyleCom28
+                          .copyWith(color: kAddPetTextColor),
                     ),
                     const Spacer(),
                     const AppSwitch()
@@ -78,15 +78,15 @@ class SellerPetDetailsViewBody extends StatelessWidget {
                   children: [
                     Text(
                       "Mating",
-                      style:
-                          Styles.textStyleCom28.copyWith(color: kAddPetTextColor),
+                      style: Styles.textStyleCom28
+                          .copyWith(color: kAddPetTextColor),
                     ),
                     const Spacer(),
                     const AppSwitch()
                   ],
                 ),
                 const Text(
-                  'User',
+                  'seller',
                   style: TextStyle(fontSize: 40),
                 ),
               ],
@@ -97,12 +97,12 @@ class SellerPetDetailsViewBody extends StatelessWidget {
               child: AppButton(
                 text: 'Edit',
                 border: 10,
-                backgroundColor: kAddPetTextColor,
+                backgroundColor: kProducPriceColor,
                 width: 120,
                 style: Styles.textStyleQui24.copyWith(color: Colors.white),
                 onTap: () {
                   // ⚠️ لا يتم تمرير pet لأننا نستخدم بيانات ثابتة
-                  GoRouter.of(context).go(AppRouter.kUserEditPet);
+                  GoRouter.of(context).go(AppRouter.kSellerEditPet);
                 },
               ),
             )

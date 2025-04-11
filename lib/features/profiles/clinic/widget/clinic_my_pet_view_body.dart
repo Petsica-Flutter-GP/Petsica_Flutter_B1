@@ -22,18 +22,23 @@ class ClinicMyPetViewBody extends StatelessWidget {
       child: Scaffold(
         backgroundColor: kWhiteGroundColor,
         appBar: AppBar(
-          title: Text("My pets", style: Styles.textStyleQu28),
+          title: Text("clinic My pets", style: Styles.textStyleQu28),
           centerTitle: true,
-          leading: const AppArrowBack(destination: AppRouter.kUserProfile),
-        ), floatingActionButton: const AppFloatingButton(
+          leading: const AppArrowBack(destination: AppRouter.kClinicProfile),
+        ),
+        floatingActionButton: AppFloatingButton(
           color: kProducPriceColor,
-          icon: Icon(
+          icon: const Icon(
             Icons.add,
             size: 35,
             color: kWhiteGroundColor,
           ),
+          onPressed: () {
+            GoRouter.of(context).go(
+              AppRouter.kClinicAddPet,
+            );
+          },
         ),
-       
         body: BlocBuilder<AddPetCubit, List<Pet>>(
           builder: (context, pets) {
             if (pets.isEmpty) {
