@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_router.dart';
+
 void main() {
-  // initial 
+  // initial
   runApp(
     DevicePreview(
       enabled: false, // تفعيل معاينة الجهاز
@@ -11,8 +12,7 @@ void main() {
     ),
   );
 }
-  //test 
-  
+
 class Petsica extends StatelessWidget {
   const Petsica({super.key});
 

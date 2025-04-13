@@ -19,4 +19,5 @@ class AssetData {
   static const storeIcon = 'assets/icon/store.svg';
   static const clinicIcon = 'assets/icon/clinic.svg';
   static const serviceIcon = 'assets/icon/service.svg';
+  static const profileIcon = 'assets/images/pero.jpeg';
 }

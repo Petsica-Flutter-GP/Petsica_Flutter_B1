@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:petsica/features/community/views/publish_post_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_profile_view.dart';
 import 'package:petsica/features/profiles/sitter/view/sitter_profile_view.dart';
 import 'package:petsica/features/profiles/user/views/user_profile_view.dart';
@@ -41,10 +42,11 @@ abstract class AppRouter {
   static const kAdminProfile = '/adminProfile';
   static const kUserAddPet = '/userAddPet';
   static const kWhereProfile = '/whereProfile';
+  static const kPost = '/Post';
 
   static final router = GoRouter(
-    // initialLocation: '/', // البداية من SplashScreen
-    initialLocation: kWhereProfile,
+    initialLocation: '/', // البداية من SplashScreen
+    //initialLocation: kPost,
     routes: [
       GoRoute(
         path: '/',
@@ -122,7 +124,11 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: kUserAddPet,
-        builder: (context, state) =>  UserAddPetView(),
+        builder: (context, state) => UserAddPetView(),
+      ),
+      GoRoute(
+        path: kPost,
+        builder: (context, state) => PublishPostView(),
       ),
     ],
   );

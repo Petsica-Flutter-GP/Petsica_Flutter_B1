@@ -7,7 +7,6 @@ class AuthService {
   static Future<Map<String, dynamic>> registerSitter({
     required String userName,
     required String email,
-    required String phone,
     required String nationalId,
     required String location,
     required String password,
@@ -17,14 +16,14 @@ class AuthService {
         Uri.parse(_baseUrl),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          "userName": userName,
+           "userName": userName,
           "email": email,
-          "phone": phone,
-          "nationalID": nationalId,
-          "location": location,
           "password": password,
-          "photo": "photo_placeholder", // Optional placeholder
-          "address": location, // Using location as address
+          "photo": "photo", // Optional (Replace with real data)
+          "address": location, // Optional
+          "type":"SITTER",
+          "approvalPhoto": "string", // Optional
+          "nationalID": nationalId // Using location as address
         }),
       );
 
