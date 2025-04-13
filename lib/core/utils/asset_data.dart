@@ -12,6 +12,7 @@ class AssetData {
   static const profileImage = 'assets/images/profile.png';
   static const petImage = 'assets/images/pet.png';
   static const settingImage = 'assets/images/setting.png';
+  static const chatBootImage = 'assets/images/chatBoot.png';
   static const petIcon = 'assets/icon/pet.svg';
   static const settingsIcon = 'assets/icon/settings.svg';
   static const logoutIcon = 'assets/icon/logout.svg';

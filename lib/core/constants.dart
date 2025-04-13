@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 const kAppColor = Color(0xffEAE6E3);
 const kWhiteGroundColor = Color(0xfffcfcfc);
 const kLightContainerColor = Color(0xfff9f9f9);
+const kChatBackGroundColor = Color(0xfff8f8f8);
 const kWordColor = Colors.black;
 const kContainerColor = Colors.white;
 const kTextFieldColor = Color(0xffFAF7F6);
