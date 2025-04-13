@@ -1,7 +1,13 @@
 import 'package:go_router/go_router.dart';
-import 'package:petsica/core/utils/app_nav_bar.dart';
 import 'package:petsica/core/utils/home.dart';
+import 'package:petsica/features/chatBoot/views/chat_boot_onboarding_view.dart';
+import 'package:petsica/features/chatBoot/views/chat_boot_view.dart';
+import 'package:petsica/features/profiles/adminn/view/admin_clinic_requests_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_profile_view.dart';
+import 'package:petsica/features/profiles/adminn/view/admin_seller_requests_view.dart';
+import 'package:petsica/features/profiles/adminn/view/admin_seller_request_details_view.dart';
+import 'package:petsica/features/profiles/adminn/view/admin_sitter_requests_view.dart';
+import 'package:petsica/features/profiles/adminn/widget/admin_settings_page.dart';
 import 'package:petsica/features/profiles/clinic/view/clinic_edit_pet_view.dart';
 import 'package:petsica/features/profiles/clinic/view/clinic_my_pet_view.dart';
 import 'package:petsica/features/profiles/clinic/view/clinic_add_pet_view.dart';
@@ -88,6 +94,7 @@ abstract class AppRouter {
   static const kSitterSettings = '/sitterSettings';
   static const kSellerSettings = '/sellerSettings';
   static const kClinicSettings = '/clinicSettings';
+  static const kAdminSettings = '/adminSettings';
   static const kSitterMyServices = '/sitterMyServices';
   static const kSitterNewServices = '/sitterNewServices';
   static const kSitterEditServices = '/sitterEditServices';
@@ -96,13 +103,20 @@ abstract class AppRouter {
   static const kSellerEditProduct = '/sellerEditProduct';
   static const kSellerOrders = '/sellerOrders';
   static const kSellerOrderDetails = '/sellerOrderDetails';
+  static const kAdminSellerRequests = '/adminStoreRequests';
+  static const kAdminClinicRequests = '/adminClinicRequests';
+  static const kAdminSitterRequests = '/adminSitterRequests';
+  static const kAdminRequestDetails = '/adminRequestDetails';
+  static const kChatBootOnboarding = '/chatBootOnboarding';
+  static const kChatBoot= '/chatBoot';
+  static const kCommunityChat= '/communityChat';
   static const kWhereProfile = '/whereProfile';
   static const kWhoEdit = '/whoEdit';
   static const kHomeScreen = '/homeScreen';
 
   static final router = GoRouter(
     // initialLocation: '/', // البداية من SplashScreen
-    initialLocation: kSellerProfile,
+    initialLocation: kChatBootOnboarding,
     routes: [
       GoRoute(
         path: '/',
@@ -267,6 +281,10 @@ abstract class AppRouter {
         builder: (context, state) => const ClinicSettingsScreen(),
       ),
       GoRoute(
+        path: kAdminSettings,
+        builder: (context, state) => const AdminSettingsScreen(),
+      ),
+      GoRoute(
         path: kSitterMyServices,
         builder: (context, state) => const SitterMyServicesView(),
       ),
@@ -298,6 +316,35 @@ abstract class AppRouter {
         path: kSellerOrderDetails,
         builder: (context, state) => const SellerOrdersDetailsView(),
       ),
+      GoRoute(
+        path: kAdminSellerRequests,
+        builder: (context, state) => const AdminSellerRequestsView(),
+      ),
+      GoRoute(
+        path: kAdminSitterRequests,
+        builder: (context, state) => const AdminSitterRequestsView(),
+      ),
+      GoRoute(
+        path: kAdminClinicRequests,
+        builder: (context, state) => const AdminClinicRequestsView(),
+      ),
+      GoRoute(
+        path: kAdminRequestDetails,
+        builder: (context, state) => const AdminSellerRequestDetailsView(),
+      ),
+      GoRoute(
+        path: kChatBootOnboarding,
+        builder: (context, state) => const ChatBootOnboardingView(),
+      ),
+      GoRoute(
+        path: kChatBoot,
+        builder: (context, state) => const ChatBootView(),
+      ),
+      // GoRoute(
+      //   path: kCommunityChat,
+      //   builder: (context, state) => const CommunityChatView(),
+      // ),
+      
     ],
   );
 }

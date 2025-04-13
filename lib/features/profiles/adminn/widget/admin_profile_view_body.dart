@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/features/profiles/user/cubit/profile_image_cubit.dart';
@@ -97,39 +98,59 @@ class AdminProfileViewBody extends StatelessWidget {
               ),
 
               /// 🔹 القائمة الجانبية
-              const Column(
+              Column(
                 children: [
                   ProfileListTile(
                     iconasset: AssetData.storeIcon,
-                    label: 'Store requests',
+                    label: 'Seller requests',
                     height: 35,
+                    onTap: () {
+                      GoRouter.of(context).go(
+                        AppRouter.kAdminSellerRequests,
+                      );
+                    },
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   ProfileListTile(
                     iconasset: AssetData.serviceIcon,
                     label: 'Sitter requests',
                     height: 35,
+                    onTap: () {
+                      GoRouter.of(context).go(
+                        AppRouter.kAdminSitterRequests,
+                      );
+                    },
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   ProfileListTile(
                     iconasset: AssetData.clinicIcon,
                     label: 'Clinic requests',
                     height: 40,
+                    onTap: () {
+                      GoRouter.of(context).go(
+                        AppRouter.kAdminClinicRequests,
+                      );
+                    },
                   ),
-                  SizedBox(height: 30),
-                  ProfileListTile(
+                  const SizedBox(height: 30),
+                   ProfileListTile(
                     iconasset: AssetData.settingsIcon,
                     label: 'Settings',
                     height: 50,
+                    onTap: () {
+                      GoRouter.of(context).go(
+                        AppRouter.kAdminSettings,
+                      );
+                    },
                   ),
-                  SizedBox(height: 30),
-                  ProfileListTile(
+                  const SizedBox(height: 30),
+                  const ProfileListTile(
                     iconasset: AssetData.aboutUsIcon,
                     label: 'About us',
                     height: 45,
                   ),
-                  SizedBox(height: 30),
-                  ProfileListTile(
+                  const SizedBox(height: 30),
+                  const ProfileListTile(
                     iconasset: AssetData.logoutIcon,
                     label: 'Log out',
                     height: 37,
