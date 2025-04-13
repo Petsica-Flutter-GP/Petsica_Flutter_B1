@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:petsica/core/utils/styles.dart';
+import 'package:petsica/core/utils/taken_storage.dart';
+import 'package:petsica/core/utils/token_decoder.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/sign_word.dart';
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/password_field.dart';
+import 'package:petsica/core/constants.dart';
+import 'package:petsica/services/signup/auth_service_login.dart';
 
-import '../../../../../core/constants.dart';
 
 class WelcomeBackViewBody extends StatefulWidget {
-  final String selectedOption; // ✅ استقبال الخيار المختار
+  final String selectedOption;
 
   const WelcomeBackViewBody({super.key, required this.selectedOption});
 
@@ -17,6 +20,50 @@ class WelcomeBackViewBody extends StatefulWidget {
 }
 
 class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  bool _isLoading = false;
+
+  Future<void> _handleLogin() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    final response = await AuthService.login(email, password);
+
+    if (response != null) {
+      await TokenStorage.saveTokens(response.token, response.refreshToken);
+
+      final roles = TokenDecoder.getRoles(response.token);
+      final userId = TokenDecoder.getUserId(response.token);
+
+      print('✅ Logged in as: $email');
+      print('🆔 User ID: $userId');
+      print('👥 Roles: $roles');
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("✅ Logged in successfully!")),
+      );
+
+      // Navigate based on role or to main page
+      // Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("❌ Login failed. Please try again.")),
+      );
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,26 +101,36 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
                 child: Column(
                   children: [
                     const SizedBox(height: 37),
-                    const InputField(label: 'User name'),
+                    InputField(
+                      label: 'User name',
+                      controller: _emailController,
+                    ),
                     const SizedBox(height: 29),
-                    const PasswordField(text: 'Password'),
+                    PasswordField(
+                      text: 'Password',
+                      controller: _passwordController,
+                    ),
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {},
                         child: Text(
                           "Forget Password?",
-                          style:
-                              Styles.textStyleCom12.copyWith(color: kWordColor),
+                          style: Styles.textStyleCom12.copyWith(color: kWordColor),
                         ),
                       ),
                     ),
                     const SizedBox(height: 33),
-                     AppButton(text: "Login",border: 20,),
+                    AppButton(
+                      text: _isLoading ? "Logging in..." : "Login",
+                      border: 20,
+                      onTap: _isLoading ? null : _handleLogin,
+                    ),
                     SignupWord(
-                        text1: "Don’t have an account?",
-                        text2: "Sign Up",
-                        userType: widget.selectedOption),
+                      text1: "Don’t have an account?",
+                      text2: "Sign Up",
+                      userType: widget.selectedOption,
+                    ),
                   ],
                 ),
               ),
@@ -81,7 +138,6 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
           ),
         ],
       ),
-    
     );
   }
 }

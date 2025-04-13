@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  static const String _baseUrl = "http://petsica.runasp.net/Auth/register";
+  static const String _baseUrl = "http://petsica.runasp.net/Auth/registerUser";
 
   static Future<Map<String, dynamic>> registerUser({
     required String userName,
@@ -14,13 +14,14 @@ class AuthService {
         Uri.parse(_baseUrl),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          "userName": userName,
-          "email": email,
-          "password": password,
-          "photo": "photo", // Optional (Replace with real data)
-          "address": "fayoum", // Optional
-          "location": "fayuoooooom", // Optional
-          "nationalID": "14578953" // Example (Should be real data)
+          "UserName": userName,
+          "Email": email,
+          "Password": password,
+          "Photo": "photo", // Optional (Replace with real data)
+          "Address": "fayoum", // Optional
+          "Type": "MEMBER",
+          "ApprovalPhoto": "string", // Optional
+          "NationalID": "14578953" // Example (Should be real data)
         }),
       );
 
@@ -35,7 +36,7 @@ class AuthService {
           "success": false,
           "message": responseData["message"] ??
               responseData["error"] ??
-              "This account is already signed up"
+              "Registeration failed"
         };
       }
     } catch (e) {

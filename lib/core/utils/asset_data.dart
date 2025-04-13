@@ -21,9 +21,13 @@ class AssetData {
   static const storeIcon = 'assets/icon/store.svg';
   static const clinicIcon = 'assets/icon/clinic.svg';
   static const serviceIcon = 'assets/icon/service.svg';
+
+  static const profileIcon = 'assets/images/pero.jpeg';
+
   static const navCommunity = 'assets/icon/navComm.svg';
   static const navAlarm = 'assets/icon/navAla.svg';
   static const navStore = 'assets/icon/navSto.svg';
   static const navServices = 'assets/icon/navServ.svg';
   static const navClinic = 'assets/icon/navCli.svg';
+
 }

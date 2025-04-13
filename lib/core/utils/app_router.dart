@@ -1,8 +1,12 @@
 import 'package:go_router/go_router.dart';
+
+import 'package:petsica/features/community/views/publish_post_view.dart';
+
 import 'package:petsica/core/utils/home.dart';
 import 'package:petsica/features/chatBoot/views/chat_boot_onboarding_view.dart';
 import 'package:petsica/features/chatBoot/views/chat_boot_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_clinic_requests_view.dart';
+
 import 'package:petsica/features/profiles/adminn/view/admin_profile_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_seller_requests_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_seller_request_details_view.dart';
@@ -111,12 +115,20 @@ abstract class AppRouter {
   static const kChatBoot= '/chatBoot';
   static const kCommunityChat= '/communityChat';
   static const kWhereProfile = '/whereProfile';
+
+  static const kPost = '/Post';
+
+  static final router = GoRouter(
+    initialLocation: '/', // البداية من SplashScreen
+    //initialLocation: kPost,
+
   static const kWhoEdit = '/whoEdit';
   static const kHomeScreen = '/homeScreen';
 
   static final router = GoRouter(
     // initialLocation: '/', // البداية من SplashScreen
     initialLocation: kChatBootOnboarding,
+
     routes: [
       GoRoute(
         path: '/',
@@ -250,6 +262,13 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: kUserAddPet,
+
+        builder: (context, state) => UserAddPetView(),
+      ),
+      GoRoute(
+        path: kPost,
+        builder: (context, state) => PublishPostView(),
+
         builder: (context, state) => const UserAddPetView(),
       ),
       GoRoute(
@@ -339,6 +358,7 @@ abstract class AppRouter {
       GoRoute(
         path: kChatBoot,
         builder: (context, state) => const ChatBootView(),
+
       ),
       // GoRoute(
       //   path: kCommunityChat,

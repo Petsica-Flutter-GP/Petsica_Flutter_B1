@@ -24,7 +24,6 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
   File? _profileImage;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -36,7 +35,6 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
     print("Attempting sitter sign-up...");
     String email = _emailController.text.trim();
     String username = _usernameController.text.trim();
-    String phone = _phoneController.text.trim();
     String nationalId = _idController.text.trim();
     String location = _locationController.text.trim();
     String password = _passwordController.text.trim();
@@ -44,7 +42,6 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
 
     if (email.isEmpty ||
         username.isEmpty ||
-        phone.isEmpty ||
         nationalId.isEmpty ||
         location.isEmpty ||
         password.isEmpty ||
@@ -68,7 +65,6 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
       final result = await AuthService.registerSitter(
         email: email,
         userName: username,
-        phone: phone,
         nationalId: nationalId,
         location: location,
         password: password,
@@ -93,7 +89,9 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-          leading: const AppArrowBack(destination: AppRouter.kWhoAreYou),
+
+        leading: AppArrowBack(destination: AppRouter.kWhoAreYou),
+
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -137,9 +135,8 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
                     const SizedBox(height: 20),
                     InputField(
                         label: "User Name", controller: _usernameController),
-                    const SizedBox(height: 20),
-                    PhoneNumberInputField(
-                        label: 'Phone number', controller: _phoneController),
+                    
+                    
                     const SizedBox(height: 20),
                     VerificationIdInputField(
                         label: 'National ID',
@@ -163,7 +160,8 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
                         : AppButton(
                             text: "Create Account",
                             border: 20,
-                            onTap: _signUpSitter),
+                            onTap: _signUpSitter,
+                          ),
                     const SizedBox(height: 20),
                     const LoginWord(
                         text1: 'Already have an account?',
