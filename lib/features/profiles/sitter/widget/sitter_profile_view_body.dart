@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/asset_data.dart';
@@ -86,41 +87,49 @@ class SitterProfileViewBody extends StatelessWidget {
             ),
 
             /// 🔹 القائمة الجانبية
-            const Column(
+            Column(
               children: [
                 ProfileListTile(
-                  iconasset: AssetData.serviceIcon,
-                  label: 'My services',
-                  height: 50,
-                ),
-                SizedBox(
+                    iconasset: AssetData.serviceIcon,
+                    label: 'My services',
+                    height: 50,
+                    onTap: () {
+                      GoRouter.of(context).go(AppRouter.kSitterMyServices);
+                    }),
+                const SizedBox(
                   height: 30,
                 ),
                 ProfileListTile(
-                  iconasset: AssetData.petIcon,
-                  label: 'Add pet',
-                  height: 50,
-                ),
-                SizedBox(
+                    iconasset: AssetData.petIcon,
+                    label: 'Add pet',
+                    height: 50,
+                    onTap: () {
+                      GoRouter.of(context).go(AppRouter.kSitterMyPet);
+                      print("sitter add pet");
+                    }),
+                const SizedBox(
                   height: 30,
                 ),
                 ProfileListTile(
                   iconasset: AssetData.settingsIcon,
                   label: 'Settings',
                   height: 50,
+                  onTap: () {
+                    GoRouter.of(context).go(AppRouter.kSitterSettings);
+                  },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
-                ProfileListTile(
+                const ProfileListTile(
                   iconasset: AssetData.aboutUsIcon,
                   label: 'About us',
                   height: 45,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
-                ProfileListTile(
+                const ProfileListTile(
                   iconasset: AssetData.logoutIcon,
                   label: 'Log out',
                   height: 37,

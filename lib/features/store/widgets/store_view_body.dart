@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/store/widgets/product_card.dart';
-import 'package:petsica/features/store/views/product_details_view.dart';
 
 import '../../../core/utils/asset_data.dart';
 import '../widgets/category_drawer.dart';

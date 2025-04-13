@@ -25,7 +25,7 @@ class ProductDetailsViewBody extends StatelessWidget {
           style: Styles.textStyleQu28,
         ),
         centerTitle: true,
-          leading: AppArrowBack(destination: AppRouter.kStore),
+          leading:const AppArrowBack(destination: AppRouter.kStore),
       ),
       body: SingleChildScrollView(
         child: Padding(

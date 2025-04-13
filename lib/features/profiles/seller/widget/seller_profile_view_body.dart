@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/features/profiles/user/cubit/profile_image_cubit.dart';
@@ -97,39 +98,55 @@ class SellerProfileViewBody extends StatelessWidget {
               ),
 
               /// 🔹 القائمة الجانبية
-              const Column(
+              Column(
                 children: [
-                  ProfileListTile(
+                   ProfileListTile(
                     iconasset: AssetData.orderIcon,
                     label: 'My order',
                     height: 50,
+                    onTap: () {
+                      GoRouter.of(context).go(
+            AppRouter.kSellerOrders,
+          );
+                    },
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   ProfileListTile(
                     iconasset: AssetData.storeIcon,
                     label: 'My store',
                     height: 35,
+                    onTap: () {
+                      GoRouter.of(context).go(
+                        AppRouter.kSellerMyStore,
+                      );
+                    },
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   ProfileListTile(
-                    iconasset: AssetData.petIcon,
-                    label: 'Add Pet',
-                    height: 50,
-                  ),
-                  SizedBox(height: 30),
+                      iconasset: AssetData.petIcon,
+                      label: 'Add Pet',
+                      height: 50,
+                      onTap: () {
+                        GoRouter.of(context).go(AppRouter.kSellerMyPet);
+                        print("seller add pet");
+                      }),
+                  const SizedBox(height: 30),
                   ProfileListTile(
                     iconasset: AssetData.settingsIcon,
                     label: 'Settings',
                     height: 50,
+                    onTap: () {
+                      GoRouter.of(context).go(AppRouter.kSellerSettings);
+                    },
                   ),
-                  SizedBox(height: 30),
-                  ProfileListTile(
+                  const SizedBox(height: 30),
+                  const ProfileListTile(
                     iconasset: AssetData.aboutUsIcon,
                     label: 'About us',
                     height: 45,
                   ),
-                  SizedBox(height: 30),
-                  ProfileListTile(
+                  const SizedBox(height: 30),
+                  const ProfileListTile(
                     iconasset: AssetData.logoutIcon,
                     label: 'Log out',
                     height: 37,
