@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/core/utils/taken_storage.dart';
 import 'package:petsica/core/utils/token_decoder.dart';
@@ -8,7 +10,6 @@ import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/password_field.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/services/signup/auth_service_login.dart';
-
 
 class WelcomeBackViewBody extends StatefulWidget {
   final String selectedOption;
@@ -51,7 +52,9 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
       );
 
       // Navigate based on role or to main page
-      // Navigator.pushReplacementNamed(context, '/home');
+      GoRouter.of(context).go(
+        AppRouter.kSellerMyStore,
+      );
     } else {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -102,7 +105,7 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
                   children: [
                     const SizedBox(height: 37),
                     InputField(
-                      label: 'User name',
+                      label: 'Email',
                       controller: _emailController,
                     ),
                     const SizedBox(height: 29),
@@ -116,7 +119,8 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
                         onPressed: () {},
                         child: Text(
                           "Forget Password?",
-                          style: Styles.textStyleCom12.copyWith(color: kWordColor),
+                          style:
+                              Styles.textStyleCom12.copyWith(color: kWordColor),
                         ),
                       ),
                     ),
@@ -125,6 +129,12 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
                       text: _isLoading ? "Logging in..." : "Login",
                       border: 20,
                       onTap: _isLoading ? null : _handleLogin,
+
+                      // onTap: () {
+                      //   GoRouter.of(context).go(
+                      //     AppRouter.kSellerMyStore,
+                      //   );
+                      // },
                     ),
                     SignupWord(
                       text1: "Don’t have an account?",

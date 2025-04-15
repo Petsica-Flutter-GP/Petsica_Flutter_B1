@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:petsica/features/profiles/seller/widget/seller_my_store_view_body.dart';
 import 'package:petsica/features/profiles/seller/widget/seller_orders_view_body.dart';
 
 class SellerOrdersView extends StatelessWidget {
@@ -7,6 +6,6 @@ class SellerOrdersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  SellerOrdersViewBody();
+    return const SellerOrdersViewBody();
   }
 }

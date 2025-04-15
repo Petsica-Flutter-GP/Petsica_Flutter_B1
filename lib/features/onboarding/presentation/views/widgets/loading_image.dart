@@ -4,7 +4,7 @@ import 'package:petsica/core/constants.dart';
 class ImageWithLoading extends StatelessWidget {
   final String imagePath;
 
-  const ImageWithLoading({Key? key, required this.imagePath}) : super(key: key);
+  const  ImageWithLoading({Key? key, required this.imagePath}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

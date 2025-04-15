@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/app_router.dart';
-import 'package:petsica/features/store/widgets/product_card.dart';
 import '../../../core/constants.dart';
 import '../../../core/utils/asset_data.dart';
 import '../../../core/utils/app_arrow_back.dart';

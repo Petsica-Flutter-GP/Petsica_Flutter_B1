@@ -6,6 +6,6 @@ class UserEditPetView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UserEditPetPageViewBody();
+    return const UserEditPetPageViewBody();
   }
 }

@@ -3,10 +3,8 @@ import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
-import 'package:petsica/features/profiles/sitter/widget/sitter_services_card.dart';
 import 'package:petsica/features/profiles/widgets/app_drop_down_button.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
-
 import '../../../../core/constants.dart';
 
 class SitterNewServicesViewBody extends StatefulWidget {

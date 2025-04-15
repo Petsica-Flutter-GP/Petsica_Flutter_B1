@@ -6,6 +6,6 @@ class SellerAddProductView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SellerAddProductViewBody();
+    return  SellerAddProductViewBody();
   }
 }

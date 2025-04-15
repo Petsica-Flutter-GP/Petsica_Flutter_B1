@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/app_router.dart';
@@ -26,7 +25,7 @@ class SellerEditProductViewBody extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 45),
               child: Column(
-                children: [SellerCameraPlaceholder()],
+                // children: [SellerCameraPlaceholder()],
               ),
             ),
           ),
