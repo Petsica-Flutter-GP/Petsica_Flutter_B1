@@ -64,7 +64,7 @@ class _UserSignUpViewBodyState extends State<UserSignUpViewBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-          leading: AppArrowBack(destination: AppRouter.kWhereProfile),
+        leading: AppArrowBack(destination: AppRouter.kWelcomeBack),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,

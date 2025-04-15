@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/core/utils/taken_storage.dart';
 import 'package:petsica/core/utils/token_decoder.dart';
@@ -8,7 +10,6 @@ import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/password_field.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/services/signup/auth_service_login.dart';
-
 
 class WelcomeBackViewBody extends StatefulWidget {
   final String selectedOption;
@@ -36,8 +37,10 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
     final response = await AuthService.login(email, password);
 
     if (response != null) {
-      await TokenStorage.saveTokens(response.token, response.refreshToken);
-
+     await TokenStorage.saveTokens(
+      accessToken: response.token,
+      refreshToken: response.refreshToken,
+    );
       final roles = TokenDecoder.getRoles(response.token);
       final userId = TokenDecoder.getUserId(response.token);
 
@@ -46,12 +49,18 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
       print('👥 Roles: $roles');
 
       if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("✅ Logged in successfully!")),
       );
 
-      // Navigate based on role or to main page
-      // Navigator.pushReplacementNamed(context, '/home');
+      // ✅ Navigate based on role using go_router
+      if (roles.contains("Admin")) {
+        context.go('/adminDashboard');
+      } else {
+        context.go(AppRouter.kPost);
+      }
+
     } else {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

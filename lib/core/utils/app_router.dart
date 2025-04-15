@@ -112,22 +112,17 @@ abstract class AppRouter {
   static const kAdminSitterRequests = '/adminSitterRequests';
   static const kAdminRequestDetails = '/adminRequestDetails';
   static const kChatBootOnboarding = '/chatBootOnboarding';
-  static const kChatBoot= '/chatBoot';
-  static const kCommunityChat= '/communityChat';
+  static const kChatBoot = '/chatBoot';
+  static const kCommunityChat = '/communityChat';
   static const kWhereProfile = '/whereProfile';
 
   static const kPost = '/Post';
-
-  static final router = GoRouter(
-    initialLocation: '/', // البداية من SplashScreen
-    //initialLocation: kPost,
-
   static const kWhoEdit = '/whoEdit';
   static const kHomeScreen = '/homeScreen';
 
   static final router = GoRouter(
-    // initialLocation: '/', // البداية من SplashScreen
-    initialLocation: kChatBootOnboarding,
+     initialLocation: '/', // البداية من SplashScreen
+    //initialLocation: kChatBootOnboarding,
 
     routes: [
       GoRoute(
@@ -262,14 +257,11 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: kUserAddPet,
-
         builder: (context, state) => UserAddPetView(),
       ),
       GoRoute(
         path: kPost,
         builder: (context, state) => PublishPostView(),
-
-        builder: (context, state) => const UserAddPetView(),
       ),
       GoRoute(
         path: kSitterAddPet,
@@ -358,13 +350,11 @@ abstract class AppRouter {
       GoRoute(
         path: kChatBoot,
         builder: (context, state) => const ChatBootView(),
-
       ),
       // GoRoute(
       //   path: kCommunityChat,
       //   builder: (context, state) => const CommunityChatView(),
       // ),
-      
     ],
   );
 }

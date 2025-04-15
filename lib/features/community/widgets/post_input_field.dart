@@ -4,8 +4,11 @@ import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/core/utils/styles.dart';
 
 class PostInputField extends StatelessWidget {
+  final TextEditingController controller;
+
   const PostInputField({
     super.key,
+    required this.controller,
   });
 
   @override
@@ -27,7 +30,7 @@ class PostInputField extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Text(
-                'Pero Osama',
+                'Pero Osama', // ✅ You can make this dynamic later if needed
                 style: Styles.textStyleQui20.copyWith(
                   color: kBurgColor,
                 ),
@@ -35,8 +38,9 @@ class PostInputField extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          const TextField(
-            decoration: InputDecoration(
+          TextField(
+            controller: controller,
+            decoration: const InputDecoration(
               hintText: "Write Here...",
               border: InputBorder.none,
             ),

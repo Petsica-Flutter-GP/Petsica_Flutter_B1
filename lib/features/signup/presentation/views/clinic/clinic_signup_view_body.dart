@@ -4,12 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
-import 'package:petsica/core/utils/snackbar_helper.dart'; // ✅ استيراد SnackbarHelper
+import 'package:petsica/core/utils/snackbar_helper.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
 import 'package:petsica/features/signup/presentation/widgets/phone_number_input_field.dart';
 import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
 import 'package:petsica/features/signup/presentation/widgets/verification_id_input_field.dart';
-import 'package:petsica/features/signup/presentation/widgets/working_hours_input_field.dart';
+import 'package:petsica/services/signup/auth_service_clinic.dart';
 import '../../../../../core/constants.dart';
 import '../../../../../core/utils/app_button.dart';
 import '../../../../../core/utils/app_arrow_back.dart';
@@ -24,10 +24,18 @@ class ClinicSignUpViewBody extends StatefulWidget {
 }
 
 class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
-  File? _profileImage;
-  File? _verificationImage; // لتخزين صورة التحقق
+  final _emailController = TextEditingController();
+  final _clinicNameController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
+  final _workingHoursController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  Future<void> _pickImage(ImageSource source) async {
+  File? _profileImage;
+  File? _verificationImage;
+  bool _isLoading = false;
+
+  Future<void> _pickVerificationImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) {
@@ -36,14 +44,9 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
       }
 
       setState(() => _verificationImage = File(image.path));
-
-      // ✅ عرض رسالة نجاح عند اختيار صورة
-      SnackbarHelper.show(context, "Image selected successfully",
-          isError: false);
+      SnackbarHelper.show(context, "Image selected successfully", isError: false);
     } catch (error) {
-      // ✅ عرض رسالة خطأ عند الفشل في اختيار الصورة
-      SnackbarHelper.show(context, "Error picking image: ${error.toString()}",
-          isError: true);
+      SnackbarHelper.show(context, "Error picking image: ${error.toString()}", isError: true);
     }
   }
 
@@ -60,7 +63,7 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
             title: const Text('Take a Photo'),
             onTap: () {
               Navigator.pop(context);
-              _pickImage(ImageSource.camera);
+              _pickVerificationImage(ImageSource.camera);
             },
           ),
           ListTile(
@@ -68,11 +71,54 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
             title: const Text('Upload From Gallery'),
             onTap: () {
               Navigator.pop(context);
-              _pickImage(ImageSource.gallery);
+              _pickVerificationImage(ImageSource.gallery);
             },
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _signUpClinic() async {
+    final email = _emailController.text.trim();
+    final clinicName = _clinicNameController.text.trim();
+    final phone = _phoneNumberController.text.trim();
+    final workingHours = _workingHoursController.text.trim();
+    final location = _locationController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty ||
+        clinicName.isEmpty ||
+        phone.isEmpty ||
+        workingHours.isEmpty ||
+        location.isEmpty ||
+        password.isEmpty) {
+      SnackbarHelper.show(context, "All fields are required", isError: true);
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final result = await AuthServiceClinic.registerClinic(
+      email: email,
+      userName: clinicName,
+      password: password,
+      address: location,
+      workingHours: workingHours,
+      phone : phone,
+      
+    );
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    SnackbarHelper.show(
+      context,
+      result["message"],
+      isError: !result["success"],
     );
   }
 
@@ -81,7 +127,7 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-          leading:const AppArrowBack(destination: AppRouter.kWhoAreYou),
+        leading: const AppArrowBack(destination: AppRouter.kWhoAreYou),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -95,15 +141,9 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
               Center(
                 child: Column(
                   children: [
-                    Text(
-                      "Sign Up",
-                      style: Styles.textStyleQu28.copyWith(color: kWordColor),
-                    ),
+                    Text("Sign Up", style: Styles.textStyleQu28.copyWith(color: kWordColor)),
                     const SizedBox(height: 8),
-                    Text(
-                      "Please enter the details to continue",
-                      style: Styles.textStyleCom18.copyWith(color: kWordColor),
-                    ),
+                    Text("Please enter the details to continue", style: Styles.textStyleCom18.copyWith(color: kWordColor)),
                   ],
                 ),
               ),
@@ -121,7 +161,7 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                     children: [
                       const SizedBox(height: 26),
                       CircleProfileImagePicker(
-                        name: 'user',
+                        name: 'clinic',
                         image: _profileImage,
                         onImageSelected: (File? image) {
                           setState(() {
@@ -129,30 +169,30 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                           });
 
                           if (image != null) {
-                            SnackbarHelper.show(
-                                context, "Profile picture updated successfully",
-                                isError: false);
+                            SnackbarHelper.show(context, "Profile picture updated successfully", isError: false);
                           }
                         },
                       ),
                       const SizedBox(height: 20),
-                      const InputField(label: 'Email address'),
+                      InputField(label: 'Email address', controller: _emailController),
                       const SizedBox(height: 20),
-                      const InputField(label: "Clinic Name"),
+                      InputField(label: "Clinic Name", controller: _clinicNameController),
                       const SizedBox(height: 20),
                       Row(
                         children: [
-                          const Expanded(
-                            child: WorkingHoursField(label: "Working hours"),
+                          Expanded(
+                            child: InputField(
+                              label: "Working hours",
+                              controller: _workingHoursController,
+                            ),
                           ),
                           const SizedBox(width: 10),
                           Expanded(
                             child: PhoneNumberInputField(
                               label: "Phone Number",
+                              controller: _phoneNumberController,
                               inputType: TextInputType.phone,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                               maxLength: 11,
                             ),
                           ),
@@ -166,18 +206,21 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      const InputField(
+                      InputField(
                         label: 'Location',
-                        icon: Icon(Icons.place, color: kIconsColor),
+                        icon: const Icon(Icons.place, color: kIconsColor),
+                        controller: _locationController,
                       ),
                       const SizedBox(height: 30),
-                      const PasswordField(text: 'Password'),
+                      PasswordField(
+                        text: 'Password',
+                        controller: _passwordController,
+                      ),
                       const SizedBox(height: 20),
-                      const PasswordField(text: 'Confirm password'),
-                      const SizedBox(height: 20),
-                      const AppButton(
-                        text: "Create Account",
+                      AppButton(
+                        text: _isLoading ? "Creating..." : "Create Account",
                         border: 20,
+                        onTap: _isLoading ? null : _signUpClinic,
                       ),
                       const LoginWord(
                         text1: 'Already have an account?',

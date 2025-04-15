@@ -4,10 +4,9 @@ import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_router.dart';
 
 void main() {
-  // initial
   runApp(
     DevicePreview(
-      enabled: false, // تفعيل معاينة الجهاز
+      enabled: false,
       builder: (context) => const Petsica(),
     ),
   );
@@ -21,10 +20,8 @@ class Petsica extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: AppRouter.router,
-      // دعم Device Preview
       builder: DevicePreview.appBuilder,
       useInheritedMediaQuery: true,
-
       theme: ThemeData(
         scaffoldBackgroundColor: kAppColor,
       ),
