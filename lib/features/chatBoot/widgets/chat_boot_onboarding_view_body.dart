@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsica/core/constants.dart';
-import 'package:petsica/core/constants.dart';
-
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/core/utils/styles.dart';
 
-import '../../../core/constants.dart';
 
 class ChatBootOnboardingViewBody extends StatelessWidget {
   const ChatBootOnboardingViewBody({super.key});

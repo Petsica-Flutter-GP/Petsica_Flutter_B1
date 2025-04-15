@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_nav_bar.dart';
 
 class HomeScreen extends StatefulWidget {

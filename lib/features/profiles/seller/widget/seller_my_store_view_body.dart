@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/app_router.dart';
-import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/profiles/seller/widget/seller_product_card.dart';
-import 'package:petsica/features/store/logic/cubit/cart_cubit.dart';
-import 'package:petsica/features/store/widgets/category_drawer.dart';
-import 'package:petsica/features/store/widgets/product_card.dart';
 
 class SellerMyStoreViewBody extends StatelessWidget {
   SellerMyStoreViewBody({super.key});

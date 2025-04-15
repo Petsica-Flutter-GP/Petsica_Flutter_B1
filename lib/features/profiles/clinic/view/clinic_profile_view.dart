@@ -6,6 +6,6 @@ class ClinicProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClinicProfileViewBody();
+    return const ClinicProfileViewBody();
   }
 }

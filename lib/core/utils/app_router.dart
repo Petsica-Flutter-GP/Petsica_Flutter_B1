@@ -1,12 +1,9 @@
 import 'package:go_router/go_router.dart';
-
 import 'package:petsica/features/community/views/publish_post_view.dart';
-
 import 'package:petsica/core/utils/home.dart';
 import 'package:petsica/features/chatBoot/views/chat_boot_onboarding_view.dart';
 import 'package:petsica/features/chatBoot/views/chat_boot_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_clinic_requests_view.dart';
-
 import 'package:petsica/features/profiles/adminn/view/admin_profile_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_seller_requests_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_seller_request_details_view.dart';
@@ -39,19 +36,15 @@ import 'package:petsica/features/profiles/sitter/widget/sitter_settings_page.dar
 import 'package:petsica/features/profiles/user/views/user_add_pet_view.dart';
 import 'package:petsica/features/profiles/user/views/user_profile_view.dart';
 import 'package:petsica/features/profiles/user/widgets/user_settings_page.dart';
-
 import 'package:petsica/features/profiles/where.dart';
 import 'package:petsica/features/signup/presentation/views/seller/seller_signup_view.dart';
 import 'package:petsica/features/signup/presentation/views/user/user_signup_view.dart';
-
 import 'package:petsica/features/splash/presentation/views/widgets/splach_screen.dart';
 import 'package:petsica/features/onboarding/presentation/views/onboarding.dart';
 import 'package:petsica/features/registeration/presentation/views/welcome_back_view.dart';
 import 'package:petsica/features/store/views/cart_view.dart';
 import 'package:petsica/features/store/views/product_details_view.dart';
-
 import 'package:petsica/features/who/presentation/views/who_view.dart';
-
 import '../../features/profiles/clinic/view/clinic_pet_details_view.dart';
 import '../../features/profiles/clinic/view/clinic_profile_view.dart';
 import '../../features/profiles/seller/view/seller_profile_view.dart';
@@ -63,71 +56,85 @@ import '../../features/signup/presentation/views/sitter/sitter_signup_view.dart'
 import '../../features/store/views/store_view.dart';
 
 abstract class AppRouter {
+  //onboarding
   static const kOnboarding = '/onboarding';
   static const kWhoAreYou = '/whoAreYou';
   static const kWelcomeBack = '/welcomeBack';
+
+  //user
   static const kUserSignUp = '/userSignUp';
-  static const kClinicSignUp = '/clinicSignUp';
-  static const kSitterSignUp = '/sitterSignUp';
-  static const kSellerSignUp = '/sellerSignUp';
-  static const kStore = '/store';
-  static const kProductDetails = '/productDetails';
-  static const kCart = '/cart';
   static const kUserProfile = '/userProfile';
-  static const kSitterProfile = '/sitterProfile';
-  static const kSellerProfile = '/sellerProfile';
-  static const kClinicProfile = '/clinicProfile';
-  static const kAdminProfile = '/adminProfile';
   static const kUserMyPet = '/userMyPet';
-  static const kClinicMyPet = '/clinicMyPet';
-  static const kSellerMyPet = '/sellerMyPet';
-  static const kSitterMyPet = '/sitterMyPet';
   static const kUserPetDetails = '/userPetDetails';
-  static const kSitterPetDetails = '/sitterPetDetails';
-  static const kSellerPetDetails = '/sellerPetDetails';
-  static const kClinicPetDetails = '/clinicPetDetails';
   static const kUserEditPet = '/userEditPet';
-  static const kSellerEditPet = '/sellerEditPet';
-  static const kSitterEditPet = '/sitterEditPet';
-  static const kClinicEditPet = '/clinicEditPet';
   static const kUserAddPet = '/userAddPet';
-  static const kSellerAddPet = '/sellerAddPet';
-  static const kSitterAddPet = '/sitterAddPet';
-  static const kClinicAddPet = '/clinicAddPet';
   static const kUserSettings = '/userSettings';
-  static const kSitterSettings = '/sitterSettings';
-  static const kSellerSettings = '/sellerSettings';
-  static const kClinicSettings = '/clinicSettings';
-  static const kAdminSettings = '/adminSettings';
-  static const kSitterMyServices = '/sitterMyServices';
-  static const kSitterNewServices = '/sitterNewServices';
-  static const kSitterEditServices = '/sitterEditServices';
+
+  //seller
+  static const kSellerSignUp = '/sellerSignUp';
+  static const kSellerProfile = '/sellerProfile';
+  static const kSellerMyPet = '/sellerMyPet';
+  static const kSellerEditPet = '/sellerEditPet';
   static const kSellerMyStore = '/sellerMyStore';
   static const kSellerAddProduct = '/sellerAddProduct';
   static const kSellerEditProduct = '/sellerEditProduct';
   static const kSellerOrders = '/sellerOrders';
   static const kSellerOrderDetails = '/sellerOrderDetails';
+  static const kSellerPetDetails = '/sellerPetDetails';
+  static const kSellerSettings = '/sellerSettings';
+  static const kSellerAddPet = '/sellerAddPet';
+
+  //sitter
+  static const kSitterSignUp = '/sitterSignUp';
+  static const kSitterProfile = '/sitterProfile';
+  static const kSitterMyPet = '/sitterMyPet';
+  static const kSitterPetDetails = '/sitterPetDetails';
+  static const kSitterSettings = '/sitterSettings';
+  static const kSitterAddPet = '/sitterAddPet';
+  static const kSitterMyServices = '/sitterMyServices';
+  static const kSitterNewServices = '/sitterNewServices';
+  static const kSitterEditServices = '/sitterEditServices';
+  static const kSitterEditPet = '/sitterEditPet';
+
+  //clinic
+  static const kClinicSignUp = '/clinicSignUp';
+  static const kClinicProfile = '/clinicProfile';
+  static const kClinicMyPet = '/clinicMyPet';
+  static const kClinicPetDetails = '/clinicPetDetails';
+  static const kClinicEditPet = '/clinicEditPet';
+  static const kClinicAddPet = '/clinicAddPet';
+  static const kClinicSettings = '/clinicSettings';
+
+  //admin
+  static const kAdminProfile = '/adminProfile';
+  static const kAdminSettings = '/adminSettings';
   static const kAdminSellerRequests = '/adminStoreRequests';
   static const kAdminClinicRequests = '/adminClinicRequests';
   static const kAdminSitterRequests = '/adminSitterRequests';
   static const kAdminRequestDetails = '/adminRequestDetails';
-  static const kChatBootOnboarding = '/chatBootOnboarding';
-  static const kChatBoot= '/chatBoot';
-  static const kCommunityChat= '/communityChat';
-  static const kWhereProfile = '/whereProfile';
 
+  //store
+  static const kStore = '/store';
+  static const kProductDetails = '/productDetails';
+  static const kCart = '/cart';
+
+//chat-boot
+  static const kChatBootOnboarding = '/chatBootOnboarding';
+  static const kChatBoot = '/chatBoot';
+
+  //community
+  static const kCommunityChat = '/communityChat';
   static const kPost = '/Post';
 
-  static final router = GoRouter(
-    initialLocation: '/', // البداية من SplashScreen
-    //initialLocation: kPost,
-
+  //other
+  static const kWhereProfile = '/whereProfile';
   static const kWhoEdit = '/whoEdit';
   static const kHomeScreen = '/homeScreen';
 
+  //routes
   static final router = GoRouter(
     // initialLocation: '/', // البداية من SplashScreen
-    initialLocation: kChatBootOnboarding,
+    initialLocation: kWelcomeBack,
 
     routes: [
       GoRoute(
@@ -262,14 +269,11 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: kUserAddPet,
-
-        builder: (context, state) => UserAddPetView(),
+        builder: (context, state) => const UserAddPetView(),
       ),
       GoRoute(
         path: kPost,
-        builder: (context, state) => PublishPostView(),
-
-        builder: (context, state) => const UserAddPetView(),
+        builder: (context, state) => const PublishPostView(),
       ),
       GoRoute(
         path: kSitterAddPet,
@@ -358,13 +362,11 @@ abstract class AppRouter {
       GoRoute(
         path: kChatBoot,
         builder: (context, state) => const ChatBootView(),
-
       ),
       // GoRoute(
       //   path: kCommunityChat,
       //   builder: (context, state) => const CommunityChatView(),
       // ),
-      
     ],
   );
 }

@@ -6,6 +6,6 @@ class SitterNewServicesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SitterNewServicesViewBody();
+    return const SitterNewServicesViewBody();
   }
 }

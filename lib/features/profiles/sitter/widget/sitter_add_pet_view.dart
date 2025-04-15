@@ -7,6 +7,6 @@ class SitterAddPetView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SitterAddPetPageViewBody();
+    return const SitterAddPetPageViewBody();
   }
 }

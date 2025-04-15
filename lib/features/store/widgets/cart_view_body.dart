@@ -21,7 +21,7 @@ class CartViewBody extends StatelessWidget {
         appBar: AppBar(
           title: Text("Cart", style: Styles.textStyleQu28),
           centerTitle: true,
-          leading: AppArrowBack(destination: AppRouter.kStore),
+          leading: const AppArrowBack(destination: AppRouter.kStore),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),

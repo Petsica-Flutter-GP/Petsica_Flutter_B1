@@ -6,6 +6,6 @@ class SellerEditProductView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SellerEditProductViewBody();
+    return const SellerEditProductViewBody();
   }
 }
