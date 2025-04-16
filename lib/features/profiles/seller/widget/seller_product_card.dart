@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
+import 'package:petsica/features/profiles/seller/cubit/delete/product_deletion_cubit.dart';
 import 'package:petsica/features/profiles/seller/services/product_services.dart';
 import 'package:petsica/features/profiles/seller/widget/seller_product_deletion_show_dialog.dart';
 
@@ -145,7 +147,14 @@ class SellerProductCard extends StatelessWidget {
     );
   }
 
-  void _showDeleteDialog(BuildContext context) {
-    SellerProductDeletionShowDialog(context, onDelete);
-  }
+ void _showDeleteDialog(BuildContext context) {
+  SellerProductDeletionShowDialog(
+    context,
+    () {
+      context.read<ProductDeletionCubit>().deleteProduct(product.productId);
+      onDelete(); // هذا علشان يحصل refresh للواجهة بعد الحذف
+    },
+  );
+}
+
 }
