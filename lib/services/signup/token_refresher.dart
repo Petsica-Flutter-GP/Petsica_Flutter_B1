@@ -1,24 +1,27 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:petsica/core/utils/taken_storage.dart';
+import 'package:petsica/services/signup/api_service.dart';
 import 'package:petsica/services/signup/auth_response_model.dart';
+
+import 'package:petsica/services/signup/refresh_token_request.dart';
+
 
 class TokenRefresher {
   static Future<bool> refreshToken() async {
-    final accessToken = await TokenStorage.getAccessToken();
+    final token = await TokenStorage.getAccessToken();
     final refreshToken = await TokenStorage.getRefreshToken();
 
-    if (accessToken == null || refreshToken == null) return false;
+    if (token == null || refreshToken == null) return false;
+
+
+    final request = RefreshTokenRequest(token: token, refreshToken: refreshToken);
 
     final url = Uri.parse('http://petsica.runasp.net/api/auth/refresh');
 
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'token': accessToken,
-        'refreshToken': refreshToken,
-      }),
+
+    final response = await ApiService.post(
+      'http://petsica.runasp.net/Auth/Refresh',
+      request.toJson(),
     );
 
     if (response.statusCode == 200) {
@@ -27,13 +30,14 @@ class TokenRefresher {
 
       // حفظ التوكنات الجديدة
       await TokenStorage.saveTokens(
-        loginResponse.token,
-        loginResponse.refreshToken,
+        accessToken: loginResponse.token,
+        refreshToken: loginResponse.refreshToken,
       );
 
       return true;
+    } else {
+      print("Refresh token failed: ${response.statusCode} -> ${response.body}");
+      return false;
     }
-
-    return false;
   }
 }

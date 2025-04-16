@@ -61,7 +61,7 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
     try {
       setState(() => _isLoading = true);
 
-      final result = await AuthService.registerSitter(
+      final result = await AuthServiceSitter.registerSitter(
         email: email,
         userName: username,
         nationalId: nationalId,
@@ -88,6 +88,7 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+
 
         leading:const AppArrowBack(destination: AppRouter.kWhoAreYou),
 
@@ -134,8 +135,6 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
                     const SizedBox(height: 20),
                     InputField(
                         label: "User Name", controller: _usernameController),
-                    
-                    
                     const SizedBox(height: 20),
                     VerificationIdInputField(
                         label: 'National ID',

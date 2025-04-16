@@ -64,6 +64,7 @@ class _UserSignUpViewBodyState extends State<UserSignUpViewBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+
           leading: const AppArrowBack(destination: AppRouter.kWhereProfile),
       ),
       body: Column(

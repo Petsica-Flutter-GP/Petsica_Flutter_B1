@@ -1,43 +1,47 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class AuthServiceSitter {
+class AuthServiceClinic {
   static const String _baseUrl = "http://petsica.runasp.net/Auth/registerUser";
 
-  static Future<Map<String, dynamic>> registerSitter({
+  static Future<Map<String, dynamic>> registerClinic({
     required String userName,
     required String email,
-    required String nationalId,
-    required String location,
     required String password,
+    required String address,
+    required String workingHours,
+    required String phone,
   }) async {
     try {
       final response = await http.post(
         Uri.parse(_baseUrl),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          "userName": userName,
-          "email": email,
-          "password": password,
-          "photo": "photo", // Optional (Replace with real data)
-          "address": location, // Optional
-          "type": "SITTER",
-          "approvalPhoto": "string", // Optional
-          "nationalID": nationalId // Using location as address
+            "userName": userName,
+            "email": email,
+            "password": password,
+            "photo": "string",
+            "address": address,
+            "approvalPhoto": "string",
+            "type": "CLINIC",
+            "workingHours": workingHours,
+            "contactInfo": phone,
+            "nationalID": "string"
         }),
       );
 
       if (response.statusCode == 204) {
         return {"success": true, "message": "Registration successful"};
       } else {
-        final Map<String, dynamic> responseData =
-            response.body.isNotEmpty ? jsonDecode(response.body) : {};
+        final Map<String, dynamic> responseData = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : {}; // Handle empty response
 
         return {
           "success": false,
           "message": responseData["message"] ??
               responseData["error"] ??
-              "Registration failed"
+              "Registeration failed"
         };
       }
     } catch (e) {

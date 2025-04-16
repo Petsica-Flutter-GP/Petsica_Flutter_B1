@@ -122,9 +122,11 @@ abstract class AppRouter {
   static const kChatBootOnboarding = '/chatBootOnboarding';
   static const kChatBoot = '/chatBoot';
 
+
   //community
   static const kCommunityChat = '/communityChat';
   static const kPost = '/Post';
+
 
   //other
   static const kWhereProfile = '/whereProfile';
@@ -133,8 +135,9 @@ abstract class AppRouter {
 
   //routes
   static final router = GoRouter(
-    // initialLocation: '/', // البداية من SplashScreen
-    initialLocation: kWelcomeBack,
+
+     initialLocation: '/', // البداية من SplashScreen
+    //initialLocation: kChatBootOnboarding,
 
     routes: [
       GoRoute(
@@ -269,11 +272,13 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: kUserAddPet,
-        builder: (context, state) => const UserAddPetView(),
+        builder: (context, state) => UserAddPetView(),
       ),
+      
       GoRoute(
         path: kPost,
         builder: (context, state) => const PublishPostView(),
+
       ),
       GoRoute(
         path: kSitterAddPet,

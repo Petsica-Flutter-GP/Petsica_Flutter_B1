@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class AuthServiceSitter {
+class AuthServiceSeller {
   static const String _baseUrl = "http://petsica.runasp.net/Auth/registerUser";
 
-  static Future<Map<String, dynamic>> registerSitter({
+  static Future<Map<String, dynamic>> registerSeller({
     required String userName,
     required String email,
-    required String nationalId,
-    required String location,
     required String password,
   }) async {
     try {
@@ -16,28 +14,29 @@ class AuthServiceSitter {
         Uri.parse(_baseUrl),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          "userName": userName,
-          "email": email,
-          "password": password,
-          "photo": "photo", // Optional (Replace with real data)
-          "address": location, // Optional
-          "type": "SITTER",
-          "approvalPhoto": "string", // Optional
-          "nationalID": nationalId // Using location as address
+          "UserName": userName,
+          "Email": email,
+          "Password": password,
+          "Photo": "photo", 
+          "Address": "fayoum", 
+          "Type": "SELLER",
+          "ApprovalPhoto": "string", 
+          "NationalID": "NationalID" 
         }),
       );
 
       if (response.statusCode == 204) {
         return {"success": true, "message": "Registration successful"};
       } else {
-        final Map<String, dynamic> responseData =
-            response.body.isNotEmpty ? jsonDecode(response.body) : {};
+        final Map<String, dynamic> responseData = response.body.isNotEmpty
+            ? jsonDecode(response.body)
+            : {}; // Handle empty response
 
         return {
           "success": false,
           "message": responseData["message"] ??
               responseData["error"] ??
-              "Registration failed"
+              "Registeration failed"
         };
       }
     } catch (e) {
