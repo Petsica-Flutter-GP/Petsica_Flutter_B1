@@ -6,6 +6,6 @@ class UserProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  UserProfileViewBody();
+    return const UserProfileViewBody();
   }
 }

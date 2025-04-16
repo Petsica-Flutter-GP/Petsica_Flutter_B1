@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/profiles/adminn/widget/admin_request_deletion_show_dialog.dart';
-import 'package:petsica/features/profiles/adminn/widget/admin_seller_requests_card.dart';
 import 'package:petsica/features/profiles/adminn/widget/admin_requests_card_Bigger.dart';
-
 import '../../../../core/constants.dart';
 
 class AdminSellerRequestDetailsViewBody extends StatelessWidget {

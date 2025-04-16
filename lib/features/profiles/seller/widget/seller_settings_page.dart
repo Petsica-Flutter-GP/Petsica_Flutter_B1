@@ -3,10 +3,8 @@ import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/core/utils/styles.dart';
-import 'package:petsica/features/profiles/widgets/app_drop_down_button.dart';
 import 'package:petsica/features/profiles/widgets/app_switch.dart';
 import 'package:petsica/features/profiles/widgets/profile_list_tile.dart';
-
 import '../../../../core/constants.dart';
 
 class SellerSettingsScreen extends StatelessWidget {

@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:petsica/core/utils/taken_storage.dart';
 import 'package:petsica/services/signup/api_service.dart';
 import 'package:petsica/services/signup/auth_response_model.dart';
+
 import 'package:petsica/services/signup/refresh_token_request.dart';
+
 
 class TokenRefresher {
   static Future<bool> refreshToken() async {
@@ -11,7 +13,11 @@ class TokenRefresher {
 
     if (token == null || refreshToken == null) return false;
 
+
     final request = RefreshTokenRequest(token: token, refreshToken: refreshToken);
+
+    final url = Uri.parse('http://petsica.runasp.net/api/auth/refresh');
+
 
     final response = await ApiService.post(
       'http://petsica.runasp.net/Auth/Refresh',
@@ -22,6 +28,7 @@ class TokenRefresher {
       final data = jsonDecode(response.body);
       final loginResponse = LoginResponse.fromJson(data);
 
+      // حفظ التوكنات الجديدة
       await TokenStorage.saveTokens(
         accessToken: loginResponse.token,
         refreshToken: loginResponse.refreshToken,

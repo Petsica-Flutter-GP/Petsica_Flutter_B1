@@ -54,12 +54,14 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
         const SnackBar(content: Text("✅ Logged in successfully!")),
       );
 
+
       // ✅ Navigate based on role using go_router
       if (roles.contains("Admin")) {
         context.go('/adminDashboard');
       } else {
         context.go(AppRouter.kPost);
       }
+
 
     } else {
       if (!mounted) return;
@@ -111,7 +113,7 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
                   children: [
                     const SizedBox(height: 37),
                     InputField(
-                      label: 'User name',
+                      label: 'Email',
                       controller: _emailController,
                     ),
                     const SizedBox(height: 29),
@@ -125,7 +127,8 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
                         onPressed: () {},
                         child: Text(
                           "Forget Password?",
-                          style: Styles.textStyleCom12.copyWith(color: kWordColor),
+                          style:
+                              Styles.textStyleCom12.copyWith(color: kWordColor),
                         ),
                       ),
                     ),
@@ -134,6 +137,12 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
                       text: _isLoading ? "Logging in..." : "Login",
                       border: 20,
                       onTap: _isLoading ? null : _handleLogin,
+
+                      // onTap: () {
+                      //   GoRouter.of(context).go(
+                      //     AppRouter.kSellerMyStore,
+                      //   );
+                      // },
                     ),
                     SignupWord(
                       text1: "Don’t have an account?",

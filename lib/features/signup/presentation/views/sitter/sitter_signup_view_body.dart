@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
-import 'package:petsica/features/signup/presentation/widgets/phone_number_input_field.dart';
 import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
 import 'package:petsica/features/signup/presentation/widgets/verification_id_input_field.dart';
 import '../../../../../core/constants.dart';
@@ -89,7 +88,10 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: AppArrowBack(destination: AppRouter.kWhoAreYou),
+
+
+        leading:const AppArrowBack(destination: AppRouter.kWhoAreYou),
+
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),

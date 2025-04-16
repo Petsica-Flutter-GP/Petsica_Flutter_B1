@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:petsica/features/profiles/user/widgets/user_edit_pet_view_body.dart';
-
 import '../widget/seller_edit_pet_view_body.dart';
 
 class SellerEditPetView extends StatelessWidget {

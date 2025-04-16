@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/profiles/seller/widget/seller_product_deletion_show_dialog.dart';
 import 'package:petsica/features/store/widgets/image_box.dart';
-
-import '../../../store/logic/cubit/cart_cubit.dart';
 
 class SellerProductCard extends StatelessWidget {
   final String productName;

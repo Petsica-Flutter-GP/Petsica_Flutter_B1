@@ -6,6 +6,6 @@ class SitterProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SitterProfileViewBody();
+    return const SitterProfileViewBody();
   }
 }
