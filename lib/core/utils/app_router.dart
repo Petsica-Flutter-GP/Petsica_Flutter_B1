@@ -136,8 +136,8 @@ abstract class AppRouter {
   //routes
   static final router = GoRouter(
 
-     initialLocation: '/', // البداية من SplashScreen
-    //initialLocation: kChatBootOnboarding,
+    //  initialLocation: '/', // البداية من SplashScreen
+    initialLocation: kWelcomeBack,
 
     routes: [
       GoRoute(

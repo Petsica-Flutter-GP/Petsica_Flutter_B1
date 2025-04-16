@@ -7,11 +7,12 @@ import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
-import 'package:petsica/features/profiles/seller/cubit/add_product_cubit.dart';
+import 'package:petsica/features/profiles/seller/cubit/add/add_product_cubit.dart';
+import 'package:petsica/features/profiles/seller/services/product_services.dart';
 import 'package:petsica/features/profiles/seller/widget/seller_camera_placeholder.dart';
 import 'package:petsica/features/profiles/widgets/app_drop_down_button.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
-import 'package:petsica/features/profiles/seller/cubit/add_product_cubit_state.dart';
+import 'package:petsica/features/profiles/seller/cubit/add/add_product_cubit_state.dart';
 
 class SellerAddProductViewBody extends StatefulWidget {
   const SellerAddProductViewBody({super.key});
@@ -23,7 +24,7 @@ class SellerAddProductViewBody extends StatefulWidget {
 
 class _SellerAddProductViewBodyState extends State<SellerAddProductViewBody> {
   final _formKey = GlobalKey<FormState>();
-  late String selectedType = 'Food';
+  late ProductCategory category;
 
   final nameController = TextEditingController();
   final priceController = TextEditingController();
@@ -58,8 +59,7 @@ class _SellerAddProductViewBodyState extends State<SellerAddProductViewBody> {
             appBar: AppBar(
               title: Text("Add product", style: Styles.textStyleQu28),
               centerTitle: true,
-              leading:
-                  const AppArrowBack(destination: AppRouter.kSellerMyStore),
+              leading: const AppArrowBack(destination: AppRouter.kHomeScreen),
             ),
             body: state is AddProductLoading
                 ? const Center(child: CircularProgressIndicator())
@@ -170,10 +170,10 @@ class _SellerAddProductViewBodyState extends State<SellerAddProductViewBody> {
                   AppDropDownButton(
                     labelText: "Category",
                     items: const ["Food", "Toys", "Accessories", "Healthcare"],
-                    value: selectedType,
+                    value: "Choose category",
                     onChanged: (newVal) {
                       setState(() {
-                        selectedType = newVal!;
+                        category = newVal as ProductCategory;
                       });
                     },
                   ),
@@ -201,7 +201,7 @@ class _SellerAddProductViewBodyState extends State<SellerAddProductViewBody> {
                           description: descriptionController.text.trim(),
                           quantity: int.parse(quanController.text),
                           photo: base64Image,
-                          selectedType: selectedType,
+                          category: category,
                         );
                       }
                     },

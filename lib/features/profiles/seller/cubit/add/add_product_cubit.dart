@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:petsica/features/profiles/seller/cubit/add_product_cubit_state.dart';
+import 'package:petsica/features/profiles/seller/cubit/add/add_product_cubit_state.dart';
 import 'package:petsica/features/profiles/seller/services/product_services.dart';
 import 'package:petsica/helpers/http_helper.dart';
 
@@ -11,7 +11,7 @@ class AddProductCubit extends Cubit<AddProductState> {
     required String name,
     required double price,
     required String description,
-    required String selectedType,
+    required ProductCategory category,
     required String photo,
     double discount = 0.0,
     int quantity = 1,
@@ -26,7 +26,7 @@ class AddProductCubit extends Cubit<AddProductState> {
         description: description,
         quantity: quantity,
         photo: photo ,
-        category: selectedType,
+        category: category,
       );
 
       if (success) {
