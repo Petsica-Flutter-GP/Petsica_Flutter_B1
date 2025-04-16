@@ -37,10 +37,10 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
     final response = await AuthService.login(email, password);
 
     if (response != null) {
-     await TokenStorage.saveTokens(
-      accessToken: response.token,
-      refreshToken: response.refreshToken,
-    );
+      await TokenStorage.saveTokens(
+        accessToken: response.token,
+        refreshToken: response.refreshToken,
+      );
       final roles = TokenDecoder.getRoles(response.token);
       final userId = TokenDecoder.getUserId(response.token);
 
@@ -54,15 +54,13 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
         const SnackBar(content: Text("✅ Logged in successfully!")),
       );
 
-
       // ✅ Navigate based on role using go_router
       if (roles.contains("Admin")) {
         context.go('/adminDashboard');
       } else {
-        context.go(AppRouter.kPost);
+        // context.go(AppRouter.kPost);
+        context.go(AppRouter.kSellerMyStore);
       }
-
-
     } else {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

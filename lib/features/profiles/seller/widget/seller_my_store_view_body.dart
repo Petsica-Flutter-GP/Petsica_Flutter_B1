@@ -3,25 +3,42 @@ import 'package:go_router/go_router.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
+import 'package:petsica/features/profiles/seller/services/product_services.dart';
 import 'package:petsica/features/profiles/seller/widget/seller_product_card.dart';
 
-class SellerMyStoreViewBody extends StatelessWidget {
-  SellerMyStoreViewBody({super.key});
+class SellerMyStoreViewBody extends StatefulWidget {
+  const SellerMyStoreViewBody({super.key});
 
-  final List<String> products = [
-    "Product Name 1",
-    "Product Name 2",
-    "Product Name 3",
-    "Product Name 4",
-    "Product Name 5",
-    "Product Name 6",
-    "Product Name 7",
-    "Product Name 8",
-    "Product Name 9",
-    "Product Name 10",
-    "Product Name 11",
-    "Product Name 12",
-  ];
+  @override
+  _SellerMyStoreViewBodyState createState() => _SellerMyStoreViewBodyState();
+}
+
+class _SellerMyStoreViewBodyState extends State<SellerMyStoreViewBody> {
+  List<Product> products = []; // تخزين المنتجات التي يتم جلبها من الـ API
+  bool isLoading = true; // لتتبع حالة التحميل
+  String? errorMessage; // لتخزين رسالة الخطأ
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchProducts(); // استدعاء الدالة لتحميل المنتجات عند تحميل الصفحة
+  }
+
+  // دالة لجلب المنتجات من الـ API
+  Future<void> _fetchProducts() async {
+    try {
+      final fetchedProducts = await ProductService.getSellerProducts();
+      setState(() {
+        products = fetchedProducts;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        errorMessage = 'Failed to load products: $e'; // تحديث رسالة الخطأ
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,53 +61,34 @@ class SellerMyStoreViewBody extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 18,
-            mainAxisSpacing: 18,
-            childAspectRatio: 0.6,
-          ),
-          itemCount: products.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                // GoRouter.of(context).go(
-                //   AppRouter.kProductDetails,
-                //   extra: {
-                //     "name": products[index], // اسم المنتج (مؤقتًا)
-                //     "price": "\$500", // السعر (قيمة تجريبية)
-                //     "image": AssetData.productImage // صورة المنتج من الأصول
-                //   },
-                // );
-              },
-              child: SellerProductCard(
-                productName: products[index],
-                onDelete: () {
-                  onDelete:
-                  () {};
-                  print("Product Deleted");
-                },
-              ),
-            );
-          },
-        ),
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator()) // عرض مؤشر تحميل عند جلب البيانات
+            : errorMessage != null
+                ? Center(child: Text(errorMessage!)) // عرض رسالة خطأ
+                : GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 18,
+                      mainAxisSpacing: 18,
+                      childAspectRatio: 0.6,
+                    ),
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          // إضافة الوظيفة عند الضغط على المنتج
+                        },
+                        child: SellerProductCard(
+                          productName: products[index].productName,
+                          onDelete: () {
+                            // إضافة عملية الحذف هنا
+                            print("Product Deleted");
+                          },
+                        ),
+                      );
+                    },
+                  ),
       ),
     );
   }
 }
-
-
-      // bottomNavigationBar: BottomNavigationBar(
-      //   type: BottomNavigationBarType.fixed,
-      //   items: const [
-      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: "Community"),
-      //     BottomNavigationBarItem(icon: Icon(Icons.store), label: "Store"),
-      //     BottomNavigationBarItem(
-      //         icon: Icon(Icons.medical_services), label: "Service"),
-      //     BottomNavigationBarItem(
-      //         icon: Icon(Icons.local_hospital), label: "Clinic"),
-      //     BottomNavigationBarItem(
-      //         icon: Icon(Icons.notifications), label: "Alarm"),
-      //   ],
-      // ),
