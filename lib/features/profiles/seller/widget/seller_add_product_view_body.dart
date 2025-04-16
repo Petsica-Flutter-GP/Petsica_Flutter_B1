@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/app_router.dart';
@@ -24,7 +25,7 @@ class SellerAddProductViewBody extends StatefulWidget {
 
 class _SellerAddProductViewBodyState extends State<SellerAddProductViewBody> {
   final _formKey = GlobalKey<FormState>();
-  late ProductCategory category;
+  ProductCategory? category;
 
   final nameController = TextEditingController();
   final priceController = TextEditingController();
@@ -45,6 +46,9 @@ class _SellerAddProductViewBodyState extends State<SellerAddProductViewBody> {
           if (state is AddProductSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('✔️ Product added successfully')),
+            );
+            GoRouter.of(context).go(
+              AppRouter.kSellerMyStore,
             );
           } else if (state is AddProductError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -170,42 +174,53 @@ class _SellerAddProductViewBodyState extends State<SellerAddProductViewBody> {
                   AppDropDownButton(
                     labelText: "Category",
                     items: const ["Food", "Toys", "Accessories", "Healthcare"],
-                    value: "Choose category",
+                    value: category?.name ??
+                        "Food", // التأكد من أن القيمة هي String وليس ProductCategory
                     onChanged: (newVal) {
                       setState(() {
-                        category = newVal as ProductCategory;
+                        category = ProductCategoryExtension.fromString(
+                            newVal!); // تحويل القيمة النصية إلى ProductCategory
                       });
                     },
                   ),
                   const SizedBox(height: 30),
                   AppButton(
-                    text: 'Add',
-                    border: 10,
-                    onTap: () async {
-                      if (_formKey.currentState!.validate()) {
-                        // التأكد من وجود الصورة إذا كانت لازمة
-                        if (_selectedImage == null) {
-                          setState(() {
-                            isImageRequired = true; // تحديد أن الصورة لازمة
-                          });
-                          return; // عدم إتمام العملية لو مفيش صورة
+                      text: 'Add',
+                      border: 10,
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          // التأكد من وجود الصورة إذا كانت لازمة
+                          if (_selectedImage == null) {
+                            setState(() {
+                              isImageRequired = true; // تحديد أن الصورة لازمة
+                            });
+                            return; // عدم إتمام العملية لو مفيش صورة
+                          }
+
+                          // التأكد من وجود فئة
+                          if (category == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('❌ Category is required')),
+                            );
+                            return; // التأكد من اختيار الفئة
+                          }
+
+                          final bytes = await _selectedImage!.readAsBytes();
+                          final base64Image = base64Encode(bytes);
+
+                          cubit.addProduct(
+                            name: nameController.text.trim(),
+                            price: double.parse(priceController.text),
+                            discount: double.parse(discController.text),
+                            description: descriptionController.text.trim(),
+                            quantity: int.parse(quanController.text),
+                            photo: base64Image,
+                            category:
+                                category!, // القيمة الآن من النوع ProductCategory
+                          );
                         }
-
-                        final bytes = await _selectedImage!.readAsBytes();
-                        final base64Image = base64Encode(bytes);
-
-                        cubit.addProduct(
-                          name: nameController.text.trim(),
-                          price: double.parse(priceController.text),
-                          discount: double.parse(discController.text),
-                          description: descriptionController.text.trim(),
-                          quantity: int.parse(quanController.text),
-                          photo: base64Image,
-                          category: category,
-                        );
-                      }
-                    },
-                  ),
+                      }),
                   const SizedBox(height: 20),
                 ],
               ),

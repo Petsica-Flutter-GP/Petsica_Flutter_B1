@@ -102,7 +102,40 @@ import 'dart:convert';
 import 'package:petsica/helpers/http_helper.dart';
 
 // تعريف Enum للفئات
-enum ProductCategory { food, healthcare, accessories }
+enum ProductCategory { food, toys, accessories, healthcare }
+
+extension ProductCategoryExtension on ProductCategory {
+  String get name {
+    switch (this) {
+      case ProductCategory.food:
+        return "Food";
+      case ProductCategory.toys:
+        return "Toys";
+      case ProductCategory.accessories:
+        return "Accessories";
+      case ProductCategory.healthcare:
+        return "Healthcare";
+      default:
+        return "Food";
+    }
+  }
+
+  static ProductCategory fromString(String value) {
+    switch (value) {
+      case 'Food':
+        return ProductCategory.food;
+      case 'Toys':
+        return ProductCategory.toys;
+      case 'Accessories':
+        return ProductCategory.accessories;
+      case 'Healthcare':
+        return ProductCategory.healthcare;
+      default:
+        return ProductCategory.food; // Default value
+    }
+  }
+}
+
 
 class ProductService {
   static Future<bool> addProduct({
@@ -148,6 +181,20 @@ class ProductService {
       throw Exception('Failed to load products');
     }
   }
+  
+
+
+static Future<bool> deleteProduct(int productId) async {
+  final url = Uri.parse('http://petsica.runasp.net/api/Products/delete/$productId');
+
+  final response = await _sendAuthorizedRequest(
+    url: url,
+    method: 'POST',
+  );
+
+  return response.statusCode == 204;
+}
+
 
   // دالة مشتركة لإرسال الطلبات المصرح بها
   static Future<dynamic> _sendAuthorizedRequest({
