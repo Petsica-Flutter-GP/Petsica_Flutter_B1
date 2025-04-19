@@ -183,13 +183,17 @@ abstract class AppRouter {
         path: kStore,
         builder: (context, state) => const StoreView(),
       ),
-      GoRoute(
-        path: kProductDetails,
-        builder: (context, state) {
-          final productData = state.extra as Map<String, dynamic>? ?? {};
-          return ProductDetailsView(productData: productData);
-        },
-      ),
+      
+ GoRoute(
+  path: kProductDetails,
+  builder: (context, state) {
+    final productId = state.extra as int; // نأخذ المنتج ID من extra
+    return ProductDetailsView(productId: productId); // نمرره في الـ constructor
+  },
+),
+
+
+
       GoRoute(
         path: kCart,
         builder: (context, state) => const CartView(),

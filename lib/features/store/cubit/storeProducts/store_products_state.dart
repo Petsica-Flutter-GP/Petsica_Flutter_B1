@@ -1,4 +1,4 @@
-part of 'storeproducts_cubit.dart';
+part of 'store_products_cubit.dart';
 
 abstract class StoreproductsState extends Equatable {
   const StoreproductsState();

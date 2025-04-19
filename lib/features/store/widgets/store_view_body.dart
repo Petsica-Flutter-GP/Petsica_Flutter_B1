@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/asset_data.dart';
-import 'package:petsica/features/profiles/seller/services/product_services.dart'; // تأكد من استيراد الـ ProductCategory
+import 'package:petsica/features/profiles/seller/services/product_services.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'package:petsica/features/store/cubit/getbycategory/getbycategory_cubit.dart';
+import 'package:petsica/features/store/cubit/getbycategory/getbycategory_state.dart';
 import 'package:petsica/features/store/services/store_services.dart';
 import 'package:petsica/features/store/widgets/product_card.dart';
+import 'package:shimmer/shimmer.dart'; // استيراد مكتبة Shimmer
 
-enum ProductCategory { food, toys, accessories, healthcare }
+// Enum for ProductCategory
+enum ProductCategory { all, food, toys, accessories, healthcare }
 
 extension ProductCategoryExtension on ProductCategory {
   String get name {
     switch (this) {
+      case ProductCategory.all:
+        return "All";
       case ProductCategory.food:
         return "Food";
       case ProductCategory.toys:
@@ -28,6 +35,8 @@ extension ProductCategoryExtension on ProductCategory {
 
   static ProductCategory fromString(String value) {
     switch (value) {
+      case 'All':
+        return ProductCategory.all;
       case 'Food':
         return ProductCategory.food;
       case 'Toys':
@@ -42,18 +51,30 @@ extension ProductCategoryExtension on ProductCategory {
   }
 }
 
-class StoreViewBody extends StatelessWidget {
+class StoreViewBody extends StatefulWidget {
   const StoreViewBody({super.key});
+
+  @override
+  _StoreViewBodyState createState() => _StoreViewBodyState();
+}
+
+class _StoreViewBodyState extends State<StoreViewBody> {
+  ProductCategory selectedCategory = ProductCategory.food; // الفئة الافتراضية
+  late Future<List<Product>> productFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    productFuture = StoreService.getByCategory(
+        selectedCategory.name); // جلب المنتجات بناءً على الفئة الافتراضية
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(size: 35),
-        title: Text(
-          "Store",
-          style: Styles.textStyleQu28,
-        ),
+        title: Text("Store", style: Styles.textStyleQu28),
         centerTitle: true,
         actions: [
           IconButton(
@@ -65,11 +86,10 @@ class StoreViewBody extends StatelessWidget {
         ],
       ),
       drawer: Drawer(
-        elevation: 16, // add a shadow effect to the drawer
+        elevation: 16,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            // Custom Drawer Header with an image and title
             DrawerHeader(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
@@ -80,11 +100,6 @@ class StoreViewBody extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  // Icon(
-                  //   Icons.store,
-                  //   size: 40,
-                  //   color: Colors.white,
-                  // ),
                   const SizedBox(width: 10),
                   Text('Categories',
                       style: Styles.textStyleCom32
@@ -92,28 +107,27 @@ class StoreViewBody extends StatelessWidget {
                 ],
               ),
             ),
-            // Display categories from the enum with icons
             ...ProductCategory.values.map((category) {
               return ListTile(
-                leading: const Icon(
-                  Icons.integration_instructions_rounded,
-                  size: 23,
-                  color: kBurgColor,
-                ),
+                leading: const Icon(Icons.integration_instructions_rounded,
+                    size: 23, color: kBurgColor),
                 title: Text(category.name, style: Styles.textStyleCom24),
                 onTap: () {
-                  // Add logic here for category filtering
-                  // Example: filter products based on selected category
+                  setState(() {
+                    selectedCategory = category;
+                    productFuture = (category == ProductCategory.all)
+                        ? StoreService
+                            .getAll() // استرجاع كل المنتجات إذا كانت الفئة هي "All"
+                        : StoreService.getByCategory(category
+                            .name); // استرجاع المنتجات حسب الفئة المحددة
+                  });
+                  Navigator.pop(context); // إغلاق الدrawer بعد الاختيار
                 },
-                tileColor: Colors.white, // Add background color for items
+                tileColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(8), // Rounded corners for tiles
-                ),
+                    borderRadius: BorderRadius.circular(8)),
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                hoverColor: Colors.blue[50], // Add hover effect
-                focusColor: Colors.blue[100], // Focus effect
               );
             }),
           ],
@@ -122,10 +136,88 @@ class StoreViewBody extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: FutureBuilder<List<Product>>(
-          future: StoreService.getAll(),
+          future: productFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 18,
+                  mainAxisSpacing: 18,
+                  childAspectRatio: 0.6,
+                ),
+                itemCount: 6, // عدد العناصر أثناء التحميل
+                itemBuilder: (context, index) {
+                  return Shimmer.fromColors(
+                    baseColor: kProducPriceColor.withOpacity(0.2),
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Card(
+                        color: Colors.grey[300],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 0,
+                        child: Column(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 150,
+                              color: Colors.grey[300],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    color: Colors.grey[300],
+                                    height: 20,
+                                    width: 100,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    color: Colors.grey[300],
+                                    height: 20,
+                                    width: 80,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    color: Colors.grey[300],
+                                    height: 20,
+                                    width: double.infinity,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        color: Colors.grey[300],
+                                        height: 20,
+                                        width: 50,
+                                      ),
+                                      Container(
+                                        color: Colors.grey[300],
+                                        height: 20,
+                                        width: 50,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
             }
 
             if (snapshot.hasError) {
@@ -148,18 +240,14 @@ class StoreViewBody extends StatelessWidget {
               itemCount: products.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {
-                    GoRouter.of(context).go(
-                      AppRouter.kProductDetails,
-                      extra: {
-                        "name": products[index].productName,
-                        "price": products[index].price.toString(),
-                        "image": products[index].photo,
-                      },
-                    );
-                  },
-                  child: ProductCard(product: products[index]),
-                );
+    onTap: () {
+      GoRouter.of(context).go(
+        AppRouter.kProductDetails,
+        extra: products[index].productId, // ✅ تمرير ID كـ int
+      );
+    },
+    child: ProductCard(product: products[index]),
+  );
               },
             );
           },
