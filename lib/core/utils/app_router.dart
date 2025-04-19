@@ -331,7 +331,7 @@ abstract class AppRouter {
      GoRoute(
   path: kSellerEditProduct,
   builder: (context, state) {
-    final productId = state.extra as int; // استرجاع المعرف من extra
+    final productId = state.extra as int;
     return SellerEditProductView(productId: productId);
   },
 ),

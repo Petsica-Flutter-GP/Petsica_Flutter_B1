@@ -4,7 +4,6 @@ import 'package:petsica/features/profiles/seller/widget/seller_edit_product_view
 class SellerEditProductView extends StatelessWidget {
   final int productId;
 
-  // تعديل الكود لتمرير معرّف المنتج
   const SellerEditProductView({
     super.key,
     required this.productId,
