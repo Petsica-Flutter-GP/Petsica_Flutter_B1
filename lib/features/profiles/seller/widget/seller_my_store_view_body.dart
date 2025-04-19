@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/app_router.dart';
+import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/profiles/seller/cubit/delete/product_deletion_cubit.dart';
 import 'package:petsica/features/profiles/seller/cubit/git/seller_product_cubit.dart';
@@ -45,7 +47,7 @@ class SellerMyStoreViewBody extends StatelessWidget {
               context.read<SellerProductsCubit>().fetchProducts();
             } else if (state is ProductDeletionFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("❌ ${state.error}")),
+                SnackBar(content: Text("❌ ${state.message}")),
               );
             }
           },
@@ -139,6 +141,38 @@ class SellerMyStoreViewBody extends StatelessWidget {
               } else if (state is SellerProductsError) {
                 return Center(child: Text(state.message));
               } else if (state is SellerProductsLoaded) {
+                if (state.products.isEmpty) {
+                  return Stack(
+                    children: [
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.store_mall_directory_outlined,
+                                size: 100, color: Colors.grey),
+                            const SizedBox(height: 16),
+                            Text('No products yet!',
+                                style: Styles.textStyleQui24
+                                    .copyWith(color: Colors.grey)),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Click the + icon to add a new product.',
+                              style: Styles.textStyleQui20
+                                  .copyWith(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Positioned(
+                        top: 10,
+                        right: 10,
+                        child: AnimatedArrowHint(),
+                      ),
+                    ],
+                  );
+                }
+
+                // باقي الحالة العادية لو في منتجات
                 return CustomScrollView(
                   slivers: [
                     SliverPadding(
@@ -178,6 +212,54 @@ class SellerMyStoreViewBody extends StatelessWidget {
             },
           ),
         ),
+      ),
+    );
+  }
+}
+
+class AnimatedArrowHint extends StatefulWidget {
+  const AnimatedArrowHint({super.key});
+
+  @override
+  State<AnimatedArrowHint> createState() => _AnimatedArrowHintState();
+}
+
+class _AnimatedArrowHintState extends State<AnimatedArrowHint>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Offset> _offsetAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _offsetAnimation = Tween<Offset>(begin: const Offset(0, -0.3), end: const Offset(0, 0.3)).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SlideTransition(
+      position: _offsetAnimation,
+      child: Row(
+        children: [
+          Text(
+            'Add Product',
+            style: Styles.textStyleCom22,
+          ),
+          const Icon(Icons.north, size: 40, color: kBurgColor),
+        ],
       ),
     );
   }

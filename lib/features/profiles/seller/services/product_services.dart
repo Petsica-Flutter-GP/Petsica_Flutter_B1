@@ -97,7 +97,6 @@
 //     );
 //   }
 // }
-
 import 'dart:convert';
 import 'package:petsica/helpers/http_helper.dart';
 
@@ -136,7 +135,6 @@ extension ProductCategoryExtension on ProductCategory {
   }
 }
 
-
 class ProductService {
   static Future<bool> addProduct({
     required String productName,
@@ -166,8 +164,40 @@ class ProductService {
     return _handleResponse(response);
   }
 
+  // دالة لتحديث المنتج
+  static Future<bool> updateProduct({
+    required int productId,
+    required String productName,
+    required double price,
+    required double discount,
+    required String description,
+    required int quantity,
+    required String photo,
+    required ProductCategory category,
+  }) async {
+    final url =
+        Uri.parse('http://petsica.runasp.net/api/Products/edit/$productId');
+
+    final response = await _sendAuthorizedRequest(
+      url: url,
+      method: 'PUT',
+      body: jsonEncode({
+        "ProductName": productName,
+        "Price": price,
+        "Discount": discount,
+        "Description": description,
+        "Quantity": quantity,
+        "Photo": photo,
+        "Category": category.name // استخدام Enum بدلاً من String
+      }),
+    );
+
+    return _handleResponse(response);
+  }
+
   static Future<List<Product>> getSellerProducts() async {
-    final url = Uri.parse('http://petsica.runasp.net/api/Products/Seller/products');
+    final url =
+        Uri.parse('http://petsica.runasp.net/api/Products/Seller/products');
 
     final response = await _sendAuthorizedRequest(
       url: url,
@@ -181,20 +211,18 @@ class ProductService {
       throw Exception('Failed to load products');
     }
   }
-  
 
+  static Future<bool> deleteProduct(int productId) async {
+    final url =
+        Uri.parse('http://petsica.runasp.net/api/Products/delete/$productId');
 
-static Future<bool> deleteProduct(int productId) async {
-  final url = Uri.parse('http://petsica.runasp.net/api/Products/delete/$productId');
+    final response = await _sendAuthorizedRequest(
+      url: url,
+      method: 'POST',
+    );
 
-  final response = await _sendAuthorizedRequest(
-    url: url,
-    method: 'POST',
-  );
-
-  return response.statusCode == 204;
-}
-
+    return response.statusCode == 204;
+  }
 
   // دالة مشتركة لإرسال الطلبات المصرح بها
   static Future<dynamic> _sendAuthorizedRequest({
@@ -257,4 +285,3 @@ class Product {
     );
   }
 }
-

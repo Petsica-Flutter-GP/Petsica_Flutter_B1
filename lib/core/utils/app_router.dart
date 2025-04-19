@@ -328,10 +328,14 @@ abstract class AppRouter {
         path: kSellerMyStore,
         builder: (context, state) => const SellerMyStoreView(),
       ),
-      GoRoute(
-        path: kSellerEditProduct,
-        builder: (context, state) => const SellerEditProductView(),
-      ),
+     GoRoute(
+  path: kSellerEditProduct,
+  builder: (context, state) {
+    final productId = state.extra as int; // استرجاع المعرف من extra
+    return SellerEditProductView(productId: productId);
+  },
+),
+
       GoRoute(
         path: kSellerAddProduct,
         builder: (context, state) => const SellerAddProductView(),
