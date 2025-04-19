@@ -74,7 +74,7 @@ class SellerProductCard extends StatelessWidget {
                         const SizedBox(height: 15),
                         GestureDetector(
                           onTap: () {
-                            GoRouter.of(context).go(AppRouter.kSellerEditProduct);
+                            GoRouter.of(context).go(AppRouter.kSellerEditProduct,extra: product.productId);
                           },
                           child: CircleAvatar(
                             radius: 15,
