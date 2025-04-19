@@ -46,16 +46,21 @@ class SellerProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 📸 صورة المنتج
             SizedBox(
               height: 150,
               child: Stack(
                 children: [
-                  Image.memory(
-                    imageBytes,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.memory(
+                        imageBytes,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
+                    ),
                   ),
                   // 🛠️ أزرار الحذف والتعديل
                   Positioned(
@@ -68,18 +73,22 @@ class SellerProductCard extends StatelessWidget {
                           child: CircleAvatar(
                             radius: 15,
                             backgroundColor: Colors.black.withOpacity(0.5),
-                            child: const Icon(Icons.close, color: Colors.white, size: 18),
+                            child: const Icon(Icons.close,
+                                color: Colors.white, size: 18),
                           ),
                         ),
                         const SizedBox(height: 15),
                         GestureDetector(
                           onTap: () {
-                            GoRouter.of(context).go(AppRouter.kSellerEditProduct,extra: product.productId);
+                            GoRouter.of(context).go(
+                                AppRouter.kSellerEditProduct,
+                                extra: product.productId);
                           },
                           child: CircleAvatar(
                             radius: 15,
                             backgroundColor: Colors.black.withOpacity(0.5),
-                            child: const Icon(Icons.edit, color: Colors.white, size: 18),
+                            child: const Icon(Icons.edit,
+                                color: Colors.white, size: 18),
                           ),
                         ),
                       ],
@@ -97,14 +106,16 @@ class SellerProductCard extends StatelessWidget {
                   const SizedBox(height: 12),
                   Text(
                     product.productName,
-                    style: Styles.textStyleCom18.copyWith(color: kProductTxtColor),
+                    style:
+                        Styles.textStyleCom18.copyWith(color: kProductTxtColor),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     product.category,
-                    style: Styles.textStyleCom16.copyWith(color: kProductTxtColor),
+                    style:
+                        Styles.textStyleCom16.copyWith(color: kProductTxtColor),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -119,7 +130,8 @@ class SellerProductCard extends StatelessWidget {
                     textStyle: const TextStyle(color: Colors.white),
                     child: Text(
                       product.description,
-                      style: Styles.textStyleCom16.copyWith(color: kProductTxtColor),
+                      style: Styles.textStyleCom16
+                          .copyWith(color: kProductTxtColor),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -130,11 +142,13 @@ class SellerProductCard extends StatelessWidget {
                     children: [
                       Text(
                         '${product.price} EGP',
-                        style: Styles.textStyleQui18.copyWith(color: kProducPriceColor),
+                        style: Styles.textStyleQui18
+                            .copyWith(color: kProducPriceColor),
                       ),
                       Text(
                         '${product.discount} %',
-                        style: Styles.textStyleQui18.copyWith(color: kProducPriceColor),
+                        style: Styles.textStyleQui18
+                            .copyWith(color: kProducPriceColor),
                       ),
                     ],
                   ),
@@ -147,14 +161,13 @@ class SellerProductCard extends StatelessWidget {
     );
   }
 
- void _showDeleteDialog(BuildContext context) {
-  SellerProductDeletionShowDialog(
-    context,
-    () {
-      context.read<ProductDeletionCubit>().deleteProduct(product.productId);
-      onDelete(); // هذا علشان يحصل refresh للواجهة بعد الحذف
-    },
-  );
-}
-
+  void _showDeleteDialog(BuildContext context) {
+    SellerProductDeletionShowDialog(
+      context,
+      () {
+        context.read<ProductDeletionCubit>().deleteProduct(product.productId);
+        onDelete(); // هذا علشان يحصل refresh للواجهة بعد الحذف
+      },
+    );
+  }
 }

@@ -142,32 +142,39 @@ class SellerMyStoreViewBody extends StatelessWidget {
                 return Center(child: Text(state.message));
               } else if (state is SellerProductsLoaded) {
                 if (state.products.isEmpty) {
-                  return Stack(
+                  return const Stack(
+                    // children: [
+                    //   Center(
+                    //     child: Column(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: [
+                    //         const Icon(Icons.store_mall_directory_outlined,
+                    //             size: 100, color: Colors.grey),
+                    //         const SizedBox(height: 16),
+                    //         Text('No products yet!',
+                    //             style: Styles.textStyleQui24
+                    //                 .copyWith(color: Colors.grey)),
+                    //         const SizedBox(height: 8),
+                    //         Text(
+                    //           'Click the + icon to add a new product.',
+                    //           style: Styles.textStyleQui20
+                    //               .copyWith(color: Colors.grey),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    //   const Positioned(
+                    //     top: 10,
+                    //     right: 10,
+                    //     child: AnimatedArrowHint(),
+                    //   ),
+                    // ],
+
                     children: [
                       Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.store_mall_directory_outlined,
-                                size: 100, color: Colors.grey),
-                            const SizedBox(height: 16),
-                            Text('No products yet!',
-                                style: Styles.textStyleQui24
-                                    .copyWith(color: Colors.grey)),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Click the + icon to add a new product.',
-                              style: Styles.textStyleQui20
-                                  .copyWith(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Positioned(
-                        top: 10,
-                        right: 10,
-                        child: AnimatedArrowHint(),
-                      ),
+                          child: Text("No products yet 🛒",
+                              style: TextStyle(fontSize: 20))),
+                      AnimatedArrow(), // السهم المتحرك
                     ],
                   );
                 }
@@ -237,7 +244,9 @@ class _AnimatedArrowHintState extends State<AnimatedArrowHint>
       vsync: this,
     )..repeat(reverse: true);
 
-    _offsetAnimation = Tween<Offset>(begin: const Offset(0, -0.3), end: const Offset(0, 0.3)).animate(
+    _offsetAnimation =
+        Tween<Offset>(begin: const Offset(0, -0.3), end: const Offset(0, 0.3))
+            .animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
   }
@@ -261,6 +270,84 @@ class _AnimatedArrowHintState extends State<AnimatedArrowHint>
           const Icon(Icons.north, size: 40, color: kBurgColor),
         ],
       ),
+    );
+  }
+}
+
+class CurvedArrowPainter extends CustomPainter {
+  final double progress;
+
+  CurvedArrowPainter(this.progress);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.orange
+      ..strokeWidth = 4
+      ..style = PaintingStyle.stroke;
+
+    final path = Path();
+
+    // من منتصف الشاشة إلى أعلى اليمين
+    path.moveTo(size.width / 2, size.height / 2);
+
+    // المسار المموج
+    path.quadraticBezierTo(
+      size.width * 0.75,
+      size.height * 0.35,
+      size.width * progress,
+      0,
+    );
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CurvedArrowPainter oldDelegate) {
+    return oldDelegate.progress != progress;
+  }
+}
+
+class AnimatedArrow extends StatefulWidget {
+  const AnimatedArrow({super.key});
+
+  @override
+  State<AnimatedArrow> createState() => _AnimatedArrowState();
+}
+
+class _AnimatedArrowState extends State<AnimatedArrow>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+
+    _animation = Tween<double>(begin: 0.5, end: 1.0).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (_, __) {
+        return CustomPaint(
+          size: MediaQuery.of(context).size,
+          painter: CurvedArrowPainter(_animation.value),
+        );
+      },
     );
   }
 }
