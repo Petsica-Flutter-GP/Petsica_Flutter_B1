@@ -39,6 +39,21 @@ static Future<List<Product>> getByCategory(String category) async {
     }
   }
 
+static Future<Product> getProductByID(int productId) async {
+  final url = Uri.parse('http://petsica.runasp.net/api/Products/details/$productId');
+
+  final response = await sendAuthorizedRequest(
+    url: url,
+    method: 'GET',
+  );
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    return Product.fromJson(data);
+  } else {
+    throw Exception('فشل في تحميل المنتج: ${response.statusCode}');
+  }
+}
 
 
 }

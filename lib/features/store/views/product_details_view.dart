@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:petsica/features/store/cubit/getbyid/get_by_id_cubit.dart';
 import 'package:petsica/features/store/widgets/product_details_view_body.dart';
 
-
 class ProductDetailsView extends StatelessWidget {
-  final Map<String, dynamic> productData;
+  final int productId; // هنا نحدد المتغير productId
 
-  const ProductDetailsView({super.key, required this.productData});
+  ProductDetailsView({super.key, required this.productId}); // نمرر الباراميتر في constructor
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: ProductDetailsViewBody());
+    // هنا يمكن استخدام productId في الـ BlocProvider
+    return BlocProvider(
+      create: (_) => ProductDetailsCubit()..fetchProductDetails(productId),
+      child: const ProductDetailsViewBody(),
+    );
   }
 }
