@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:petsica/features/store/cubit/getbyid/get_by_id_state.dart';
+import 'package:petsica/features/store/cubit/storeC/getbyid/get_by_id_state.dart';
 import 'package:petsica/features/store/services/store_services.dart';
 
 class ProductDetailsCubit extends Cubit<ProductDetailsState> {

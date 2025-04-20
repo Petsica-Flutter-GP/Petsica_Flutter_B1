@@ -1,6 +1,6 @@
 // تعريف الـ Cubit
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:petsica/features/store/cubit/getbycategory/getbycategory_state.dart';
+import 'package:petsica/features/store/cubit/storeC/getbycategory/getbycategory_state.dart';
 import 'package:petsica/features/store/services/store_services.dart';
 
 class GetByCategoryCubit extends Cubit<GetByCategoryState> {

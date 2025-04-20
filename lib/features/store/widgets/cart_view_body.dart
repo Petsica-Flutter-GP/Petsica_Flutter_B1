@@ -82,11 +82,11 @@ class CartViewBody extends StatelessWidget {
                       border: 9,
                       onTap: () {
                         if (cartItems.isEmpty) {
-                          GoRouter.of(context).go(
-                            AppRouter.kStore,
-                          );
-                        } else {
                           showDialogMessage(context);
+                        } else {
+                          GoRouter.of(context).go(
+                            AppRouter.kCheckOut,
+                          );
                         }
                       },
                     );

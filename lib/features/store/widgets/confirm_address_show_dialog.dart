@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/features/store/widgets/address_input_field.dart';
 
 import '../../../core/utils/app_button.dart';
@@ -30,6 +32,9 @@ Future<dynamic> showDialogMessage(BuildContext context) {
                     duration: Duration(seconds: 2),
                   ),
                 );
+                GoRouter.of(context).go(
+                        AppRouter.kCheckOut,
+                      );
               },
             ),
           )
