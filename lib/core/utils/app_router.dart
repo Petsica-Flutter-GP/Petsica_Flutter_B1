@@ -43,6 +43,7 @@ import 'package:petsica/features/splash/presentation/views/widgets/splach_screen
 import 'package:petsica/features/onboarding/presentation/views/onboarding.dart';
 import 'package:petsica/features/registeration/presentation/views/welcome_back_view.dart';
 import 'package:petsica/features/store/views/cart_view.dart';
+import 'package:petsica/features/store/views/checkout_view.dart';
 import 'package:petsica/features/store/views/product_details_view.dart';
 import 'package:petsica/features/who/presentation/views/who_view.dart';
 import '../../features/profiles/clinic/view/clinic_pet_details_view.dart';
@@ -117,6 +118,7 @@ abstract class AppRouter {
   static const kStore = '/store';
   static const kProductDetails = '/productDetails';
   static const kCart = '/cart';
+  static const kCheckOut = '/checkOut';
 
 //chat-boot
   static const kChatBootOnboarding = '/chatBootOnboarding';
@@ -147,6 +149,10 @@ abstract class AppRouter {
       GoRoute(
         path: kOnboarding,
         builder: (context, state) => const Onboarding(),
+      ),
+      GoRoute(
+        path: kCheckOut,
+        builder: (context, state) =>  CheckOutView(),
       ),
       GoRoute(
         path: kHomeScreen,

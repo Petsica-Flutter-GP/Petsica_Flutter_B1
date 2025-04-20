@@ -6,11 +6,11 @@ import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/features/profiles/seller/services/product_services.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:go_router/go_router.dart';
-import 'package:petsica/features/store/cubit/getbycategory/getbycategory_cubit.dart';
-import 'package:petsica/features/store/cubit/getbycategory/getbycategory_state.dart';
+import 'package:petsica/features/store/cubit/storeC/getbycategory/getbycategory_cubit.dart';
+import 'package:petsica/features/store/cubit/storeC/getbycategory/getbycategory_state.dart';
 import 'package:petsica/features/store/services/store_services.dart';
 import 'package:petsica/features/store/widgets/product_card.dart';
-import 'package:shimmer/shimmer.dart'; // استيراد مكتبة Shimmer
+import 'package:shimmer/shimmer.dart';
 
 // Enum for ProductCategory
 enum ProductCategory { all, food, toys, accessories, healthcare }
@@ -46,7 +46,7 @@ extension ProductCategoryExtension on ProductCategory {
       case 'Healthcare':
         return ProductCategory.healthcare;
       default:
-        return ProductCategory.food;
+        return ProductCategory.all;
     }
   }
 }
@@ -59,14 +59,13 @@ class StoreViewBody extends StatefulWidget {
 }
 
 class _StoreViewBodyState extends State<StoreViewBody> {
-  ProductCategory selectedCategory = ProductCategory.food; // الفئة الافتراضية
+  ProductCategory selectedCategory = ProductCategory.all;
   late Future<List<Product>> productFuture;
 
   @override
   void initState() {
     super.initState();
-    productFuture = StoreService.getByCategory(
-        selectedCategory.name); // جلب المنتجات بناءً على الفئة الافتراضية
+    productFuture = StoreService.getAll();
   }
 
   @override
@@ -74,7 +73,13 @@ class _StoreViewBodyState extends State<StoreViewBody> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(size: 35),
-        title: Text("Store", style: Styles.textStyleQu28),
+        title: Text(
+          selectedCategory == ProductCategory.all
+              ? 'Store'
+              : selectedCategory.name,
+          key: ValueKey(selectedCategory.name),
+          style: Styles.textStyleQu28,
+        ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -116,12 +121,10 @@ class _StoreViewBodyState extends State<StoreViewBody> {
                   setState(() {
                     selectedCategory = category;
                     productFuture = (category == ProductCategory.all)
-                        ? StoreService
-                            .getAll() // استرجاع كل المنتجات إذا كانت الفئة هي "All"
-                        : StoreService.getByCategory(category
-                            .name); // استرجاع المنتجات حسب الفئة المحددة
+                        ? StoreService.getAll()
+                        : StoreService.getByCategory(category.name);
                   });
-                  Navigator.pop(context); // إغلاق الدrawer بعد الاختيار
+                  Navigator.pop(context);
                 },
                 tileColor: Colors.white,
                 shape: RoundedRectangleBorder(
@@ -146,7 +149,7 @@ class _StoreViewBodyState extends State<StoreViewBody> {
                   mainAxisSpacing: 18,
                   childAspectRatio: 0.6,
                 ),
-                itemCount: 6, // عدد العناصر أثناء التحميل
+                itemCount: 6,
                 itemBuilder: (context, index) {
                   return Shimmer.fromColors(
                     baseColor: kProducPriceColor.withOpacity(0.2),
@@ -240,14 +243,17 @@ class _StoreViewBodyState extends State<StoreViewBody> {
               itemCount: products.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
-    onTap: () {
-      GoRouter.of(context).go(
-        AppRouter.kProductDetails,
-        extra: products[index].productId, // ✅ تمرير ID كـ int
-      );
-    },
-    child: ProductCard(product: products[index]),
-  );
+                  onTap: () {
+                    GoRouter.of(context).go(
+                      AppRouter.kProductDetails,
+                      extra: products[index].productId,
+                    );
+                  },
+                  child: Hero(
+                    tag: products[index].productId.toString(),
+                    child: ProductCard(product: products[index]),
+                  ),
+                );
               },
             );
           },

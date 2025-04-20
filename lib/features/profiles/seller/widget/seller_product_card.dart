@@ -50,6 +50,108 @@ class SellerProductCard extends StatelessWidget {
               height: 150,
               child: Stack(
                 children: [
+
+
+
+                  /**
+                   * SizedBox(
+  height: 150,
+  child: Stack(
+    children: [
+      // ✅ صورة المنتج
+      Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.memory(
+            imageBytes,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+        ),
+      ),
+
+      // ✅ Badge "Sold Out"
+      if (!product.isAvailable)
+        Positioned(
+          top: 8,
+          left: 8,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.redAccent,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Text(
+              'Sold Out',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ),
+
+      // ✅ Overlay شفاف يغطي الصورة
+      if (!product.isAvailable)
+        Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          alignment: Alignment.center,
+          child: const Text(
+            'SOLD OUT',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2,
+            ),
+          ),
+        ),
+
+      // ✅ أزرار الحذف والتعديل
+      Positioned(
+        top: 8,
+        right: 8,
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () => _showDeleteDialog(context),
+              child: CircleAvatar(
+                radius: 15,
+                backgroundColor: Colors.black.withOpacity(0.5),
+                child: const Icon(Icons.close,
+                    color: Colors.white, size: 18),
+              ),
+            ),
+            const SizedBox(height: 15),
+            GestureDetector(
+              onTap: () {
+                GoRouter.of(context).go(
+                    AppRouter.kSellerEditProduct,
+                    extra: product.productId);
+              },
+              child: CircleAvatar(
+                radius: 15,
+                backgroundColor: Colors.black.withOpacity(0.5),
+                child: const Icon(Icons.edit,
+                    color: Colors.white, size: 18),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+),
+
+                   */
                   Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: ClipRRect(

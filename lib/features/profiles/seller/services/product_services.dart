@@ -138,6 +138,20 @@ static Future<List<Product>> getSellerProducts() async {
     return _handleResponse(response);
   }
 
+
+  // // تعليم المنتج كـ Sold Out
+  // static Future<bool> markAsSoldOut(int productId) async {
+  //   final url = Uri.parse('http://petsica.runasp.net/api/Products/soldout/$productId');
+
+  //   final response = await _sendAuthorizedRequest(
+  //     url: url,
+  //     method: 'POST',
+  //   );
+
+  //   return _handleResponse(response);
+  // }
+
+
   // دالة إرسال الطلبات مع التوكن
   static Future<dynamic> _sendAuthorizedRequest({
     required Uri url,
