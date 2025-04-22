@@ -171,59 +171,85 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody>
                             const SizedBox(height: 50),
 
                             /// ✅ زر الإضافة إلى السلة
-                            BlocConsumer<AddToCartCubit, AddToCartState>(
-                              listener: (context, state) {
-                                if (state is AddToCartSuccess) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("✅ Added Succesfully"),
-                                      backgroundColor: Colors.green,
-                                      duration: Duration(seconds: 1),
-                                    ),
-                                  );
+                            product.isAvailable
+                                ? BlocConsumer<AddToCartCubit, AddToCartState>(
+                                    listener: (context, state) {
+                                      if (state is AddToCartSuccess) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content:
+                                                Text("✅ Added Succesfully"),
+                                            backgroundColor: Colors.green,
+                                            duration: Duration(seconds: 1),
+                                          ),
+                                        );
 
-                                  // التأخير لمدة ثانية ثم الانتقال
-                                  Future.delayed(
-                                      const Duration(milliseconds: 100), () {
-                                    GoRouter.of(context).go(AppRouter.kStore);
-                                  });
-                                } else if (state is AddToCartFailure) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text("❌ Error: ${state.error}"),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                }
-                              },
-                              builder: (context, state) {
-                                return AnimatedBuilder(
-                                  animation: _animation,
-                                  builder: (context, child) {
-                                    return Transform.translate(
-                                      offset: Offset(0, -_animation.value),
-                                      child: AppButton(
-                                        text: state is AddToCartLoading
-                                            ? 'Loading..'
-                                            : 'Add To Cart',
-                                        border: 10,
-                                        onTap: state is AddToCartLoading
-                                            ? null
-                                            : () {
-                                                context
-                                                    .read<AddToCartCubit>()
-                                                    .addToCart(
-                                                      productId:
-                                                          product.productId,
-                                                      quantity: 1,
-                                                    );
-                                              },
+                                        Future.delayed(
+                                            const Duration(milliseconds: 100),
+                                            () {
+                                          GoRouter.of(context)
+                                              .go(AppRouter.kStore);
+                                        });
+                                      } else if (state is AddToCartFailure) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content:
+                                                Text("❌ Error: ${state.error}"),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    builder: (context, state) {
+                                      return AnimatedBuilder(
+                                        animation: _animation,
+                                        builder: (context, child) {
+                                          return Transform.translate(
+                                            offset:
+                                                Offset(0, -_animation.value),
+                                            child: AppButton(
+                                              text: state is AddToCartLoading
+                                                  ? 'Loading..'
+                                                  : 'Add To Cart',
+                                              border: 10,
+                                              onTap: state is AddToCartLoading
+                                                  ? null
+                                                  : () {
+                                                      context
+                                                          .read<
+                                                              AddToCartCubit>()
+                                                          .addToCart(
+                                                            productId: product
+                                                                .productId,
+                                                            quantity: 1,
+                                                          );
+                                                    },
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  )
+                                : Column(
+                                    children: [
+                                      Text(
+                                        "⚠️ هذا المنتج غير متوفر حالياً",
+                                        style: Styles.textStyleCom22.copyWith(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    );
-                                  },
-                                );
-                              },
-                            ),
+                                      const SizedBox(height: 10),
+                                      AppButton(
+                                        text: "Unavailable",
+                                        border: 10,
+                                        onTap: null,
+                                        backgroundColor: Colors.grey.shade400,
+                                      ),
+                                    ],
+                                  ),
 
                             const SizedBox(height: 20),
                           ],
