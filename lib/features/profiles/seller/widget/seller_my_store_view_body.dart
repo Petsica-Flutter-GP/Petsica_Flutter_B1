@@ -10,6 +10,7 @@ import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/profiles/seller/cubit/delete/product_deletion_cubit.dart';
 import 'package:petsica/features/profiles/seller/cubit/git/seller_product_cubit.dart';
 import 'package:petsica/features/profiles/seller/cubit/git/seller_product_state.dart';
+import 'package:petsica/features/profiles/seller/cubit/soldOut/soldout_cubit.dart';
 import 'package:petsica/features/profiles/seller/widget/seller_product_card.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -22,6 +23,7 @@ class SellerMyStoreViewBody extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => SellerProductsCubit()..fetchProducts()),
         BlocProvider(create: (_) => ProductDeletionCubit()),
+        BlocProvider(create: (_) => SoldOutCubit()),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -143,33 +145,6 @@ class SellerMyStoreViewBody extends StatelessWidget {
               } else if (state is SellerProductsLoaded) {
                 if (state.products.isEmpty) {
                   return const Stack(
-                    // children: [
-                    //   Center(
-                    //     child: Column(
-                    //       mainAxisAlignment: MainAxisAlignment.center,
-                    //       children: [
-                    //         const Icon(Icons.store_mall_directory_outlined,
-                    //             size: 100, color: Colors.grey),
-                    //         const SizedBox(height: 16),
-                    //         Text('No products yet!',
-                    //             style: Styles.textStyleQui24
-                    //                 .copyWith(color: Colors.grey)),
-                    //         const SizedBox(height: 8),
-                    //         Text(
-                    //           'Click the + icon to add a new product.',
-                    //           style: Styles.textStyleQui20
-                    //               .copyWith(color: Colors.grey),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    //   const Positioned(
-                    //     top: 10,
-                    //     right: 10,
-                    //     child: AnimatedArrowHint(),
-                    //   ),
-                    // ],
-
                     children: [
                       Center(
                           child: Text("No products yet 🛒",

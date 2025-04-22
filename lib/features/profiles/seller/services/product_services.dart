@@ -68,62 +68,61 @@ class ProductService {
 
   // تعديل منتج باستخدام ID في نهاية الرابط (PUT)
 // تعديل منتج باستخدام ID في نهاية الرابط (PUT)
-static Future<bool> updateProduct({
-  required int productId,
-  required String productName,
-  required double price,
-  required double discount,
-  required String description,
-  required int quantity,
-  required String photo,
-  required ProductCategory category,
-  required String sellerId,
-  required bool isAvailable,
-}) async {
-  final url = Uri.parse('http://petsica.runasp.net/api/Products/edit/$productId');
+  static Future<bool> updateProduct({
+    required int productId,
+    required String productName,
+    required double price,
+    required double discount,
+    required String description,
+    required int quantity,
+    required String photo,
+    required ProductCategory category,
+    required String sellerId,
+    required bool isAvailable,
+  }) async {
+    final url =
+        Uri.parse('http://petsica.runasp.net/api/Products/edit/$productId');
 
-  final response = await _sendAuthorizedRequest(
-    url: url,
-    method: 'PUT',
-    body: jsonEncode({
-      "ProductName": productName,
-      "Price": price,
-      "Discount": discount,
-      "Description": description,
-      "Quantity": quantity,
-      "Photo": photo,
-      "Category": category.name,
-      "sellerId": sellerId,
-      "isAvailable": isAvailable,
-    }),
-  );
+    final response = await _sendAuthorizedRequest(
+      url: url,
+      method: 'PUT',
+      body: jsonEncode({
+        "ProductName": productName,
+        "Price": price,
+        "Discount": discount,
+        "Description": description,
+        "Quantity": quantity,
+        "Photo": photo,
+        "Category": category.name,
+        "sellerId": sellerId,
+        "isAvailable": isAvailable,
+      }),
+    );
 
-  print('Response status: ${response.statusCode}');
-  print('Response body: ${response.body}');
-  return _handleResponse(response);
-}
-
-
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+    return _handleResponse(response);
+  }
 
   // جلب منتجات البائع
 // جلب منتجات البائع مع القيم المطلوبة
-static Future<List<Product>> getSellerProducts() async {
-  final url = Uri.parse('http://petsica.runasp.net/api/Products/Seller/products');
+  static Future<List<Product>> getSellerProducts() async {
+    final url =
+        Uri.parse('http://petsica.runasp.net/api/Products/Seller/products');
 
-  final response = await _sendAuthorizedRequest(
-    url: url,
-    method: 'GET',
-  );
+    final response = await _sendAuthorizedRequest(
+      url: url,
+      method: 'GET',
+    );
 
-  if (response.statusCode == 200) {
-    final List<dynamic> data = jsonDecode(response.body);
-    // تعديل البيانات لتتوافق مع القيم المطلوبة
-    return data.map((json) => Product.fromJson(json)).toList();
-  } else {
-    throw Exception('Failed to load products');
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      // تعديل البيانات لتتوافق مع القيم المطلوبة
+      return data.map((json) => Product.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load products');
+    }
   }
-}
-
 
   // حذف منتج باستخدام ID
   static Future<bool> deleteProduct(int productId) async {
@@ -138,19 +137,22 @@ static Future<List<Product>> getSellerProducts() async {
     return _handleResponse(response);
   }
 
+ static Future<bool> markProductAsSoldOut(int productId) async {
+    final url = Uri.parse('http://petsica.runasp.net/api/Products/soldout/$productId');
 
-  // // تعليم المنتج كـ Sold Out
-  // static Future<bool> markAsSoldOut(int productId) async {
-  //   final url = Uri.parse('http://petsica.runasp.net/api/Products/soldout/$productId');
+    try {
+      final response = await _sendAuthorizedRequest(
+        url: url,
+        method: 'POST',
+      );
 
-  //   final response = await _sendAuthorizedRequest(
-  //     url: url,
-  //     method: 'POST',
-  //   );
-
-  //   return _handleResponse(response);
-  // }
-
+      // التحقق من استجابة الـ API
+      return _handleResponse(response);
+    } catch (e) {
+      print('Error: $e');
+      return false;
+    }
+  }
 
   // دالة إرسال الطلبات مع التوكن
   static Future<dynamic> _sendAuthorizedRequest({
@@ -190,7 +192,7 @@ class Product {
   final String photo;
   final String category;
   final String sellerId;
-  final bool isAvailable;
+  late final bool isAvailable;
 
   Product({
     required this.productId,
