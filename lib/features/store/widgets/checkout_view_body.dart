@@ -78,14 +78,9 @@ class _CheckOutViewBodyState extends State<CheckOutViewBody> {
                     height: 140,
                     child: Stack(
                       children: [
-                        CartItemCard(
-                          item: item,
-                          onDelete: () {
-                            setState(() {
-                              cartItems.removeAt(index);
-                            });
-                          }, onQuantityChanged: (int ) {  },
-                        ),
+                        // CartItemCard(
+                         
+                        // ),
                       ],
                     ),
                   );

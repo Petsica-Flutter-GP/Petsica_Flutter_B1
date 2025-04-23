@@ -5,7 +5,7 @@ import 'package:petsica/features/store/widgets/address_input_field.dart';
 
 import '../../../core/utils/app_button.dart';
 
-Future<dynamic> showDialogMessage(BuildContext context) {
+Future<dynamic> showDialogMessageCart(BuildContext context) {
   return showDialog(
     context: context,
     builder: (BuildContext context) {

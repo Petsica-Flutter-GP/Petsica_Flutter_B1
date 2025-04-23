@@ -1,30 +1,26 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsica/core/constants.dart';
-import 'package:petsica/core/utils/asset_data.dart';
+import 'package:petsica/core/utils/styles.dart';
+import 'package:petsica/features/store/cubit/cartC/getCartItems/get_cart_items_cubit.dart';
+import 'package:petsica/features/store/logic/cubit/cart_cubit.dart';
+import 'package:petsica/features/store/models/cart_model.dart';
 import 'package:petsica/features/store/widgets/image_box.dart';
 import 'package:petsica/features/store/widgets/product_deletion_show_dialog.dart';
 
-import '../../../core/utils/styles.dart';
+class CartItemCard extends StatelessWidget {
+  final CartItemModel item;
 
-class CartItemCard extends StatefulWidget {
-  final Map<String, dynamic> item;
-  final VoidCallback onDelete;
-  final void Function(int) onQuantityChanged; // 👈 استبدلي VoidCallback
+  const CartItemCard({super.key, required this.item});
 
-  const CartItemCard({
-    super.key,
-    required this.item,
-    required this.onDelete,
-    required this.onQuantityChanged,
-  });
-
-  @override
-  State<CartItemCard> createState() => _CartItemCardState();
-}
-
-class _CartItemCardState extends State<CartItemCard> {
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<CartCubit>();
+    Uint8List imageBytes = base64Decode(item.photo);
+
     return Card(
       color: kStoreContainerColor,
       margin: const EdgeInsets.symmetric(vertical: 5),
@@ -39,73 +35,122 @@ class _CartItemCardState extends State<CartItemCard> {
             // ✅ صورة المنتج ✅
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: const SizedBox(
+              child: SizedBox(
                 width: 120,
                 height: 120,
-                child: ImageBox(imagePath: AssetData.productImage),
+                child: Image.memory(
+                  imageBytes,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
               ),
             ),
             const SizedBox(width: 13),
 
-            // ✅ اسم المنتج، السعر، وزر الحذف ✅
+            // ✅ التفاصيل ✅
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      // ✅ اسم المنتج مع Tooltip ✅
                       Expanded(
                         child: Tooltip(
-                          message: widget.item["name"],
+                          message: item.productName,
                           child: Text(
-                            widget.item["name"],
+                            item.productName,
                             style: Styles.textStyleCom22,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),
-                      // ✅ زر الحذف ✅
                       IconButton(
                         icon: const Icon(Icons.highlight_remove_outlined,
                             color: kRemoveColor, size: 30),
                         onPressed: () {
-                          _showDeleteDialog(context);
+                          // ProductDeletionShowDialog(context, () {
+                          //   cubit.removeItem(item.productId);
+                          // });
                         },
                       ),
                     ],
                   ),
-
-                  // ✅ السعر الأساسي للمنتج ✅
-                  Text(
-                    "Unit Price: \$${widget.item["price"]}",
-                    style: Styles.textStyleCom18
-                        .copyWith(color: kProducPriceColor),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // ✅ لو في خصم > 0
+                      if (item.discount > 0) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            // السعر الأصلي مشطوب
+                            Text(
+                              "${item.price.toStringAsFixed(2)} LE",
+                              style: Styles.textStyleCom18.copyWith(
+                                color: Colors.grey,
+                                decoration: TextDecoration.lineThrough,
+                              ),
+                            ),
+                            const SizedBox(width: 30),
+                            // التخفيض باللون الأحمر
+                            Text(
+                              "-${item.discount.toStringAsFixed(2)}",
+                              style: Styles.textStyleCom18
+                                  .copyWith(color: Colors.red),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        // السعر بعد الخصم
+                        Text(
+                          "Price : ${(item.price - item.discount).toStringAsFixed(2)} LE",
+                          style: Styles.textStyleCom18
+                              .copyWith(color: kProducPriceColor),
+                        ),
+                      ] else ...[
+                        // ✅ لو الخصم = 0
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${item.price.toStringAsFixed(2)} LE",
+                              style: Styles.textStyleCom18
+                                  .copyWith(color: kProducPriceColor),
+                            ),
+                            const SizedBox(width: 30),
+                            Text(
+                              "-${item.discount.toStringAsFixed(2)}",
+                              style: Styles.textStyleCom18
+                                  .copyWith(color: Colors.red),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "Price : ${item.price.toStringAsFixed(2)} LE",
+                          style: Styles.textStyleCom18
+                              .copyWith(color: kProducPriceColor),
+                        ),
+                      ],
+                    ],
                   ),
 
                   const SizedBox(height: 15),
 
-                  // ✅ أزرار التحكم في الكمية ✅
+                  // ✅ كمية + - ✅
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // زر إنقاص الكمية
                       OutlinedButton(
-                        onPressed: () {
-                          setState(() {
-                            if (widget.item["quantity"] > 1) {
-                              widget.item["quantity"]--;
-                              widget.onQuantityChanged(
-                                  widget.item["quantity"]); // تحديث السعر الكلي
-                            }
-                          });
-                        },
+                        onPressed: () {},
+                        // item.quantity > 1
+                        // ? () => cubit.updateQuantity(item.productId, item.quantity - 1)
+                        // : null,
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
+                              borderRadius: BorderRadius.circular(5)),
                           side: const BorderSide(color: kBurgColor, width: 1.5),
                           padding: const EdgeInsets.all(4),
                           minimumSize: const Size(30, 30),
@@ -113,28 +158,19 @@ class _CartItemCardState extends State<CartItemCard> {
                         child: const Icon(Icons.remove,
                             color: kBurgColor, size: 18),
                       ),
-
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Text(
-                          widget.item["quantity"].toString().padLeft(2, '0'),
+                          "${item.quantity}",
                           style: Styles.textStyleCom18,
                         ),
                       ),
-
-                      // زر زيادة الكمية
                       ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            widget.item["quantity"]++;
-                            widget.onQuantityChanged(
-                                widget.item["quantity"]); // تحديث السعر الكلي
-                          });
-                        },
+                        onPressed: () {},
+                        // () => cubit.updateQuantity(item.productId, item.quantity + 1),
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
+                              borderRadius: BorderRadius.circular(5)),
                           backgroundColor: kBurgColor,
                           padding: const EdgeInsets.all(6),
                           minimumSize: const Size(30, 30),
@@ -151,9 +187,5 @@ class _CartItemCardState extends State<CartItemCard> {
         ),
       ),
     );
-  }
-
-  void _showDeleteDialog(BuildContext context) {
-    ProductDeletionShowDialog(context, widget.onDelete);
   }
 }

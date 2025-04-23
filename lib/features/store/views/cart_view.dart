@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:petsica/features/store/cubit/cartC/getCartItems/get_cart_items_cubit.dart';
 import 'package:petsica/features/store/widgets/cart_view_body.dart';
 
 class CartView extends StatelessWidget {
@@ -6,6 +8,9 @@ class CartView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  const CartViewBody();
+    return BlocProvider(
+      create: (context) => CartCubit()..fetchCartItems(),
+      child: const CartViewBody(),
+    );
   }
 }
