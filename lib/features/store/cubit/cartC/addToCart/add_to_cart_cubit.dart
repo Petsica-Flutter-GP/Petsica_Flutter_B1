@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsica/features/store/services/cart_services.dart';
-import 'package:petsica/features/store/cubit/cartC/add_to_cart_state.dart';
+import 'package:petsica/features/store/cubit/cartC/addToCart/add_to_cart_state.dart';
 
 class AddToCartCubit extends Cubit<AddToCartState> {
   AddToCartCubit() : super(AddToCartInitial());

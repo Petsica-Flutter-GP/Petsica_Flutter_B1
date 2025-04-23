@@ -385,26 +385,34 @@ class _SellerAddProductViewBodyState extends State<SellerAddProductViewBody> {
                   ),
                   const SizedBox(height: 40),
                   InputField(
-                    label: 'Discount',
-                    controller: discController,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Required';
-                      }
-                      final discount = double.tryParse(value);
-                      final price = double.tryParse(priceController.text);
-                      if (discount != null && discount < 0) {
-                        return 'Discount cannot be negative number';
-                      }
-                      if (discount != null &&
-                          price != null &&
-                          discount > price) {
-                        return 'Discount cannot exceed price';
-                      }
-                      return null;
-                    },
-                  ),
+  label: 'Discount',
+  
+  controller: discController,
+  keyboardType: TextInputType.number,
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return 'Required';
+    }
+
+    final discount = double.tryParse(value);
+    final price = double.tryParse(priceController.text);
+
+    if (discount == null) {
+      return 'Enter a valid number';
+    }
+
+    if (discount < 0) {
+      return 'Discount must be 0 or greater';
+    }
+
+    if (price != null && discount > price) {
+      return 'Discount cannot exceed price';
+    }
+
+    return null;
+  },
+),
+
                   const SizedBox(height: 25),
                   InputField(
                     label: 'Quantity',
