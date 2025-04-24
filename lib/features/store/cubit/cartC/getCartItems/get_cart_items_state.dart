@@ -1,20 +1,21 @@
-
 import 'package:petsica/features/store/models/cart_model.dart';
 
 abstract class CartState {}
 
 class CartInitial extends CartState {}
 
-class CartLoading extends CartState {}
+class CartItemsLoading extends CartState {}
 
-class CartLoaded extends CartState {
+class CartItemsLoaded extends CartState {
   final CartResponseModel cart;
 
-  CartLoaded(this.cart);
+  CartItemsLoaded(this.cart);
 }
 
-class CartError extends CartState {
-  final String message;
-  CartError(this.message);
 
+
+
+class CartItemsError extends CartState {
+  final String errorMessage;
+  CartItemsError(this.errorMessage);
 }

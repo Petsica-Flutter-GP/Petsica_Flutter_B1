@@ -11,8 +11,21 @@ import 'package:petsica/features/store/logic/cubit/cart_cubit.dart';
 import 'package:petsica/features/store/widgets/cart_item_card.dart';
 import 'package:petsica/features/store/widgets/confirm_address_show_dialog.dart';
 
-class CartViewBody extends StatelessWidget {
+class CartViewBody extends StatefulWidget {
   const CartViewBody({super.key});
+
+  @override
+  State<CartViewBody> createState() => _CartViewBodyState();
+}
+
+class _CartViewBodyState extends State<CartViewBody> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CartCubit>().fetchCartItems();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,27 +39,24 @@ class CartViewBody extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: BlocBuilder<CartCubit, CartState>(
           builder: (context, state) {
-            if (state is CartLoading) {
+            if (state is CartItemsLoading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state is CartError) {
-              return Center(child: Text("❌ ${state.message}"));
-            } else if (state is CartLoaded) {
-              final cart = state.cart;
-              final cartItems = cart.items;
+            } else if (state is CartItemsError) {
+              return Center(child: Text("❌ ${state.errorMessage}"));
+            } else if (state is CartItemsLoaded) {
+  final cart = (state as CartItemsLoaded).cart;
+  final cartItems = cart.items;
 
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Products: ${cart.totalQuantity}",
-                            style: Styles.textStyleCom18),
-                        Text(
-                            "Total Price: ${cart.totalPrice.toStringAsFixed(2)}",
-                            style: Styles.textStyleCom18),
-                      ],
+  return Column(
+    children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Products: ${cart.totalQuantity}", style: Styles.textStyleCom18),
+            Text("Total Price: ${cart.totalPrice.toStringAsFixed(2)}", style: Styles.textStyleCom18),
+          ],
                     ),
                   ),
                   Expanded(

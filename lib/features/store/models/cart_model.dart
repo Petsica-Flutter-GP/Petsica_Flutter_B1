@@ -4,9 +4,9 @@ class CartItemModel {
   final String photo;
   final double price;
   final double discount;
-  final int quantity;
+  int quantity;  // تم تغييرها من final إلى متغير قابل للتعديل
   final bool isAvailable;
-  final double subTotal;
+  double subTotal;  // تم تغييرها لتحديث القيمة عند تعديل الكمية
 
   CartItemModel({
     required this.productId,
@@ -18,6 +18,12 @@ class CartItemModel {
     required this.isAvailable,
     required this.subTotal,
   });
+
+  // دالة لتحديث الكمية وحساب السعر الكلي
+  void updateQuantity(int newQuantity) {
+    quantity = newQuantity ;
+    subTotal = price * quantity;  // تحديث subtotal بناءً على الكمية الجديدة
+  }
 
   factory CartItemModel.fromJson(Map<String, dynamic> json) {
     return CartItemModel(
