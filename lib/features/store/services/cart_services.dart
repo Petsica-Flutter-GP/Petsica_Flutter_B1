@@ -84,4 +84,33 @@ class CartService {
       throw Exception('فشل في جلب بيانات السلة: ${response.statusCode}');
     }
   }
+
+
+
+
+
+  /// ✅ حذف منتج من السلة
+static Future<void> deleteCartItem({
+  required int productId,
+}) async {
+  final url = Uri.parse('http://petsica.runasp.net/api/Carts/remove/$productId');
+
+  try {
+    final response = await sendAuthorizedRequest(
+      url: url,
+      method: 'DELETE',
+    );
+
+    if (response.statusCode == 200) {
+      log('🗑️ Deleted sucessfuly');
+      return;
+    } else {
+      throw Exception('Error:: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error during deleteCartItem: $e');
+    rethrow;
+  }
+}
+
 }
