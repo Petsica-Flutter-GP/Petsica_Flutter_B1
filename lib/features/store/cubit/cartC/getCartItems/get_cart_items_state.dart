@@ -8,8 +8,11 @@ class CartItemsLoading extends CartState {}
 
 class CartItemsLoaded extends CartState {
   final CartResponseModel cart;
+  final double totalPrice;
+  final int totalQuantity;
 
-  CartItemsLoaded(this.cart);
+
+  CartItemsLoaded(this.cart, this.totalPrice, this.totalQuantity);
 }
 
 

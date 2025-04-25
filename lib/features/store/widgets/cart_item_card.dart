@@ -57,12 +57,72 @@ class CartItemCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 8),
                           IconButton(
-                            icon: const Icon(Icons.highlight_remove_outlined,
-                                color: kRemoveColor, size: 30),
-                            onPressed: () {
-                              // تنفيذ الحذف حسب المطلوب
-                            },
-                          ),
+                              icon: const Icon(Icons.highlight_remove_outlined,
+                                  color: kRemoveColor, size: 30),
+                              onPressed: () async {
+                                final confirmed = await showDialog<bool>(
+                                  context: context,
+                                  builder: (context) {
+                                    return AnimatedScale(
+                                      scale: 1,
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.easeInOut,
+                                      child: AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        backgroundColor: Colors.white,
+                                        title: const Text(
+                                          'Are you sure?',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        actionsAlignment:
+                                            MainAxisAlignment.center,
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(false),
+                                            child: const Text('Cancel',
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 16)),
+                                          ),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      255, 192, 39, 51),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(true),
+                                            child: const Text('Delete',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16)),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+
+                                if (confirmed == true) {
+                                  context
+                                      .read<CartCubit>()
+                                      .deleteCartItemFromCart(item.productId);
+                                }
+                              }),
                         ],
                       ),
                       Row(

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsica/features/store/cubit/cartC/getCartItems/get_cart_items_state.dart';
 import 'package:petsica/features/store/models/cart_model.dart';
@@ -13,10 +12,10 @@ class CartCubit extends Cubit<CartState> {
   Future<void> fetchCartItems() async {
     emit(CartItemsLoading());
     try {
-      final cart =
-          await CartService.getCartItems(); // cart هنا من نوع CartResponseModel
+      final cart = await CartService.getCartItems();
       cartItems = cart;
-      emit(CartItemsLoaded(cart));
+      emit(CartItemsLoaded(cartItems, cartItems.totalPrice,
+          cartItems.totalQuantity)); // إصدار الحالة مع البيانات الكاملة
     } catch (e) {
       emit(CartItemsError(e.toString()));
     }
@@ -24,27 +23,67 @@ class CartCubit extends Cubit<CartState> {
 
   // دالة لتحديث الكمية في الواجهة مباشرة
   void updateCartItemInUI(int productId, int quantity) {
-    final indexx =
-        cartItems.items.indexWhere((item) => item.productId == productId);
-    if (indexx != -1) {
-      log(cartItems.items[indexx].quantity.toString());
-    }
-
     final index =
         cartItems.items.indexWhere((item) => item.productId == productId);
     if (index != -1) {
-      // استخدم دالة updateQuantity لتحديث الكمية
+      // تحديث الكمية
       cartItems.items[index].updateQuantity(quantity);
-      final indexx =
-          cartItems.items.indexWhere((item) => item.productId == productId);
-      if (indexx != -1) {
-        log(cartItems.items[indexx].quantity.toString());
+
+      // حساب الإجمالي
+      double totalPrice = 0.0;
+      int totalQuantity = 0;
+
+      for (var item in cartItems.items) {
+        totalQuantity += item.quantity;
+        totalPrice += (item.price - item.discount) * item.quantity;
       }
-      emit(CartItemsLoaded(
-          cartItems.items as CartResponseModel)); // تحديث الواجهة بعد التعديل
+
+      // تحديث السلة بالقيم الجديدة
+      final updatedCart = CartResponseModel(
+        items: cartItems.items,
+        totalQuantity: totalQuantity,
+        totalPrice: totalPrice,
+      );
+
+      // إصدار الحالة مع البيانات المحدثة
+      emit(CartItemsLoaded(updatedCart, totalPrice, totalQuantity));
     }
   }
+
+
+  // ✅ حذف منتج من السلة وتحديث الواجهة
+Future<void> deleteCartItemFromCart(int productId) async {
+  try {
+    await CartService.deleteCartItem(productId: productId);
+
+    // حذف المنتج من القائمة داخل الموديل
+    cartItems.items.removeWhere((item) => item.productId == productId);
+
+    // إعادة حساب الكمية والسعر الإجمالي
+    double totalPrice = 0.0;
+    int totalQuantity = 0;
+
+    for (var item in cartItems.items) {
+      totalQuantity += item.quantity;
+      totalPrice += (item.price - item.discount) * item.quantity;
+    }
+
+    // تحديث بيانات السلة
+    final updatedCart = CartResponseModel(
+      items: cartItems.items,
+      totalQuantity: totalQuantity,
+      totalPrice: totalPrice,
+    );
+
+    emit(CartItemsLoaded(updatedCart, totalPrice, totalQuantity));
+  } catch (e) {
+    emit(CartItemsError('فشل في حذف المنتج: $e'));
+  }
 }
+
+  
+}
+
 
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:petsica/features/store/cubit/cartC/getCartItems/get_cart_items_state.dart';
