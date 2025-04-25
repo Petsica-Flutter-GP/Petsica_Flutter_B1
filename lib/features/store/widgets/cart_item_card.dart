@@ -1,15 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/store/cubit/cartC/getCartItems/get_cart_items_cubit.dart';
-import 'package:petsica/features/store/cubit/cartC/getCartItems/get_cart_items_state.dart';
 import 'package:petsica/features/store/cubit/cartC/updateCart/update_cart_cubit.dart';
 import 'package:petsica/features/store/cubit/cartC/updateCart/update_cart_state.dart';
-import 'package:petsica/features/store/logic/cubit/cart_cubit.dart';
 import 'package:petsica/features/store/models/cart_model.dart';
 
 class CartItemCard extends StatelessWidget {
