@@ -8,6 +8,7 @@ import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/store/cubit/cartC/getCartItems/get_cart_items_cubit.dart';
 import 'package:petsica/features/store/cubit/cartC/getCartItems/get_cart_items_state.dart';
 import 'package:petsica/features/store/cubit/cartC/updateCart/update_cart_cubit.dart';
+import 'package:petsica/features/store/cubit/cartC/updateCart/update_cart_state.dart';
 import 'package:petsica/features/store/logic/cubit/cart_cubit.dart';
 import 'package:petsica/features/store/models/cart_model.dart';
 
@@ -26,154 +27,140 @@ class CartItemCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: SizedBox(
-                width: 120,
-                height: 120,
-                child: Image.memory(imageBytes, fit: BoxFit.cover),
-              ),
-            ),
-            const SizedBox(width: 13),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+        child: BlocBuilder<UpdateCartCubit, UpdateCartState>(
+          builder: (context, state) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: SizedBox(
+                    width: 120,
+                    height: 120,
+                    child: Image.memory(imageBytes, fit: BoxFit.cover),
+                  ),
+                ),
+                const SizedBox(width: 13),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Tooltip(
-                          message: item.productName,
-                          child: Text(
-                            item.productName,
-                            style: Styles.textStyleCom22,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      IconButton(
-                        icon: const Icon(Icons.highlight_remove_outlined,
-                            color: kRemoveColor, size: 30),
-                        onPressed: () {
-                          // تنفيذ الحذف حسب المطلوب
-                        },
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "${item.price.toStringAsFixed(2)} LE",
-                        style: item.discount > 0
-                            ? Styles.textStyleCom18.copyWith(
-                                color: Colors.grey,
-                                decoration: TextDecoration.lineThrough,
-                              )
-                            : Styles.textStyleCom18
-                                .copyWith(color: kProducPriceColor),
-                      ),
-                      const SizedBox(width: 20),
-                      Text(
-                        "-${item.discount.toStringAsFixed(2)}",
-                        style: Styles.textStyleCom18.copyWith(
-                          color: item.discount > 0
-                              ? Colors.red
-                              : Colors.transparent,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "Price : ${(item.price - item.discount).toStringAsFixed(2)} LE",
-                    style: Styles.textStyleCom18
-                        .copyWith(color: kProducPriceColor),
-                  ),
-                  const SizedBox(height: 15),
-                  BlocBuilder<CartCubit, CartState>(
-                    builder: (context, state) {
-                      if (state is CartItemsLoading) {
-                        return const CircularProgressIndicator(); // يظهر مؤشر التحميل
-                      } else if (state is CartItemsLoaded) {
-                        final cartItem = state.cart.items.firstWhere(
-                          (cartItem) => cartItem.productId == item.productId,
-                          orElse: () => item,
-                        );
-
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            OutlinedButton(
-                              onPressed: () async {
-                                if (cartItem.quantity > 1) {
-                                  await context
-                                      .read<UpdateCartCubit>()
-                                      .updateCartItem(
-                                        productId: item.productId,
-                                        quantity: cartItem.quantity - 1,
-                                      );
-                                  context
-                                      .read<CartCubit>()
-                                      .fetchCartItems(); // ⬅️ إعادة الجلب بعد التحديث
-                                }
-                              },
-                              style: OutlinedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
-                                side: const BorderSide(
-                                    color: kBurgColor, width: 1.5),
-                                padding: const EdgeInsets.all(4),
-                                minimumSize: const Size(30, 30),
-                              ),
-                              child: const Icon(Icons.remove,
-                                  color: kBurgColor, size: 18),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Tooltip(
+                              message: item.productName,
                               child: Text(
-                                "${cartItem.quantity}",
-                                style: Styles.textStyleCom18,
+                                item.productName,
+                                style: Styles.textStyleCom22,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            ElevatedButton(
-                              onPressed: () async {
+                          ),
+                          const SizedBox(width: 8),
+                          IconButton(
+                            icon: const Icon(Icons.highlight_remove_outlined,
+                                color: kRemoveColor, size: 30),
+                            onPressed: () {
+                              // تنفيذ الحذف حسب المطلوب
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "${item.price.toStringAsFixed(2)} LE",
+                            style: item.discount > 0
+                                ? Styles.textStyleCom18.copyWith(
+                                    color: Colors.grey,
+                                    decoration: TextDecoration.lineThrough,
+                                  )
+                                : Styles.textStyleCom18
+                                    .copyWith(color: kProducPriceColor),
+                          ),
+                          const SizedBox(width: 20),
+                          Text(
+                            "-${item.discount.toStringAsFixed(2)}",
+                            style: Styles.textStyleCom18.copyWith(
+                              color: item.discount > 0
+                                  ? Colors.red
+                                  : Colors.transparent,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "Price : ${(item.price - item.discount).toStringAsFixed(2)} LE",
+                        style: Styles.textStyleCom18
+                            .copyWith(color: kProducPriceColor),
+                      ),
+                      const SizedBox(height: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          OutlinedButton(
+                            onPressed: () async {
+                              if (item.quantity > 1) {
                                 await context
                                     .read<UpdateCartCubit>()
                                     .updateCartItem(
                                       productId: item.productId,
-                                      quantity: cartItem.quantity + 1,
+                                      quantity: item.quantity - 1,
                                     );
-                                context
-                                    .read<CartCubit>()
-                                    .fetchCartItems(); // ⬅️ تحديث القائمة
-                              },
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
-                                backgroundColor: kBurgColor,
-                                padding: const EdgeInsets.all(6),
-                                minimumSize: const Size(30, 30),
-                              ),
-                              child: const Icon(Icons.add,
-                                  color: Colors.white, size: 18),
+                                context.read<CartCubit>().updateCartItemInUI(
+                                    item.productId, item.quantity - 1);
+                              }
+                            },
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+                              side: const BorderSide(
+                                  color: kBurgColor, width: 1.5),
+                              padding: const EdgeInsets.all(4),
+                              minimumSize: const Size(30, 30),
                             ),
-                          ],
-                        );
-                      } 
-                      return const SizedBox
-                          .shrink(); // لا شيء إذا كانت الحالة غير محملة
-                    },
+                            child: const Icon(Icons.remove,
+                                color: kBurgColor, size: 18),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(
+                              "${item.quantity}",
+                              style: Styles.textStyleCom18,
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              await context
+                                  .read<UpdateCartCubit>()
+                                  .updateCartItem(
+                                    productId: item.productId,
+                                    quantity: item.quantity + 1,
+                                  );
+                              context.read<CartCubit>().updateCartItemInUI(
+                                  item.productId, item.quantity + 1);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+                              backgroundColor: kBurgColor,
+                              padding: const EdgeInsets.all(6),
+                              minimumSize: const Size(30, 30),
+                            ),
+                            child: const Icon(Icons.add,
+                                color: Colors.white, size: 18),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

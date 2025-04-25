@@ -20,13 +20,6 @@ class CartViewBody extends StatefulWidget {
 
 class _CartViewBodyState extends State<CartViewBody> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CartCubit>().fetchCartItems();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,22 +34,26 @@ class _CartViewBodyState extends State<CartViewBody> {
           builder: (context, state) {
             if (state is CartItemsLoading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state is CartItemsError) {
+            } else 
+            if (state is CartItemsError) {
               return Center(child: Text("❌ ${state.errorMessage}"));
             } else if (state is CartItemsLoaded) {
-  final cart = (state as CartItemsLoaded).cart;
-  final cartItems = cart.items;
+              final cart = (state).cart;
+              final cartItems = cart.items;
 
-  return Column(
-    children: [
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Products: ${cart.totalQuantity}", style: Styles.textStyleCom18),
-            Text("Total Price: ${cart.totalPrice.toStringAsFixed(2)}", style: Styles.textStyleCom18),
-          ],
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Products: ${cart.totalQuantity}",
+                            style: Styles.textStyleCom18),
+                        Text(
+                            "Total Price: ${cart.totalPrice.toStringAsFixed(2)}",
+                            style: Styles.textStyleCom18),
+                      ],
                     ),
                   ),
                   Expanded(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsica/features/store/cubit/cartC/getCartItems/get_cart_items_state.dart';
 import 'package:petsica/features/store/models/cart_model.dart';
@@ -13,6 +15,7 @@ class CartCubit extends Cubit<CartState> {
     try {
       final cart =
           await CartService.getCartItems(); // cart هنا من نوع CartResponseModel
+      cartItems = cart;
       emit(CartItemsLoaded(cart));
     } catch (e) {
       emit(CartItemsError(e.toString()));
@@ -21,16 +24,28 @@ class CartCubit extends Cubit<CartState> {
 
   // دالة لتحديث الكمية في الواجهة مباشرة
   void updateCartItemInUI(int productId, int quantity) {
+    final indexx =
+        cartItems.items.indexWhere((item) => item.productId == productId);
+    if (indexx != -1) {
+      log(cartItems.items[indexx].quantity.toString());
+    }
+
     final index =
         cartItems.items.indexWhere((item) => item.productId == productId);
     if (index != -1) {
       // استخدم دالة updateQuantity لتحديث الكمية
       cartItems.items[index].updateQuantity(quantity);
+      final indexx =
+          cartItems.items.indexWhere((item) => item.productId == productId);
+      if (indexx != -1) {
+        log(cartItems.items[indexx].quantity.toString());
+      }
       emit(CartItemsLoaded(
           cartItems.items as CartResponseModel)); // تحديث الواجهة بعد التعديل
     }
   }
 }
+
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:petsica/features/store/cubit/cartC/getCartItems/get_cart_items_state.dart';
 // import 'package:petsica/features/store/models/cart_model.dart';
