@@ -1,8 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:petsica/core/utils/send_Authorized_Request.dart';
 import 'package:petsica/features/store/models/cart_model.dart';
-
 
 import 'package:petsica/core/utils/send_Authorized_Request.dart';
 import 'package:petsica/features/store/models/cart_model.dart';
@@ -34,29 +34,37 @@ class CartService {
     }
   }
 
-  /// ✅ تحديث كمية منتج في السلة
   static Future<void> updateCartItem({
     required int productId,
     required int quantity,
   }) async {
     final url = Uri.parse('http://petsica.runasp.net/api/Carts/update');
 
-    final response = await sendAuthorizedRequest(
-      url: url,
-      method: 'PUT',
-      body: jsonEncode({
-        "productId": productId,
-        "quantity": quantity,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    );
+    try {
+      final response = await sendAuthorizedRequest(
+        url: url,
+        method: 'PUT',
+        body: jsonEncode({
+          "productId": productId,
+          "quantity": quantity,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
 
-    if (response.statusCode == 204) {
-      return;
-    } else {
-      throw Exception('فشل في تحديث السلة: ${response.statusCode}');
+      // طباعة response body في حالة نجاح الطلب
+      log('@@@@@@Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        throw Exception('Updated Successfuly ${response.statusCode}');
+      }
+    } catch (e) {
+      // طباعة الاستثناء في حالة حدوث أي خطأ
+      print('Error: $e');
+      rethrow; // لإعادة رمي الاستثناء علشان يتعامل معه في الكيوبت
     }
   }
 

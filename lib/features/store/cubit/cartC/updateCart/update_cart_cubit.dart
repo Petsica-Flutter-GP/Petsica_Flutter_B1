@@ -46,13 +46,11 @@ class UpdateCartCubit extends Cubit<UpdateCartState> {
     required int productId,
     required int quantity,
   }) async {
-    emit(UpdateCartLoading());
     try {
       await CartService.updateCartItem(
           productId: productId, quantity: quantity);
 
       emit(UpdateCartSuccess());
-      await cartCubit.fetchCartItems();
     } catch (e) {
       emit(UpdateCartFailure(e.toString()));
     }
