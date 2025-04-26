@@ -14,7 +14,7 @@ class OrderService {
         headers: {'Content-Type': 'application/json'},
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 204) {
         print('✅ Order created successfully');
       } else {
         // طباعة الاستجابة بالكامل للمساعدة في فهم الخطأ
