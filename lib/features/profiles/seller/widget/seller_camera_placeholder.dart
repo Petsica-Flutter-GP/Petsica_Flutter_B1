@@ -180,11 +180,20 @@ class SellerCameraPlaceholder extends StatefulWidget {
   final bool isImageRequired;
   final ValueChanged<bool> onImageStatusChanged;
 
+  final double? width;
+  final double? height;
+  final IconData? icon;
+  final BorderRadius? borderRadius; // ✅ البراميتر الجديد
+
   const SellerCameraPlaceholder({
     super.key,
     this.onImageSelected,
     this.isImageRequired = false,
     required this.onImageStatusChanged,
+    this.width,
+    this.height,
+    this.icon,
+    this.borderRadius, // ✅ لا تنسي تضيفيه هنا
   });
 
   @override
@@ -195,20 +204,17 @@ class _SellerCameraPlaceholderState extends State<SellerCameraPlaceholder> {
   File? _imageFile;
   bool _isImageSelected = false;
 
-  // دالة لتحويل الصورة إلى Base64
   String encodeImageToBase64(Uint8List imageBytes) {
     return base64Encode(imageBytes);
   }
 
-  // دالة لفك تشفير Base64 إلى صورة
   Uint8List decodeBase64ToImage(String base64String) {
     return base64Decode(base64String);
   }
 
-  // دالة لتحويل الصورة إلى Base64 بعد اختيارها
   Future<void> convertImageToBase64(File imageFile) async {
     Uint8List imageBytes = await imageFile.readAsBytes();
-    String base64String = encodeImageToBase64(imageBytes); // استخدم الدالة هنا
+    String base64String = encodeImageToBase64(imageBytes);
     print("📦📦📦 Base64 Encoded Image:\n$base64String\n");
   }
 
@@ -222,7 +228,6 @@ class _SellerCameraPlaceholderState extends State<SellerCameraPlaceholder> {
         _isImageSelected = true;
       });
 
-      // نحول الصورة إلى Base64 بعد اختيارها
       await convertImageToBase64(file);
 
       widget.onImageSelected?.call(file);
@@ -281,15 +286,16 @@ class _SellerCameraPlaceholderState extends State<SellerCameraPlaceholder> {
             GestureDetector(
               onTap: _showImagePickerOptions,
               child: Container(
-                width: double.infinity,
-                height: 230,
+                width: widget.width ?? double.infinity,
+                height: widget.height ?? 230,
                 decoration: BoxDecoration(
                   color: kLightContainerColor,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: widget.borderRadius ?? BorderRadius.circular(10), // ✅ استخدام البراميتر الجديد
                   border: hasError
                       ? Border.all(
                           color: const Color.fromARGB(255, 179, 11, 25),
-                          width: 1.3)
+                          width: 1.3,
+                        )
                       : Border.all(color: Colors.grey.shade300),
                   image: _imageFile != null
                       ? DecorationImage(
@@ -299,8 +305,8 @@ class _SellerCameraPlaceholderState extends State<SellerCameraPlaceholder> {
                       : null,
                 ),
                 child: _imageFile == null
-                    ? const Icon(
-                        Icons.image_rounded,
+                    ? Icon(
+                        widget.icon ?? Icons.image_rounded,
                         size: 90,
                         color: kIconsColor,
                       )
@@ -337,7 +343,9 @@ class _SellerCameraPlaceholderState extends State<SellerCameraPlaceholder> {
               child: Text(
                 'Image is required',
                 style: TextStyle(
-                    color: Color.fromARGB(255, 179, 11, 25), fontSize: 14),
+                  color: Color.fromARGB(255, 179, 11, 25),
+                  fontSize: 14,
+                ),
               ),
             ),
           ),

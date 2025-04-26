@@ -7,7 +7,7 @@ import 'package:petsica/features/store/widgets/cart_view_body.dart';
 
 class CartView extends StatelessWidget {
   const CartView({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -18,11 +18,10 @@ class CartView extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return BlocProvider(
-            create: (_) =>
-                UpdateCartCubit(
-                  cartService: CartService(),
-    cartCubit: context.read<CartCubit>(),
-  ),
+            create: (_) => UpdateCartCubit(
+              cartService: CartService(),
+              cartCubit: context.read<CartCubit>(),
+            ),
             child: const CartViewBody(),
           );
         },
