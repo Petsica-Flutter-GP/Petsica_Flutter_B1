@@ -29,6 +29,14 @@ class _CartViewBodyState extends State<CartViewBody> {
         title: Text("Cart", style: Styles.textStyleQu28),
         centerTitle: true,
         leading: const AppArrowBack(destination: AppRouter.kStore),
+        actions: [
+          IconButton(
+            onPressed: () {
+              GoRouter.of(context).go(AppRouter.kCheckOut);
+            },
+            icon: const Icon(Icons.shopping_cart_checkout),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),

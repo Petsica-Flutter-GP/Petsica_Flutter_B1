@@ -1,12 +1,12 @@
-abstract class OrderState {}
+abstract class MakeOrderState {}
 
-class OrderInitial extends OrderState {}
+class MakeOrderInitial extends MakeOrderState {}
 
-class OrderLoading extends OrderState {}
+class MakeOrderLoading extends MakeOrderState {}
 
-class OrderSuccess extends OrderState {}
+class MakeOrderSuccess extends MakeOrderState {}
 
-class OrderError extends OrderState {
+class MakeOrderError extends MakeOrderState {
   final String errorMessage;
-  OrderError(this.errorMessage);
+  MakeOrderError(this.errorMessage);
 }

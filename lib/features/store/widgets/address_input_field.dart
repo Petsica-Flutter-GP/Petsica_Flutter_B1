@@ -130,7 +130,7 @@ Future<dynamic> showDialogMessageCart(BuildContext context) {
                     ),
                   );
 
-                  GoRouter.of(context).go(AppRouter.kStore);
+                  GoRouter.of(context).go(AppRouter.kCheckOut);
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

@@ -3,17 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsica/features/store/cubit/ordersC/makeOrder/makeorder_state.dart';
 import 'package:petsica/features/store/services/order_services.dart';
 
-class OrderCubit extends Cubit<OrderState> {
-  OrderCubit() : super(OrderInitial());
+class MakeOrderCubit extends Cubit<MakeOrderState> {
+  MakeOrderCubit() : super(MakeOrderInitial());
 
   Future<void> makeOrder(String address) async {
-    emit(OrderLoading());
+    emit(MakeOrderLoading());
     try {
       await OrderService.makeOrder(address);
-      emit(OrderSuccess());
+      emit(MakeOrderSuccess());
     } catch (e) {
       log('Order Error: $e');
-      emit(OrderError(e.toString()));
+      emit(MakeOrderError(e.toString()));
     }
   }
 }
