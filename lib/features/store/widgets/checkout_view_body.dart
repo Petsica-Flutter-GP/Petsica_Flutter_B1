@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
@@ -8,6 +9,11 @@ import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/store/cubit/ordersC/userorder/userorder_cubit.dart';
 import 'package:petsica/features/store/cubit/ordersC/userorder/userorder_state.dart';
 import 'package:petsica/features/store/models/user_order_model.dart'; // علشان تنسيق التاريخ
+import 'package:petsica/features/store/views/order_details_view.dart';
+import 'package:petsica/features/store/views/order_details_view.dart';
+import 'package:shimmer/shimmer.dart';
+
+import '../views/order_details_view.dart'; // تأكد من إضافة المكتبة
 
 class CheckOutViewBody extends StatelessWidget {
   const CheckOutViewBody({super.key});
@@ -23,7 +29,28 @@ class CheckOutViewBody extends StatelessWidget {
       body: BlocBuilder<UserOrderCubit, UserOrderState>(
         builder: (context, state) {
           if (state is UserOrderLoading) {
-            return const Center(child: CircularProgressIndicator());
+            // استخدام Shimmer بدل CircularProgressIndicator
+            return ListView.builder(
+              itemCount: 5, // عدد العناصر التي ستظهر أثناء التحميل
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      height: 300,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
           } else if (state is UserOrderLoaded) {
             if (state.orders.isEmpty) {
               return const Center(
@@ -37,160 +64,172 @@ class CheckOutViewBody extends StatelessWidget {
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    elevation: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // 🛒 رقم الطلب وسعره
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Order #${order.orderID}",
-                                style: Styles.textStyleQui20,
-                              ),
-                              Text(
-                                "\$${order.totalPrice.toStringAsFixed(2)}",
-                                style: Styles.textStyleQui18
-                                    .copyWith(color: Colors.green),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-
-                          // 🏠 العنوان
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on_outlined, size: 22),
-                              const SizedBox(width: 5),
-                              Expanded(
-                                child: Text(
-                                  order.address,
-                                  style: Styles.textStyleCom14,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-
-                          // 🕒 التاريخ
-                          Row(
-                            children: [
-                              const Icon(Icons.calendar_today_outlined,
-                                  size: 18),
-                              const SizedBox(width: 5),
-                              Text(
-                                DateFormat('dd MMM yyyy, hh:mm a').format(
-                                  DateTime.parse(order.createdAt),
-                                ),
-                                style: Styles.textStyleCom14,
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 8),
-
-                          // 🔄 الحالة
-                          // 🔄 الحالة
-                          Row(
-                            children: [
-                              const Icon(Icons.info_outline, size: 22),
-                              const SizedBox(width: 5),
-                              Text(
-                                order.status ? 'Completed' : 'Pending',
-                                style: Styles.textStyleCom14.copyWith(
-                                  color: order.status
-                                      ? Colors.green
-                                      : Colors.orange,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-
-// 👇 زرار الإلغاء لو الطلب Pending
-                          if (!order.status)
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: kProducPriceColor,
-                                ),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      content: Text(
-                                        'Are you sure you want to cancel this order?',
-                                        style: Styles.textStyleCom16,
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // تقفلي الـ Dialog لو اختارت No
-                                          },
-                                          child: Text('No',
-                                              style: Styles.textStyleCom16
-                                                  .copyWith(
-                                                color: kProductTxtColor,
-                                                decoration: TextDecoration
-                                                    .underline, // تحتها خط ✍️
-                                              )),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // تقفلي الـ Dialog
-                                            // وبعدها تعملي كود إلغاء الطلب نفسه لو عندك API
-                                          },
-                                          child: Text('yes',
-                                              style: Styles.textStyleCom16
-                                                  .copyWith(
-                                                      color: kProductTxtColor)),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  'Cancel Order',
-                                  style: Styles.textStyleCom14
-                                      .copyWith(color: kWhiteGroundColor),
-                                ),
-                              ),
-                            ),
-
-                          const SizedBox(height: 10),
-
-                          // 🛍️ المنتجات المختصرة
-                          if (order.orderItems.isNotEmpty)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(15),
+                    onTap: () {
+                      GoRouter.of(context).go(
+                        AppRouter.kOrderDetails,
+                        extra: order.orderID
+                      );
+                    },
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      elevation: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // 🛒 رقم الطلب وسعره
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Products:',
+                                  "Order #${order.orderID}",
                                   style: Styles.textStyleQui20,
                                 ),
-                                const SizedBox(height: 5),
-                                ...order.orderItems.map((item) => Padding(
-                                      padding: const EdgeInsets.only(bottom: 4),
-                                      child: Text(
-                                        '- ${item.productName}   x${item.quantity}',
-                                        style: Styles.textStyleCom16.copyWith(
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    )),
+                                Text(
+                                  "\$${order.totalPrice.toStringAsFixed(2)}",
+                                  style: Styles.textStyleQui18
+                                      .copyWith(color: Colors.green),
+                                ),
                               ],
                             ),
-                        ],
+                            const SizedBox(height: 8),
+
+                            // 🏠 العنوان
+                            Row(
+                              children: [
+                                const Icon(Icons.location_on_outlined,
+                                    size: 22),
+                                const SizedBox(width: 5),
+                                Expanded(
+                                  child: Text(
+                                    order.address,
+                                    style: Styles.textStyleCom14,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+
+                            // 🕒 التاريخ
+                            Row(
+                              children: [
+                                const Icon(Icons.calendar_today_outlined,
+                                    size: 18),
+                                const SizedBox(width: 5),
+                                Text(
+                                  DateFormat('dd MMM yyyy, hh:mm a').format(
+                                    DateTime.parse(order.createdAt),
+                                  ),
+                                  style: Styles.textStyleCom14,
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 8),
+
+                            // 🔄 الحالة
+                            // 🔄 الحالة
+                            Row(
+                              children: [
+                                const Icon(Icons.info_outline, size: 22),
+                                const SizedBox(width: 5),
+                                Text(
+                                  order.status ? 'Completed' : 'Pending',
+                                  style: Styles.textStyleCom14.copyWith(
+                                    color: order.status
+                                        ? Colors.green
+                                        : Colors.orange,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+
+                            // 👇 زرار الإلغاء لو الطلب Pending
+                            if (!order.status)
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: kProducPriceColor,
+                                  ),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        content: Text(
+                                          'Are you sure you want to cancel this order?',
+                                          style: Styles.textStyleCom16,
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // تقفلي الـ Dialog لو اختارت No
+                                            },
+                                            child: Text('No',
+                                                style: Styles.textStyleCom16
+                                                    .copyWith(
+                                                  color: kProductTxtColor,
+                                                  decoration: TextDecoration
+                                                      .underline, // تحتها خط ✍️
+                                                )),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // تقفلي الـ Dialog
+                                              // وبعدها تعملي كود إلغاء الطلب نفسه لو عندك API
+                                            },
+                                            child: Text('yes',
+                                                style: Styles.textStyleCom16
+                                                    .copyWith(
+                                                        color:
+                                                            kProductTxtColor)),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Cancel Order',
+                                    style: Styles.textStyleCom14
+                                        .copyWith(color: kWhiteGroundColor),
+                                  ),
+                                ),
+                              ),
+
+                            const SizedBox(height: 10),
+
+                            // 🛍️ المنتجات المختصرة
+                            if (order.orderItems.isNotEmpty)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Products:',
+                                    style: Styles.textStyleQui20,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  ...order.orderItems.map((item) => Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 4),
+                                        child: Text(
+                                          '- ${item.productName}   x${item.quantity}',
+                                          style: Styles.textStyleCom16.copyWith(
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      )),
+                                ],
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

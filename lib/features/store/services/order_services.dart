@@ -31,11 +31,6 @@ class OrderService {
 
 
 
-
-
-
-
-
 //get user order
  static Future<List<UserOrderModel>> getUserOrders() async {
     final url = Uri.parse('http://petsica.runasp.net/api/Orders/userorders');
@@ -62,6 +57,37 @@ class OrderService {
     } catch (e) {
       print('❌ حدث خطأ أثناء جلب الطلبات: $e');
       rethrow;
+    }
+  }
+
+
+  //get user order details
+  static Future<UserOrderModel> getUserOrderById(int orderID) async {
+    final url = Uri.parse('http://petsica.runasp.net/api/Orders/$orderID');
+
+    try {
+      final response = await sendAuthorizedRequest(
+        url: url,
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        // تحويل البيانات إلى نموذج UserOrderModel
+        final order = UserOrderModel.fromJson(data);
+
+        print('✅ Order fetched successfully');
+        return order;
+      } else {
+        print('❌ فشل في جلب الطلب: ${response.statusCode}');
+        print('تفاصيل الخطأ: ${response.body}');
+        throw Exception('❌ فشل في جلب الطلب: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('❌ حدث خطأ أثناء جلب الطلب: $e');
+      rethrow; // لإعادة رمي الخطأ بعد تسجيله
     }
   }
 

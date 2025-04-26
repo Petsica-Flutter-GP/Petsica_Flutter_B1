@@ -44,6 +44,7 @@ import 'package:petsica/features/onboarding/presentation/views/onboarding.dart';
 import 'package:petsica/features/registeration/presentation/views/welcome_back_view.dart';
 import 'package:petsica/features/store/views/cart_view.dart';
 import 'package:petsica/features/store/views/checkout_view.dart';
+import 'package:petsica/features/store/views/order_details_view.dart';
 import 'package:petsica/features/store/views/product_details_view.dart';
 import 'package:petsica/features/who/presentation/views/who_view.dart';
 import '../../features/profiles/clinic/view/clinic_pet_details_view.dart';
@@ -119,6 +120,7 @@ abstract class AppRouter {
   static const kProductDetails = '/productDetails';
   static const kCart = '/cart';
   static const kCheckOut = '/checkOut';
+  static const kOrderDetails = '/orderDetaild';
 
 //chat-boot
   static const kChatBootOnboarding = '/chatBootOnboarding';
@@ -199,6 +201,13 @@ abstract class AppRouter {
 ),
 
 
+GoRoute(
+  path: kOrderDetails,
+  builder: (context, state) {
+    final orderID = state.extra as int;
+    return OrderDetailsView(orderID: orderID);
+  },
+),
 
       GoRoute(
         path: kCart,

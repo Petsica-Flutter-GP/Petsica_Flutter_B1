@@ -12,6 +12,8 @@ abstract class Styles {
       GoogleFonts.comfortaa(fontSize: 26, fontWeight: FontWeight.bold);
   static var textStyleCom22 =
       GoogleFonts.comfortaa(fontSize: 22, fontWeight: FontWeight.bold);
+  static var textStyleCom20 =
+      GoogleFonts.comfortaa(fontSize: 20, fontWeight: FontWeight.bold);
   static var textStyleCom24 =
       GoogleFonts.comfortaa(fontSize: 24, fontWeight: FontWeight.bold);
   static var textStyleQui24 =
