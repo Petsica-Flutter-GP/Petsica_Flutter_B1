@@ -235,7 +235,7 @@ class _ProductDetailsViewBodyState extends State<ProductDetailsViewBody>
                                 : Column(
                                     children: [
                                       Text(
-                                        "⚠️ هذا المنتج غير متوفر حالياً",
+                                        "This product is soldout ",
                                         style: Styles.textStyleCom22.copyWith(
                                           color: Colors.red,
                                           fontWeight: FontWeight.bold,

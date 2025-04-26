@@ -126,7 +126,6 @@ class _StoreViewBodyState extends State<StoreViewBody> {
                   });
                   Navigator.pop(context);
                 },
-                tileColor: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
                 contentPadding:
@@ -152,7 +151,7 @@ class _StoreViewBodyState extends State<StoreViewBody> {
                 itemCount: 6,
                 itemBuilder: (context, index) {
                   return Shimmer.fromColors(
-                    baseColor: kProducPriceColor.withOpacity(0.2),
+                    baseColor: kWhiteGroundColor.withOpacity(0.1),
                     highlightColor: Colors.grey[100]!,
                     child: Container(
                       decoration: BoxDecoration(
@@ -160,7 +159,6 @@ class _StoreViewBodyState extends State<StoreViewBody> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Card(
-                        color: Colors.grey[300],
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
