@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:petsica/features/store/widgets/address_input_field.dart';
 import 'package:shimmer/shimmer.dart'; // إضافة مكتبة Shimmer
 
 import 'package:petsica/core/constants.dart';
@@ -12,7 +13,6 @@ import 'package:petsica/features/store/cubit/cartC/getCartItems/get_cart_items_c
 import 'package:petsica/features/store/cubit/cartC/getCartItems/get_cart_items_state.dart';
 import 'package:petsica/features/store/models/cart_model.dart';
 import 'package:petsica/features/store/widgets/cart_item_card.dart';
-import 'package:petsica/features/store/widgets/confirm_address_show_dialog.dart';
 
 class CartViewBody extends StatefulWidget {
   const CartViewBody({super.key});
@@ -29,6 +29,14 @@ class _CartViewBodyState extends State<CartViewBody> {
         title: Text("Cart", style: Styles.textStyleQu28),
         centerTitle: true,
         leading: const AppArrowBack(destination: AppRouter.kStore),
+        actions: [
+          IconButton(
+            onPressed: () {
+              GoRouter.of(context).go(AppRouter.kCheckOut);
+            },
+            icon: const Icon(Icons.shopping_cart_checkout),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
