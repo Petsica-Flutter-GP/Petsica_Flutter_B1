@@ -1,17 +1,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:petsica/core/constants.dart';
-import 'package:petsica/features/profiles/user/cubit/add_pet_cubit.dart';
+import 'package:petsica/core/utils/asset_data.dart';
 
 import '../../../core/utils/styles.dart';
 
 class PetContainer extends StatelessWidget {
   const PetContainer({
     super.key,
-    required this.pet,
   });
 
-  final Pet pet;
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +31,13 @@ class PetContainer extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CircleAvatar(
+        const  CircleAvatar(
             radius: 35,
-            backgroundImage: AssetImage(pet.image),
+            backgroundImage: AssetImage(AssetData.clinicImage),
           ),
           const SizedBox(width: 12),
           Text(
-            pet.name,
+            'pet.name',
             style: Styles.textStyleCom22
                 .copyWith(color: kProductTxtColor),
           ),
