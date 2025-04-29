@@ -1,333 +1,141 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
+import 'package:petsica/features/chatBoot/cubit/aichat/ai_chat_cubit.dart';
+import 'package:petsica/features/chatBoot/cubit/aichat/ai_chat_state.dart';
+import 'package:petsica/features/chatBoot/widgets/message_bubble.dart';
 
 class ChatBootViewBody extends StatefulWidget {
   const ChatBootViewBody({super.key});
 
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  State<ChatBootViewBody> createState() => _ChatBootViewBodyState();
 }
 
-class _ChatScreenState extends State<ChatBootViewBody> {
+class _ChatBootViewBodyState extends State<ChatBootViewBody> {
   final TextEditingController _controller = TextEditingController();
-  final List<String> messages = ["Hello!", "How are you?"];
+  final ScrollController _scrollController = ScrollController();
 
-  void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
-      setState(() {
-        messages.add(_controller.text);
-      });
+  void _sendMessage(BuildContext context) {
+    final message = _controller.text.trim();
+    if (message.isNotEmpty) {
+      context.read<AIChatCubit>().sendMessage(message);
       _controller.clear();
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kChatBackGroundColor,
-      appBar: AppBar(
-        title: Text("Chat-Boot", style: Styles.textStyleQui24),
-        centerTitle: true,
-        leading: const AppArrowBack(destination: AppRouter.kChatBootOnboarding),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 20),
-          Expanded(
-            child: ListView.builder(
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                return MessageBubble(
-                  message: messages[index],
-                  timestamp: '7:20',
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              color: const Color(0xffeae1e2),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _controller,
-                      decoration: InputDecoration(
-                        filled: true, // ✅ يجعل الخلفية مملوءة باللون
-                        fillColor: const Color(
-                            0xffeae1e2), // ✅ تحديد لون الخلفية (يمكنك تغييره)
-                        hintText:
-                            'Ask anything...', // يمكن تعديل النص هنا إذا أردت
-                        labelStyle: Styles.textStyleQui20,
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
-                          ),
-                        ),
-                        floatingLabelStyle: const TextStyle(
-                          color: Colors.transparent,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
-                          ),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.send_rounded,
-                      size: 40,
-                      color: kBurgColor,
-                    ),
-                    onPressed: _sendMessage,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
-}
-
-class MessageBubble extends StatelessWidget {
-  final String message;
-  final String timestamp; // لإضافة الوقت
-
-  const MessageBubble(
-      {super.key, required this.message, required this.timestamp});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start, // لتوسيط النصوص في الجهة اليسرى
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: const BoxDecoration(
-                color: kBurgColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(18),
-                  topRight: Radius.circular(18),
-                  bottomRight: Radius.circular(18),
+    return BlocProvider(
+      create: (_) => AIChatCubit(),
+      child: Scaffold(
+        backgroundColor: kChatBackGroundColor,
+        appBar: AppBar(
+          title: Text("Chat-Boot", style: Styles.textStyleQui24),
+          centerTitle: true,
+          leading:
+              const AppArrowBack(destination: AppRouter.kChatBootOnboarding),
+        ),
+        body: BlocConsumer<AIChatCubit, AIChatState>(
+          listener: (context, state) {
+            if (state is MessagesLoaded) {
+              _scrollToBottom();
+            }
+          },
+          builder: (context, state) {
+            return Column(
+              children: [
+                const SizedBox(height: 20),
+                Expanded(
+                  child: state is MessagesLoaded
+                      ? ListView.builder(
+                          controller: _scrollController,
+                          itemCount: state.messages.length,
+                          itemBuilder: (context, index) {
+                            final msg = state.messages[index];
+                            return MessageBubble(
+                              message: msg.text,
+                              timestamp:
+                                  "${msg.timestamp.hour}:${msg.timestamp.minute}",
+                              isUser: msg.isUser,
+                            );
+                          },
+                        )
+                      : const Center(child: Text("ابدأ المحادثة مع البوت ✨")),
                 ),
-              ),
-              child: Text(
-                message,
-                style: Styles.textStyleQui20.copyWith(color: kWhiteGroundColor),
-              ),
-            ),
-            Text(
-              timestamp, // الوقت الذي سيتم عرضه هنا
-              style: Styles.textStyleQui16
-                  .copyWith(color: kWordColor.withOpacity(0.6), fontSize: 12),
-            ),
-          ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    color: const Color(0xffeae1e2),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _controller,
+                            textDirection: TextDirection.rtl,
+                            textAlign: TextAlign.right,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: const Color(0xffeae1e2),
+                              hintText: 'اسأل أي شيء...',
+                              labelStyle: Styles.textStyleQui20,
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Colors.transparent, width: 1),
+                              ),
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Colors.transparent, width: 1),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.send_rounded,
+                            size: 40,
+                            color: kBurgColor,
+                          ),
+                          onPressed: () => _sendMessage(context),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 }
 
-
-/*
-
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:petsica/core/constants.dart';
-import 'package:petsica/core/utils/app_arrow_back.dart';
-import 'package:petsica/core/utils/app_router.dart';
-import 'package:petsica/core/utils/styles.dart';
-
-class ChatBootViewBody extends StatefulWidget {
-  const ChatBootViewBody({super.key});
-
-  @override
-  _ChatScreenState createState() => _ChatScreenState();
-}
-
-class _ChatScreenState extends State<ChatBootViewBody> {
-  final TextEditingController _controller = TextEditingController();
-  final List<Message> messages = [
-    Message(text: "Hello!", sender: "other"),
-    Message(text: "How are you?", sender: "other")
-  ];
-
-  void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
-      setState(() {
-        messages.add(Message(text: _controller.text, sender: "me"));
-      });
-      _controller.clear();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kChatBackGroundColor,
-      appBar: AppBar(
-        title: Text("Chat-Boot", style: Styles.textStyleQui24),
-        centerTitle: true,
-        leading: const AppArrowBack(destination: AppRouter.kChatBootOnboarding),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 20),
-          Expanded(
-            child: ListView.builder(
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                return MessageBubble(
-                  message: messages[index].text,
-                  timestamp: '7:20',
-                  sender: messages[index].sender,
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              color: const Color(0xffeae1e2),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _controller,
-                      decoration: InputDecoration(
-                        filled: true, // ✅ يجعل الخلفية مملوءة باللون
-                        fillColor: const Color(
-                            0xffeae1e2), // ✅ تحديد لون الخلفية (يمكنك تغييره)
-                        hintText:
-                            'Ask anything...', // يمكن تعديل النص هنا إذا أردت
-                        labelStyle: Styles.textStyleQui20,
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
-                          ),
-                        ),
-                        floatingLabelStyle: const TextStyle(
-                          color: Colors.transparent,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
-                          ),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.send_rounded,
-                      size: 40,
-                      color: kBurgColor,
-                    ),
-                    onPressed: _sendMessage,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Message {
+class AIChatMessage {
   final String text;
-  final String sender; // "me" أو "other"
+  final bool isUser;
+  final DateTime timestamp;
 
-  Message({required this.text, required this.sender});
+  AIChatMessage({
+    required this.text,
+    required this.isUser,
+    required this.timestamp,
+  });
 }
-
-class MessageBubble extends StatelessWidget {
-  final String message;
-  final String timestamp;
-  final String sender; // لإضافة مرسل الرسالة
-
-  const MessageBubble(
-      {super.key,
-      required this.message,
-      required this.timestamp,
-      required this.sender});
-
-  @override
-  Widget build(BuildContext context) {
-    bool isUserMessage =
-        sender == "me"; // التحقق مما إذا كانت الرسالة من المستخدم
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-      child: Align(
-        alignment: isUserMessage
-            ? Alignment.centerRight
-            : Alignment.centerLeft, // تغيير الاتجاه بناءً على المرسل
-        child: Column(
-          crossAxisAlignment: isUserMessage
-              ? CrossAxisAlignment.end
-              : CrossAxisAlignment.start, // توجيه النص إلى اليمين أو اليسار
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: isUserMessage
-                    ? kBurgColor
-                    : kWhiteGroundColor, // تحديد لون الفقاعة بناءً على المرسل
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(18),
-                  topRight: const Radius.circular(18),
-                  bottomRight: isUserMessage
-                      ? const Radius.circular(18)
-                      : Radius.zero, // الزاوية السفلية اليمنى فقط للمستخدم
-                  bottomLeft: isUserMessage
-                      ? Radius.zero
-                      : const Radius.circular(
-                          18), // الزاوية السفلية اليسرى فقط للشخص الآخر
-                ),
-              ),
-              child: Text(
-                message,
-                style: Styles.textStyleQui20.copyWith(color: kWhiteGroundColor),
-              ),
-            ),
-            Text(
-              timestamp, // الوقت الذي سيتم عرضه هنا
-              style: Styles.textStyleQui16
-                  .copyWith(color: kWordColor.withOpacity(0.6), fontSize: 12),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-
-*/
