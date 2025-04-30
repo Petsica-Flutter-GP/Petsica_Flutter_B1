@@ -26,7 +26,8 @@ class UserProfileViewBody extends StatelessWidget {
         appBar: AppBar(
           title: Text("Profile", style: Styles.textStyleQu28),
           centerTitle: true,
-          leading: const AppArrowBack(destination: AppRouter.kWhereProfile),
+          leading:
+              const AppArrowBack(destination: AppRouter.kChatBootOnboarding),
         ),
         body: Column(
           children: [
