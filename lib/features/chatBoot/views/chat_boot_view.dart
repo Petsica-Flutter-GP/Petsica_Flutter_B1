@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:petsica/features/chatBoot/cubit/aichat/ai_chat_cubit.dart';
 import 'package:petsica/features/chatBoot/widgets/chat_boot_view_body.dart';
 
 class ChatBootView extends StatelessWidget {
@@ -6,6 +8,9 @@ class ChatBootView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  const ChatBootViewBody();
+    return BlocProvider<AIChatCubit>(
+      create: (_) => AIChatCubit(), // إنشاء الـ Cubit
+      child: const ChatBootViewBody(), // تمرير الـ ChatBootViewBody
+    );
   }
 }
