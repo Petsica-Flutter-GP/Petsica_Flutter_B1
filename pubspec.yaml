@@ -31,6 +31,7 @@ dependencies:
   shared_preferences: ^2.5.3
   shared_preferences_android: ^2.4.6
   shimmer: ^3.0.0
+  typewritertext: ^3.0.9
 
 dev_dependencies:
   flutter_lints: ^4.0.0
