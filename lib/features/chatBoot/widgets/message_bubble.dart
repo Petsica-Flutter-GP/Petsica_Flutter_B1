@@ -1,8 +1,10 @@
+import 'dart:async';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:petsica/core/constants.dart';
-import 'package:typewritertext/typewritertext.dart';
+import 'package:flutter/services.dart';
+import 'package:petsica/core/constants.dart'; // تأكد من أن الكود يحتوي على هذا اللون
 
-class MessageBubble extends StatelessWidget {
+class MessageBubble extends StatefulWidget {
   final String message;
   final String timestamp;
   final bool isUser;
@@ -14,107 +16,222 @@ class MessageBubble extends StatelessWidget {
     required this.isUser,
   });
 
+  @override
+  State<MessageBubble> createState() => _MessageBubbleState();
+}
+
+class _MessageBubbleState extends State<MessageBubble> {
+  bool isLiked = false;
+  bool isDisliked = false;
+  bool isLikeScaled = false;
+  bool isDislikeScaled = false;
+
   bool isWellFormed(String text) {
     try {
-      // محاولة تحويل النص إلى قائمة "رونز" (Unicode code points)
       text.runes.toList();
       return true;
     } catch (e) {
-      // في حال حدوث استثناء يعني أن النص غير صالح
       return false;
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isUser ? kBurgColor : Colors.grey[300],
-          borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(16),
-            topRight: const Radius.circular(16),
-            bottomLeft: isUser ? const Radius.circular(16) : Radius.zero,
-            bottomRight: isUser ? Radius.zero : const Radius.circular(16),
-          ),
-          border: Border.all(
-            color: isUser ? Colors.transparent : Colors.grey,
-            width: 1,
+  void animateScale(VoidCallback onComplete, Function(bool) setScale) {
+    setState(() {
+      setScale(true);
+    });
+    Future.delayed(const Duration(milliseconds: 100), () {
+      setState(() {
+        setScale(false);
+      });
+      onComplete();
+    });
+  }
+
+  Widget _buildAnimatedIconButton({
+    required IconData icon,
+    required String tooltip,
+    required VoidCallback onTap,
+    required bool isScaled,
+    Color? color,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedScale(
+        scale: isScaled ? 1.3 : 1.0,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+        child: Tooltip(
+          message: tooltip,
+          child: Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.grey.shade400),
+            ),
+            child: Icon(
+              icon,
+              size: 16,
+              color: color ?? Colors.grey[700],
+            ),
           ),
         ),
-        child: Column(
-          crossAxisAlignment:
-              isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          children: [
-            isUser
-                ? Text(
-                    message,
-                    textDirection: TextDirection.rtl,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Cairo',
-                      height: 1.4,
+      ),
+    );
+  }
+
+  // حفظ الرسائل المعروضة بالفعل
+  static Set<String> shownMessages = {};
+
+  @override
+  Widget build(BuildContext context) {
+    final bool showAnimation = !widget.isUser &&
+        widget.message != 'typing_indicator' &&
+        isWellFormed(widget.message) &&
+        !shownMessages.contains(widget.message);
+
+    if (showAnimation) {
+      shownMessages.add(widget.message); // إضافة الرسالة بعد عرضها
+    }
+
+    // التحقق من لغة الجهاز
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
+    return Padding(
+      padding: widget.isUser
+          ? const EdgeInsets.symmetric(horizontal: 10) // للمستخدم بدون تعديل
+          : const EdgeInsets.symmetric(horizontal: 40), // للبوت مع Padding أكبر
+      child: Column(
+        crossAxisAlignment: widget.isUser
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start, // محاذاة الرسائل حسب المستخدم أو البوت
+        children: [
+          widget.isUser
+              ? Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.all(12),
+                    decoration: const BoxDecoration(
+                      color: kBurgColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12),
+                        bottomLeft: Radius.circular(12),
+                      ),
                     ),
-                    maxLines: null, // Allow multi-line
-                    overflow:
-                        TextOverflow.visible, // Ensure no clipping of text
-                  )
-                : message == 'typing_indicator'
-                    ? const TypingIndicatorDots()
-                    : isWellFormed(message)
-                        ? TypeWriterText(
-                            text: Text(
-                              _getWords(message),
-                              textDirection: TextDirection.rtl,
+                    child: Text(
+                      widget.message,
+                      textDirection: isArabic
+                          ? TextDirection.rtl
+                          : TextDirection.ltr, // تغيير الاتجاه بناءً على اللغة
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'Cairo',
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                )
+              : widget.message == 'typing_indicator'
+                  ? const TypingIndicatorDots()
+                  : isWellFormed(widget.message)
+                      ? showAnimation
+                          ? AnimatedTextWriter(
+                              text: widget.message,
+                              color: Colors.black,
+                              fontSize: 16,
+                              textAlign: TextAlign.right,
+                            )
+                          : Text(
+                              widget.message,
+                              textDirection: isArabic
+                                  ? TextDirection.rtl
+                                  : TextDirection
+                                      .ltr, // تغيير الاتجاه بناءً على اللغة
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
                                 fontFamily: 'Cairo',
                                 height: 1.4,
                               ),
-                            ),
-                            duration: const Duration(
-                                milliseconds: 1), // Adjust speed here
-                          )       
-
-                        : const Text(
-                            "⚠ لا يمكن عرض هذه الرسالة",
-                            style: TextStyle(
-                              fontFamily: 'Cairo',
-                              fontSize: 16,
-                              color: Colors.red,
-                            ),
+                              softWrap: true,
+                              overflow: TextOverflow.visible,
+                            )
+                      : const Text(
+                          "⚠ لا يمكن عرض هذه الرسالة",
+                          style: TextStyle(
+                            fontFamily: 'Cairo',
+                            fontSize: 16,
+                            color: Colors.red,
                           ),
-            const SizedBox(height: 5),
-            Text(
-              timestamp,
-              style: TextStyle(
-                color: isUser ? Colors.white70 : Colors.black54,
-                fontSize: 12,
-                fontFamily: 'Cairo',
-                height: 1.2,
+                        ),
+          const SizedBox(height: 5),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                widget.timestamp,
+                style: TextStyle(
+                  color: widget.isUser ? Colors.white70 : Colors.black54,
+                  fontSize: 12,
+                  fontFamily: 'Cairo',
+                ),
               ),
-            ),
-          ],
-        ),
+              if (!widget.isUser) ...[
+                const SizedBox(width: 8),
+                _buildAnimatedIconButton(
+                  icon: Icons.copy,
+                  tooltip: "نسخ الرسالة",
+                  isScaled: false,
+                  color: Colors.grey[700],
+                  onTap: () {
+                    Clipboard.setData(ClipboardData(text: widget.message));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('تم نسخ الرسالة إلى الحافظة!')),
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
+                _buildAnimatedIconButton(
+                  icon: isLiked ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
+                  tooltip: "أعجبتني",
+                  isScaled: isLikeScaled,
+                  color: isLiked ? Colors.blue : Colors.grey[700],
+                  onTap: () {
+                    animateScale(() {
+                      setState(() {
+                        isLiked = !isLiked;
+                        if (isLiked) isDisliked = false;
+                      });
+                    }, (val) => setState(() => isLikeScaled = val));
+                  },
+                ),
+                const SizedBox(width: 8),
+                _buildAnimatedIconButton(
+                  icon: isDisliked
+                      ? Icons.thumb_down
+                      : Icons.thumb_down_alt_outlined,
+                  tooltip: "لم تعجبني",
+                  isScaled: isDislikeScaled,
+                  color: isDisliked ? Colors.red : Colors.grey[700],
+                  onTap: () {
+                    animateScale(() {
+                      setState(() {
+                        isDisliked = !isDisliked;
+                        if (isDisliked) isLiked = false;
+                      });
+                    }, (val) => setState(() => isDislikeScaled = val));
+                  },
+                ),
+              ],
+            ],
+          ),
+        ],
       ),
     );
   }
-}
-
-// Function to split message into words and display them one by one
-String _getWords(String message) {
-  List<String> words =
-      message.split(" "); // Split message by spaces to get words
-  String result = '';
-  for (var word in words) {
-    result += "$word "; // Add one word at a time to the result
-  }
-  return result;
 }
 
 class TypingIndicatorDots extends StatefulWidget {
@@ -182,5 +299,80 @@ class _TypingIndicatorDotsState extends State<TypingIndicatorDots>
       controller.dispose();
     }
     super.dispose();
+  }
+}
+
+class AnimatedTextWriter extends StatelessWidget {
+  final String text;
+  final Color color;
+  final double fontSize;
+  final TextAlign textAlign;
+
+  const AnimatedTextWriter({
+    super.key,
+    required this.text,
+    this.color = Colors.black,
+    this.fontSize = 16.0,
+    this.textAlign = TextAlign.right,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedTextKit(
+      animatedTexts: [
+        TypewriterAnimatedText(
+          text,
+          textStyle: TextStyle(
+            fontSize: fontSize,
+            fontFamily: 'Cairo',
+            color: color,
+            height: 1.4,
+          ),
+          speed: const Duration(milliseconds: 25),
+        ),
+      ],
+      isRepeatingAnimation: false,
+      totalRepeatCount: 1,
+      displayFullTextOnTap: true,
+      stopPauseOnTap: true,
+      pause: Duration.zero,
+    );
+  }
+}
+
+class ChatScreen extends StatelessWidget {
+  final ScrollController _scrollController = ScrollController();
+
+  ChatScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Chat'),
+      ),
+      body: ListView.builder(
+        controller: _scrollController,
+        itemCount: 10, // عدد الرسائل هنا
+        itemBuilder: (context, index) {
+          return MessageBubble(
+            message: "رسالة $index",
+            timestamp: "12:00 PM",
+            isUser: index % 2 == 0,
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // التمرير للأسفل عند إضافة رسالة جديدة
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        },
+        child: const Icon(Icons.send),
+      ),
+    );
   }
 }

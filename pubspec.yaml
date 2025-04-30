@@ -9,6 +9,7 @@ environment:
   sdk: ^3.5.1
 
 dependencies:
+  animated_text_kit: ^4.2.3
   another_flushbar: ^1.12.30
   device_preview: ^1.2.0
   draggable_fab: ^0.1.4
