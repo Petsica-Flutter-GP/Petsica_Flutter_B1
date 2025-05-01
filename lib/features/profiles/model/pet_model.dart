@@ -1,35 +1,35 @@
 class PetModel {
-  final String species;
+  final String age;
   final String photo;
   final String gender;
   final String name;
-  final String breed;
+  final String type;
 
   PetModel({
-    required this.species,
+    required this.age,
     required this.photo,
     required this.gender,
     required this.name,
-    required this.breed,
+    required this.type,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'species': species,
+      'species': age,
       'photo': photo,
       'gender': gender,
       'name': name,
-      'breed': breed,
+      'breed': type,
     };
   }
 
   factory PetModel.fromJson(Map<String, dynamic> json) {
     return PetModel(
-      species: json['species'] ?? '',
+      age: json['species'] ?? '',
       photo: json['photo'] ?? '',
       gender: json['gender'] ?? '',
       name: json['name'] ?? '',
-      breed: json['breed'] ?? '',
+      type: json['breed'] ?? '',
     );
   }
 }

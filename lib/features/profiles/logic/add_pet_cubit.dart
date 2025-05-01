@@ -12,8 +12,8 @@ class AddPetCubit extends Cubit<AddPetState> {
     try {
       await PetService.addPet(
         name: pet.name,
-        type: pet.breed,
-        age: pet.species,
+        type: pet.type,
+        age: pet.age,
         gender: pet.gender,
         photoBase64: pet.photo,
       );
