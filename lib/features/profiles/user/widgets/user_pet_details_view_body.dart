@@ -9,8 +9,8 @@ import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/profiles/widgets/app_switch.dart';
 
-class UserPetDetailsViewBody extends StatelessWidget {
-  const UserPetDetailsViewBody({super.key});
+class PetDetailsViewBody extends StatelessWidget {
+  const PetDetailsViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class UserPetDetailsViewBody extends StatelessWidget {
         title: Text(petName, style: Styles.textStyleQu28),
         centerTitle: true,
         leading: const AppArrowBack(
-          destination: AppRouter.kUserMyPet,
+          destination: AppRouter.kMyPet,
         ),
       ),
       body: Padding(
@@ -102,7 +102,7 @@ class UserPetDetailsViewBody extends StatelessWidget {
                 style: Styles.textStyleQui24.copyWith(color: Colors.white),
                 onTap: () {
                   // ⚠️ لا يتم تمرير pet لأننا نستخدم بيانات ثابتة
-                  GoRouter.of(context).go(AppRouter.kUserEditPet);
+                  GoRouter.of(context).go(AppRouter.kEditPet);
                 },
               ),
             )

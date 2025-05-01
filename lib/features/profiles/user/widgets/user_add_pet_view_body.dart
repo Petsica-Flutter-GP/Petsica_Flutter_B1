@@ -42,7 +42,7 @@ class _AddPetPageViewBodyState extends State<AddPetPageViewBody> {
       appBar: AppBar(
         title: Text("Add Your Pet Information", style: Styles.textStyleQui24),
         centerTitle: true,
-        leading: const AppArrowBack(destination: AppRouter.kUserMyPet),
+        leading: const AppArrowBack(destination: AppRouter.kMyPet),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),

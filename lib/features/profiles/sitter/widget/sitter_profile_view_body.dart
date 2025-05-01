@@ -104,7 +104,7 @@ class SitterProfileViewBody extends StatelessWidget {
                     label: 'Add pet',
                     height: 50,
                     onTap: () {
-                      GoRouter.of(context).go(AppRouter.kSitterMyPet);
+                      GoRouter.of(context).go(AppRouter.kMyPet);
                       print("sitter add pet");
                     }),
                 const SizedBox(
