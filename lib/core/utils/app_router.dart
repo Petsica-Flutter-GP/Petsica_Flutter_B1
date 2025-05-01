@@ -33,7 +33,8 @@ import 'package:petsica/features/profiles/sitter/view/sitter_pet_details_view.da
 import 'package:petsica/features/profiles/sitter/view/sitter_profile_view.dart';
 import 'package:petsica/features/profiles/sitter/widget/sitter_add_pet_view.dart';
 import 'package:petsica/features/profiles/sitter/widget/sitter_settings_page.dart';
-import 'package:petsica/features/profiles/user/views/user_add_pet_view.dart';
+import 'package:petsica/features/profiles/user/views/add_pet_view.dart';
+import 'package:petsica/features/profiles/user/views/edit_pet_view.dart';
 import 'package:petsica/features/profiles/user/views/user_profile_view.dart';
 import 'package:petsica/features/profiles/user/widgets/user_settings_page.dart';
 import 'package:petsica/features/profiles/where.dart';
@@ -50,9 +51,8 @@ import 'package:petsica/features/who/presentation/views/who_view.dart';
 import '../../features/profiles/clinic/view/clinic_pet_details_view.dart';
 import '../../features/profiles/clinic/view/clinic_profile_view.dart';
 import '../../features/profiles/seller/view/seller_profile_view.dart';
-import '../../features/profiles/user/views/user_my_pet_view.dart';
-import '../../features/profiles/user/views/user_edit_pet_view.dart';
-import '../../features/profiles/user/views/user_pet_details_view.dart';
+import '../../features/profiles/user/views/my_pet_view.dart';
+import '../../features/profiles/user/views/pet_details_view.dart';
 import '../../features/signup/presentation/views/clinic/clinic_signup_view.dart';
 import '../../features/signup/presentation/views/sitter/sitter_signup_view.dart';
 import '../../features/store/views/store_view.dart';
@@ -66,45 +66,35 @@ abstract class AppRouter {
   //user
   static const kUserSignUp = '/userSignUp';
   static const kUserProfile = '/userProfile';
-  static const kUserMyPet = '/userMyPet';
-  static const kUserPetDetails = '/userPetDetails';
-  static const kUserEditPet = '/userEditPet';
-  static const kAddPet = '/AddPet';
   static const kUserSettings = '/userSettings';
+  
+  // pets part
+  static const kMyPet = '/myPet';
+  static const kPetDetails = '/petDetails';
+  static const kEditPet = '/editPet';
+  static const kAddPet = '/addPet';
 
   //seller
   static const kSellerSignUp = '/sellerSignUp';
   static const kSellerProfile = '/sellerProfile';
-  static const kSellerMyPet = '/sellerMyPet';
-  static const kSellerEditPet = '/sellerEditPet';
   static const kSellerMyStore = '/sellerMyStore';
   static const kSellerAddProduct = '/sellerAddProduct';
   static const kSellerEditProduct = '/sellerEditProduct';
   static const kSellerOrders = '/sellerOrders';
   static const kSellerOrderDetails = '/sellerOrderDetails';
-  static const kSellerPetDetails = '/sellerPetDetails';
   static const kSellerSettings = '/sellerSettings';
-  static const kSellerAddPet = '/sellerAddPet';
 
   //sitter
   static const kSitterSignUp = '/sitterSignUp';
   static const kSitterProfile = '/sitterProfile';
-  static const kSitterMyPet = '/sitterMyPet';
-  static const kSitterPetDetails = '/sitterPetDetails';
   static const kSitterSettings = '/sitterSettings';
-  static const kSitterAddPet = '/sitterAddPet';
   static const kSitterMyServices = '/sitterMyServices';
   static const kSitterNewServices = '/sitterNewServices';
   static const kSitterEditServices = '/sitterEditServices';
-  static const kSitterEditPet = '/sitterEditPet';
 
   //clinic
   static const kClinicSignUp = '/clinicSignUp';
   static const kClinicProfile = '/clinicProfile';
-  static const kClinicMyPet = '/clinicMyPet';
-  static const kClinicPetDetails = '/clinicPetDetails';
-  static const kClinicEditPet = '/clinicEditPet';
-  static const kClinicAddPet = '/clinicAddPet';
   static const kClinicSettings = '/clinicSettings';
 
   //admin
@@ -235,57 +225,19 @@ abstract class AppRouter {
         builder: (context, state) => const WhereProf(),
       ),
       GoRoute(
-        path: kUserMyPet,
-        builder: (context, state) => const UserMyPetView(),
+        path: kMyPet,
+        builder: (context, state) => const MyPetView(),
       ),
+
       GoRoute(
-        path: kClinicMyPet,
-        builder: (context, state) => const ClinicMyPetView(),
+          path: kPetDetails,
+          builder: (context, state) => const PetDetailsView()),
+
+      GoRoute(
+        path: kEditPet,
+        builder: (context, state) => const EditPetView(),
       ),
-      GoRoute(
-        path: kSellerMyPet,
-        builder: (context, state) => const SellerMyPetView(),
-      ),
-      GoRoute(
-        path: kSitterMyPet,
-        builder: (context, state) => const SitterMyPetView(),
-      ),
-      GoRoute(
-        path: kSitterMyPet,
-        builder: (context, state) => const SitterMyPetView(),
-      ),
-      GoRoute(
-          path: kUserPetDetails,
-          builder: (context, state) => const UserPetDetailsView()),
-      GoRoute(
-          path: kSitterPetDetails,
-          builder: (context, state) => const SitterPetDetailsView()),
-      GoRoute(
-          path: kSellerPetDetails,
-          builder: (context, state) => const SellerPetDetailsView()),
-      GoRoute(
-          path: kClinicPetDetails,
-          builder: (context, state) => const ClinicPetDetailsView()),
-      GoRoute(
-        path: kWhoEdit,
-        builder: (context, state) => const WhereEdit(),
-      ),
-      GoRoute(
-        path: kUserEditPet,
-        builder: (context, state) => const UserEditPetView(),
-      ),
-      GoRoute(
-        path: kSitterEditPet,
-        builder: (context, state) => const SitterEditPetView(),
-      ),
-      GoRoute(
-        path: kSellerEditPet,
-        builder: (context, state) => const SellerEditPetView(),
-      ),
-      GoRoute(
-        path: kClinicEditPet,
-        builder: (context, state) => const ClinicEditPetView(),
-      ),
+
       GoRoute(
         path: kAddPet,
         builder: (context, state) => const AddPetView(),
@@ -295,18 +247,7 @@ abstract class AppRouter {
         path: kPost,
         builder: (context, state) => const PublishPostView(),
       ),
-      GoRoute(
-        path: kSitterAddPet,
-        builder: (context, state) => const SitterAddPetView(),
-      ),
-      GoRoute(
-        path: kSellerAddPet,
-        builder: (context, state) => const SellerAddPetView(),
-      ),
-      GoRoute(
-        path: kClinicAddPet,
-        builder: (context, state) => const ClinicAddPetView(),
-      ),
+
       GoRoute(
         path: kUserSettings,
         builder: (context, state) => const UserSettingsScreen(),

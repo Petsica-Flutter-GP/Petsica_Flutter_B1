@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:petsica/features/profiles/user/widgets/user_edit_pet_view_body.dart';
 
-class UserEditPetView extends StatelessWidget {
-  const UserEditPetView({super.key});
+class EditPetView extends StatelessWidget {
+  const EditPetView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const UserEditPetPageViewBody();
+    return const EditPetPageViewBody();
   }
 }
