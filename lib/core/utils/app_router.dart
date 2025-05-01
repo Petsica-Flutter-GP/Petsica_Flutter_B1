@@ -69,7 +69,7 @@ abstract class AppRouter {
   static const kUserMyPet = '/userMyPet';
   static const kUserPetDetails = '/userPetDetails';
   static const kUserEditPet = '/userEditPet';
-  static const kUserAddPet = '/userAddPet';
+  static const kAddPet = '/AddPet';
   static const kUserSettings = '/userSettings';
 
   //seller
@@ -126,11 +126,9 @@ abstract class AppRouter {
   static const kChatBootOnboarding = '/chatBootOnboarding';
   static const kChatBoot = '/chatBoot';
 
-
   //community
   static const kCommunityChat = '/communityChat';
   static const kPost = '/Post';
-
 
   //other
   static const kWhereProfile = '/whereProfile';
@@ -139,7 +137,6 @@ abstract class AppRouter {
 
   //routes
   static final router = GoRouter(
-
     //  initialLocation: '/', // البداية من SplashScreen
     initialLocation: kWelcomeBack,
 
@@ -154,7 +151,7 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: kCheckOut,
-        builder: (context, state) =>  CheckOutView(),
+        builder: (context, state) => const CheckOutView(),
       ),
       GoRoute(
         path: kHomeScreen,
@@ -191,23 +188,23 @@ abstract class AppRouter {
         path: kStore,
         builder: (context, state) => const StoreView(),
       ),
-      
- GoRoute(
-  path: kProductDetails,
-  builder: (context, state) {
-    final productId = state.extra as int; // نأخذ المنتج ID من extra
-    return ProductDetailsView(productId: productId); // نمرره في الـ constructor
-  },
-),
 
+      GoRoute(
+        path: kProductDetails,
+        builder: (context, state) {
+          final productId = state.extra as int; // نأخذ المنتج ID من extra
+          return ProductDetailsView(
+              productId: productId); // نمرره في الـ constructor
+        },
+      ),
 
-GoRoute(
-  path: kOrderDetails,
-  builder: (context, state) {
-    final orderID = state.extra as int;
-    return OrderDetailsView(orderID: orderID);
-  },
-),
+      GoRoute(
+        path: kOrderDetails,
+        builder: (context, state) {
+          final orderID = state.extra as int;
+          return OrderDetailsView(orderID: orderID);
+        },
+      ),
 
       GoRoute(
         path: kCart,
@@ -290,14 +287,13 @@ GoRoute(
         builder: (context, state) => const ClinicEditPetView(),
       ),
       GoRoute(
-        path: kUserAddPet,
-        builder: (context, state) => UserAddPetView(),
+        path: kAddPet,
+        builder: (context, state) => const AddPetView(),
       ),
-      
+
       GoRoute(
         path: kPost,
         builder: (context, state) => const PublishPostView(),
-
       ),
       GoRoute(
         path: kSitterAddPet,
@@ -347,13 +343,13 @@ GoRoute(
         path: kSellerMyStore,
         builder: (context, state) => const SellerMyStoreView(),
       ),
-     GoRoute(
-  path: kSellerEditProduct,
-  builder: (context, state) {
-    final productId = state.extra as int;
-    return SellerEditProductView(productId: productId);
-  },
-),
+      GoRoute(
+        path: kSellerEditProduct,
+        builder: (context, state) {
+          final productId = state.extra as int;
+          return SellerEditProductView(productId: productId);
+        },
+      ),
 
       GoRoute(
         path: kSellerAddProduct,

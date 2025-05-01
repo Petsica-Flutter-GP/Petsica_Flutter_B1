@@ -29,31 +29,31 @@ class UserMyPetViewBody extends StatelessWidget {
           color: kWhiteGroundColor,
         ),
         onPressed: () {
-          GoRouter.of(context).go(AppRouter.kUserAddPet);
+          GoRouter.of(context).go(AppRouter.kAddPet);
         },
       ),
-      body:  Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              child: CustomScrollView(
-                slivers: [
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            GoRouter.of(context).go(
-                              AppRouter.kUserPetDetails,
-                            );
-                          },
-                          child: PetContainer(),
-                        );
-                      },
-                      childCount:5,
-                    ),
-                  ),
-                ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        child: CustomScrollView(
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      GoRouter.of(context).go(
+                        AppRouter.kUserPetDetails,
+                      );
+                    },
+                    child: const PetContainer(),
+                  );
+                },
+                childCount: 5,
               ),
             ),
+          ],
+        ),
+      ),
     );
   }
 }
