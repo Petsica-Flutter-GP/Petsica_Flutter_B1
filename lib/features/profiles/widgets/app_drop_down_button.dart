@@ -10,6 +10,7 @@ class AppDropDownButton extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.validator, // إضافة validator للحقل
+    this.color, 
   });
 
   final String labelText;
@@ -17,7 +18,7 @@ class AppDropDownButton extends StatelessWidget {
   final String value;
   final ValueChanged<String?> onChanged;
   final String? Function(String?)? validator; // validator لتخصيص التحقق
-
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
@@ -27,8 +28,8 @@ class AppDropDownButton extends StatelessWidget {
           value: item,
           child: Text(
             item,
-            style: const TextStyle(
-              color: kInputWordColor,
+            style: TextStyle(
+              color:color?? kInputWordColor,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -43,24 +44,24 @@ class AppDropDownButton extends StatelessWidget {
         labelStyle: GoogleFonts.comfortaa(
           fontSize: 16,
           fontWeight: FontWeight.normal,
-          color: kInputWordColor,
+              color:color?? kInputWordColor,
         ),
-        floatingLabelStyle: const TextStyle(
-          color: kProducPriceColor,
+        floatingLabelStyle:  TextStyle(
+              color:color?? kInputWordColor,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12), // تغيير الحواف
-          borderSide: const BorderSide(
-            color: kProducPriceColor, // تغيير لون الحواف عند التركيز
+          borderSide:  BorderSide(
+              color:color?? kInputWordColor,
             width: 2,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: kStorkTextFieldColor, // الحواف العادية
+          borderSide:  BorderSide(
+              color:color?? kInputWordColor,
             width: 1,
           ),
         ),

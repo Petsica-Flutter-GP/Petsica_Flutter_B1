@@ -11,12 +11,13 @@ class InputField extends StatefulWidget {
   final int? maxLength; // ✅ Optional maxLength
   final int? maxLines; // ✅ Optional maxLines
   final String? Function(String?)? validator; // ✅ Optional validator
-
+  final Color? color;
   const InputField({
     super.key,
     required this.label,
     this.controller,
     this.icon,
+    this.color,
     this.isPassword = false, // Default: not a password field
     this.keyboardType = TextInputType.text, // Default: normal text input
     this.maxLength, // Optional maxLength
@@ -60,24 +61,24 @@ class _InputFieldState extends State<InputField> {
         labelStyle: GoogleFonts.comfortaa(
           fontSize: 16,
           fontWeight: FontWeight.normal,
-          color: kInputWordColor,
+          color: widget.color??kInputWordColor,
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            color: kBurgColor,
+          borderSide: BorderSide(
+            color: widget.color ?? kBurgColor,
             width: 1,
           ),
         ),
-        floatingLabelStyle: const TextStyle(
-          color: kBurgColor,
+        floatingLabelStyle:  TextStyle(
+            color: widget.color ?? kBurgColor,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            color: kStorkTextFieldColor,
+          borderSide:  BorderSide(
+            color: widget.color??kStorkTextFieldColor,
             width: 1,
           ),
         ),
