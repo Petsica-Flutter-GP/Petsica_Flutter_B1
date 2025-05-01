@@ -18,7 +18,6 @@ class UserProfileViewBody extends StatelessWidget {
   const UserProfileViewBody({super.key});
 
   @override
-  
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ProfileImageCubit(), // إنشاء `Cubit`
