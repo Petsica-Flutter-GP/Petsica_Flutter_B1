@@ -62,7 +62,7 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
         // context.go(AppRouter.kPost);
         // context.go(AppRouter.kStore);
         // context.go(AppRouter.kSellerMyStore);
-        context.go(AppRouter.kWhereProfile);
+        context.go(AppRouter.kMyPet);
       }
     } else {
       if (!mounted) return;

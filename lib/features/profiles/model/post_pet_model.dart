@@ -6,11 +6,11 @@ class PetModel {
   final String type;
 
   PetModel({
-    required this.age,
+    required this.age, // Represents 'species' in API response
     required this.photo,
     required this.gender,
     required this.name,
-    required this.type,
+    required this.type, // Represents 'breed' in API response
   });
 
   Map<String, dynamic> toJson() {
@@ -33,3 +33,5 @@ class PetModel {
     );
   }
 }
+
+
