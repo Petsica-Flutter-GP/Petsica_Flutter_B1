@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:petsica/features/profiles/model/pet_model.dart';
-import 'package:petsica/features/profiles/services/add_pet_service.dart';
+import 'package:petsica/features/profiles/model/post_pet_model.dart';
+import 'package:petsica/features/profiles/services/pet_services.dart';
 import 'add_pet_state.dart';
 
 class AddPetCubit extends Cubit<AddPetState> {
@@ -10,7 +10,7 @@ class AddPetCubit extends Cubit<AddPetState> {
     emit(AddPetLoading());
 
     try {
-      await PetService.addPet(
+      await PetServices.addPet(
         name: pet.name,
         type: pet.type,
         age: pet.age,

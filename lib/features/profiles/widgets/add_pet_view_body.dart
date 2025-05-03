@@ -8,11 +8,13 @@ import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
-import 'package:petsica/features/profiles/logic/add_pet_cubit.dart';
-import 'package:petsica/features/profiles/logic/add_pet_state.dart';
-import 'package:petsica/features/profiles/model/pet_model.dart';
+import 'package:petsica/features/profiles/logic/addPet/add_pet_cubit.dart';
+import 'package:petsica/features/profiles/logic/addPet/add_pet_state.dart';
+import 'package:petsica/features/profiles/model/post_pet_model.dart';
 import 'package:petsica/features/profiles/seller/widget/seller_camera_placeholder.dart';
+import 'package:petsica/features/profiles/widgets/adoption_mating_tog.dart';
 import 'package:petsica/features/profiles/widgets/app_drop_down_button.dart';
+import 'package:petsica/features/profiles/widgets/app_switch.dart';
 import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
 import '../../../core/utils/app_arrow_back.dart';
 
@@ -35,6 +37,8 @@ class _AddPetPageViewBodyState extends State<AddPetPageViewBody> {
   bool isImageRequired = false;
   bool isLoading = false;
   File? _selectedImage;
+  bool isAvailableForAdoption = false;
+  bool isAvailableForMating = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,6 @@ class _AddPetPageViewBodyState extends State<AddPetPageViewBody> {
               const SnackBar(content: Text('✔️ Pet added successfully')),
             );
 
-            // تصفير الحقول
             _petNameController.clear();
             _petAgeController.clear();
             setState(() {
@@ -78,40 +81,58 @@ class _AddPetPageViewBodyState extends State<AddPetPageViewBody> {
               padding: const EdgeInsets.all(20),
               child: Form(
                 key: _formKey,
-                autovalidateMode:
-                    AutovalidateMode.onUserInteraction, // تفعيل التحقق التلقائي
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SellerCameraPlaceholder(
-                      color: kLightAddContainerColor,
-                      onImageSelected: (image) {
-                        setState(() {
-                          _selectedImage = image;
-                          isImageRequired = false;
-                        });
-                      },
-                      onImageStatusChanged: (bool isSelected) {
-                        setState(() {
-                          isImageRequired = !isSelected;
-                        });
-                      },
-                      isImageRequired: isImageRequired,
+                    // ✅ تأثير التفاعل عند اختيار الصورة
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: _selectedImage != null
+                              ? Colors.green
+                              : Colors.transparent,
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: SellerCameraPlaceholder(
+                        color: kLightAddContainerColor,
+                        onImageSelected: (image) {
+                          setState(() {
+                            _selectedImage = image;
+                            isImageRequired = false;
+                          });
+                        },
+                        onImageStatusChanged: (bool isSelected) {
+                          setState(() {
+                            isImageRequired = !isSelected;
+                          });
+                        },
+                        isImageRequired: isImageRequired,
+                      ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 30),
+
+                    // 🐾 اسم الحيوان + الملاحظة
                     InputField(
                       color: kProducPriceColor,
                       label: 'Pet Name',
                       controller: _petNameController,
                       validator: (value) {
                         if (value!.isEmpty) return 'Required';
-                        if (RegExp(r'[^a-zA-Z\s]').hasMatch(value)) {
-                          return 'Name should not contain numbers or symbols';
+                        if (RegExp(r'[^a-zA-Z0-9\s]').hasMatch(value)) {
+                          return 'Name should not contain symbols';
                         }
+
                         return null;
                       },
                       maxLength: 20,
                     ),
+
                     const SizedBox(height: 15),
+
                     InputField(
                       color: kProducPriceColor,
                       label: "Pet Age",
@@ -127,30 +148,50 @@ class _AddPetPageViewBodyState extends State<AddPetPageViewBody> {
                       },
                     ),
                     const SizedBox(height: 30),
-                    AppDropDownButton(
-                      color: kProducPriceColor,
-                      labelText: 'Pet Type',
-                      items: const ['Cat', 'Dog'],
-                      value: selectedType,
-                      onChanged: (newVal) {
-                        setState(() {
-                          selectedType = newVal!;
-                        });
-                      },
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppDropDownButton(
+                            color: kProducPriceColor,
+                            labelText: 'Pet Type',
+                            items: const ['Cat', 'Dog'],
+                            value: selectedType,
+                            onChanged: (newVal) {
+                              setState(() {
+                                selectedType = newVal!;
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: AppDropDownButton(
+                            color: kProducPriceColor,
+                            labelText: 'Pet Gender',
+                            items: const ['Male', 'Female'],
+                            value: selectedGender,
+                            onChanged: (newVal) {
+                              setState(() {
+                                selectedGender = newVal!;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 30),
-                    AppDropDownButton(
-                      color: kProducPriceColor,
-                      labelText: 'Pet Gender',
-                      items: const ['Male', 'Female'],
-                      value: selectedGender,
-                      onChanged: (newVal) {
-                        setState(() {
-                          selectedGender = newVal!;
-                        });
-                      },
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 2),
+                      child: Column(
+                        children: [
+                          AdoptionOrMatongToggle(
+                              text: "Available for Adoption"),
+                          SizedBox(height: 10),
+                          AdoptionOrMatongToggle(text: "Available for Mating")
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 60),
+                    const SizedBox(height: 40),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: AppButton(
@@ -160,7 +201,6 @@ class _AddPetPageViewBodyState extends State<AddPetPageViewBody> {
                         backgroundColor: kProducPriceColor,
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                            // التحقق من اختيار صورة
                             if (_selectedImage == null) {
                               setState(() {
                                 isImageRequired = true;
@@ -168,16 +208,13 @@ class _AddPetPageViewBodyState extends State<AddPetPageViewBody> {
                               return;
                             }
 
-                            // تحويل الصورة إلى base64
                             final bytes = await _selectedImage!.readAsBytes();
                             final base64Image = base64Encode(bytes);
 
-                            // بدء التحميل
                             setState(() {
                               isLoading = true;
                             });
 
-                            // إرسال البيانات إلى Cubit
                             await cubit.addPet(
                               PetModel(
                                 name: _petNameController.text.trim(),
@@ -188,7 +225,6 @@ class _AddPetPageViewBodyState extends State<AddPetPageViewBody> {
                               ),
                             );
 
-                            // إنهاء التحميل
                             setState(() {
                               isLoading = false;
                             });

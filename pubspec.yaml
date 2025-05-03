@@ -33,6 +33,7 @@ dependencies:
   shared_preferences_android: ^2.4.6
   shimmer: ^3.0.0
   typewritertext: ^3.0.9
+  web_socket_channel: ^3.0.3
 
 dev_dependencies:
   flutter_lints: ^4.0.0

@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:petsica/core/utils/send_Authorized_Request.dart';
+import 'package:petsica/features/profiles/model/get_pet_model.dart';
+import 'package:petsica/features/profiles/model/post_pet_model.dart';
 
-class PetService {
+class PetServices {
   static Future<void> addPet({
     required String name,
     required String type,
@@ -31,6 +34,25 @@ class PetService {
       return;
     } else {
       throw Exception('❌ فشل في إضافة الحيوان الأليف: ${response.statusCode}');
+    }
+  }
+
+   static Future<List<GetPetModel>> getAllPets() async {
+    final url = Uri.parse('http://petsica.runasp.net/api/Pets/GetAllPets');
+
+    final response = await sendAuthorizedRequest(
+      url: url,
+      method: 'GET',
+    );
+
+    if (response.statusCode == 200) {
+      final decoded = jsonDecode(response.body);
+
+      final List petsJson = decoded['value'] ?? [];
+
+      return petsJson.map((json) => GetPetModel.fromJson(json)).toList();
+    } else {
+      throw Exception('فشل في جلب الحيوانات: ${response.statusCode}');
     }
   }
 }
