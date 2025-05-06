@@ -94,12 +94,7 @@ class MyPetViewBody extends StatelessWidget {
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
                             final pet = state.pets[index];
-                            return GestureDetector(
-                              onTap: () {
-                                GoRouter.of(context).go(AppRouter.kPetDetails);
-                              },
-                              child: PetContainer(pet: pet),
-                            );
+                            return PetContainer(pet: pet);
                           },
                           childCount: state.pets.length,
                         ),
