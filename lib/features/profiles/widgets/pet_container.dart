@@ -18,6 +18,7 @@ class PetContainer extends StatelessWidget {
       onTap: () {
         GoRouter.of(context).go(
           AppRouter.kPetDetails,
+          extra: pet,
         );
       },
       child: Container(
@@ -45,19 +46,34 @@ class PetContainer extends StatelessWidget {
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(35),
+              borderRadius: BorderRadius.circular(52),
               child: pet.photo.isNotEmpty
                   ? Image.memory(
                       base64Decode(pet.photo),
-                      width: 70,
-                      height: 70,
+                      width: 80,
+                      height: 80,
                       fit: BoxFit.cover,
                     )
-                  : const Image(
-                      width: 70,
-                      height: 70,
-                      image: AssetImage(AssetData.clinicImage),
-                      fit: BoxFit.cover,
+                  : Container(
+                      width: 80, 
+                      height: 80, 
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.red),
+                        borderRadius:
+                            BorderRadius.circular(52),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 6,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                        size: 40, // حجم الأيقونة
+                      ),
                     ),
             ),
             const SizedBox(width: 15),

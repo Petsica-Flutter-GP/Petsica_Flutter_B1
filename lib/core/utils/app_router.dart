@@ -15,6 +15,7 @@ import 'package:petsica/features/profiles/clinic/view/clinic_my_pet_view.dart';
 import 'package:petsica/features/profiles/clinic/view/clinic_add_pet_view.dart';
 import 'package:petsica/features/profiles/clinic/widget/clinic_settings_page.dart';
 import 'package:petsica/features/profiles/edit.dart';
+import 'package:petsica/features/profiles/model/get_pet_model.dart';
 import 'package:petsica/features/profiles/seller/view/seller_add_product_view.dart';
 import 'package:petsica/features/profiles/seller/view/seller_edit_pet_view.dart';
 import 'package:petsica/features/profiles/seller/view/seller_edit_product_view.dart';
@@ -235,8 +236,10 @@ abstract class AppRouter {
 
       GoRoute(
           path: kPetDetails,
-          builder: (context, state) => const PetDetailsView()),
-
+builder: (context, state) {
+    final pet = state.extra as GetPetModel;
+    return PetDetailsView(pet: pet);
+  },),
       GoRoute(
         path: kEditPet,
         builder: (context, state) => const EditPetView(),

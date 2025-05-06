@@ -55,4 +55,41 @@ class PetServices {
       throw Exception('فشل في جلب الحيوانات: ${response.statusCode}');
     }
   }
+
+
+
+
+  static Future<GetPetModel> getPetDetails(int petId) async {
+  final url = Uri.parse('http://petsica.runasp.net/api/pets/GetPetprofil/$petId');
+
+  final response = await sendAuthorizedRequest(
+    url: url,
+    method: 'GET',
+  );
+
+  if (response.statusCode == 200) {
+    final decoded = jsonDecode(response.body);
+    final petJson = decoded['value'];
+    return GetPetModel.fromJson(petJson);
+  } else {
+    throw Exception('❌❌Failed to get pet details: ${response.statusCode}');
+  }
+}
+
+
+static Future<void> petAdoptionToggleOn(int petId) async {
+    final url = Uri.parse('http://petsica.runasp.net/api/Pets/PetAdoptionToggle/$petId'); 
+    try {
+      final response = await sendAuthorizedRequest(url:url,method:  'POST'); 
+      if (response.statusCode == 200) {
+        log('Toggled Successfully');
+      } else {
+        log('Toggle Failed ${response.statusCode}');
+        Exception('❌❌Failed to Toggle Adoption: ${response.statusCode}');
+      }
+    } catch (e) {
+      log('Excption: $e');
+    }
+  }
+
 }
