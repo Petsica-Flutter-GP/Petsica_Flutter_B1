@@ -340,10 +340,10 @@ class AnimatedTextWriter extends StatelessWidget {
   }
 }
 
-class ChatScreen extends StatelessWidget {
+class ChatBScreen extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
 
-  ChatScreen({super.key});
+  ChatBScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,22 +1,21 @@
 // import 'package:flutter/material.dart';
-// import 'package:petsica/features/chatt/widget/chat_view_body.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:petsica/features/chatt/logic/chat_cubit.dart';
 
-// class ChatView extends StatelessWidget {
-//   final String senderId;
+// class CChatScreen extends StatelessWidget {
 //   final String receiverId;
+//   final String senderId;
 
-//   const ChatView({
-//     required this.senderId,
-//     required this.receiverId,
-//     super.key,
-//   });
+//   const ChatScreen({Key? key, required this.receiverId, required this.senderId}) : super(key: key);
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return ChatViewBody(
-//         senderId: senderId,
-//         receiverId: receiverId,
-//       );
-    
+//     return Scaffold(
+//       appBar: AppBar(title: Text('الدردشة')),
+//       body: BlocProvider(
+//         create: (_) => ChatCubit(receiverId, senderId),
+//         child: ChatScreenBody(),
+//       ),
+//     );
 //   }
 // }

@@ -1,35 +1,34 @@
-// // 📁 chat_message_model.dart
-// class ChatMessageModel {
-//   final int? messageID;
-//   final String clinicReceiverID;
-//   final String clinicSenderID;
-//   final String content;
-//   final String date;
+class MessageModel {
+  final int messageID;
+  final String clinicReceiverID;
+  final String clinicSenderID;
+  final String content;
+  final String date;
 
-//   ChatMessageModel({
-//     this.messageID,
-//     required this.clinicReceiverID,
-//     required this.clinicSenderID,
-//     required this.content,
-//     required this.date,
-//   });
+  MessageModel({
+    required this.messageID,
+    required this.clinicReceiverID,
+    required this.clinicSenderID,
+    required this.content,
+    required this.date,
+  });
 
-//   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
-//     return ChatMessageModel(
-//       messageID: json['messageID'],
-//       clinicReceiverID: json['clinicReceiverID'],
-//       clinicSenderID: json['clinicSenderID'],
-//       content: json['content'],
-//       date: json['date'],
-//     );
-//   }
+  factory MessageModel.fromJson(Map<String, dynamic> json) {
+    return MessageModel(
+      messageID: json['messageID'],
+      clinicReceiverID: json['clinicReceiverID'],
+      clinicSenderID: json['clinicSenderID'],
+      content: json['content'],
+      date:(json['date']),
+    );
+  }
 
-//   Map<String, dynamic> toJson() {
-//     return {
-//       "ClinicReceiverID": clinicReceiverID,
-//       "ClinicSenderID": clinicSenderID,
-//       "Content": content,
-//       "Date": date,
-//     };
-//   }
-// }
+  Map<String, dynamic> toJson() {
+    return {
+      'clinicReceiverID': clinicReceiverID,
+      'clinicSenderID': clinicSenderID,
+      'content': content,
+      'date': date,
+    };
+  }
+}

@@ -1,31 +1,43 @@
-// // 📁 chat_service.dart
-// import 'dart:convert';
-// import 'package:http/http.dart' as http;
-// import 'package:petsica/features/chatt/model/message_model.dart';
+import 'dart:convert';
 
-// class ChatService {
-//   static const String baseUrl = "http://petsica.runasp.net/api/Chats";
+import 'package:petsica/core/utils/send_Authorized_Request.dart';
+import 'package:petsica/features/chatt/model/message_model.dart';
 
-//   static Future<List<ChatMessageModel>> getMessages(String receiverId, String senderId) async {
-//     final url = Uri.parse("$baseUrl/get-messages/$receiverId/$senderId");
-//     final response = await http.get(url);
+class ChatService {
+  static Future<List<MessageModel>> getMessages({
+    required String receiverId,
+    required String senderId,
+  }) async {
+    final url = Uri.parse("http://petsica.runasp.net/api/Chats/get-messages/$receiverId/$senderId");
 
-//     if (response.statusCode == 200) {
-//       final List jsonList = json.decode(response.body);
-//       return jsonList.map((json) => ChatMessageModel.fromJson(json)).toList();
-//     } else {
-//       throw Exception("Failed to fetch messages");
-//     }
-//   }
+    final response = await sendAuthorizedRequest(
+      url: url,
+      method: 'GET',
+    );
 
-//   static Future<bool> sendMessage(ChatMessageModel message) async {
-//     final url = Uri.parse("$baseUrl/send-message");
-//     final response = await http.post(
-//       url,
-//       headers: {"Content-Type": "application/json"},
-//       body: json.encode(message.toJson()),
-//     );
+    if (response.statusCode == 200) {
+      final List data = json.decode(response.body);
+      return data.map((e) => MessageModel.fromJson(e)).toList();
+    } else {
+      throw Exception("فشل تحميل الرسائل");
+    }
+  }
 
-//     return response.statusCode == 200;
-//   }
-// }
+  static Future<void> sendMessage({
+    required MessageModel message,
+  }) async {
+    final url = Uri.parse("http://petsica.runasp.net/api/Chats/send-message");
+
+    final body = json.encode(message.toJson());
+
+    final response = await sendAuthorizedRequest(
+      url: url,
+      method: 'POST',
+      body: body,
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception("فشل إرسال الرسالة");
+    }
+  }
+}

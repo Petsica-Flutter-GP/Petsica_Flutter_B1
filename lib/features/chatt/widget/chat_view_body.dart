@@ -1,101 +1,103 @@
-
-// // 📁 chat_screen.dart
 // import 'package:flutter/material.dart';
-// import 'package:petsica/features/chatt/model/message_model.dart';
-// import 'package:petsica/features/chatt/services/chat_services.dart';
-// import 'package:petsica/features/chatt/services/chat_web_socket_services.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:petsica/features/chatt/logic/chat_cubit.dart';
+// import 'package:petsica/features/chatt/logic/chat_state.dart';
 
-// class ChatViewBody extends StatefulWidget {
-//   final String senderId;
+// class CChatScreenBody extends StatefulWidget {
 //   final String receiverId;
+//   final String senderId;
 
-//   const ChatViewBody({required this.senderId, required this.receiverId, super.key});
+//   const CChatScreenBody({
+//     super.key,
+//     required this.receiverId,
+//     required this.senderId,
+//   });
 
 //   @override
-//   State<ChatViewBody> createState() => _ChatViewBodyState();
+//   State<CChatScreenBody> createState() => _CChatScreenBodyState();
 // }
 
-// class _ChatViewBodyState extends State<ChatViewBody> {
+// class _CChatScreenBodyState extends State<CChatScreenBody> {
 //   final TextEditingController _controller = TextEditingController();
-//   late ChatWebSocketService _webSocketService;
-//   List<ChatMessageModel> messages = [];
 
 //   @override
 //   void initState() {
 //     super.initState();
-//     _webSocketService = ChatWebSocketService(userId: widget.senderId);
-//     fetchMessages();
-//     _webSocketService.getMessageStream().listen((msg) {
-//       if ((msg.clinicSenderID == widget.receiverId && msg.clinicReceiverID == widget.senderId) ||
-//           (msg.clinicSenderID == widget.senderId && msg.clinicReceiverID == widget.receiverId)) {
-//         setState(() => messages.add(msg));
-//       }
-//     });
-//   }
-
-//   Future<void> fetchMessages() async {
-//     try {
-//       final msgs = await ChatService.getMessages(widget.receiverId, widget.senderId);
-//       setState(() => messages = msgs);
-//     } catch (e) {
-//       print("Error fetching messages: $e");
-//     }
-//   }
-
-//   void sendMessage() {
-//     if (_controller.text.isEmpty) return;
-//     final message = ChatMessageModel(
-//       clinicSenderID: widget.senderId,
-//       clinicReceiverID: widget.receiverId,
-//       content: _controller.text.trim(),
-//       date: DateTime.now().toIso8601String(),
-//     );
-//     _controller.clear();
-//     _webSocketService.sendMessage(message);
-//   }
-
-//   @override
-//   void dispose() {
-//     _webSocketService.dispose();
-//     super.dispose();
+//     context.read<ChatCubit>().loadMessages(
+//           receiverId: widget.receiverId,
+//           senderId: widget.senderId,
+//         );
 //   }
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text("الرسائل")),
-//       body: Column(
-//         children: [
-//           Expanded(
-//             child: ListView.builder(
-//               reverse: true,
-//               itemCount: messages.length,
-//               itemBuilder: (_, index) {
-//                 final msg = messages[messages.length - index - 1];
-//                 final isMine = msg.clinicSenderID == widget.senderId;
-//                 return Align(
-//                   alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
-//                   child: Container(
-//                     margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-//                     padding: const EdgeInsets.all(10),
-//                     decoration: BoxDecoration(
-//                       color: isMine ? Colors.green[100] : Colors.grey[200],
-//                       borderRadius: BorderRadius.circular(12),
-//                     ),
-//                     child: Text(msg.content),
-//                   ),
+//     return Column(
+//       children: [
+//         Expanded(
+//           child: BlocBuilder<ChatCubit, ChatState>(
+//             builder: (context, state) {
+//               if (state is ChatLoading) {
+//                 return const Center(child: CircularProgressIndicator());
+//               } else if (state is ChatLoaded) {
+//                 return ListView.builder(
+//                   reverse: true,
+//                   itemCount: state.messages.length,
+//                   itemBuilder: (context, index) {
+//                     final message =
+//                         state.messages[state.messages.length - 1 - index];
+//                     final isMe = message.clinicSenderID == widget.senderId;
+//                     return Align(
+//                       alignment:
+//                           isMe ? Alignment.centerRight : Alignment.centerLeft,
+//                       child: Container(
+//                         margin: const EdgeInsets.symmetric(
+//                             vertical: 4, horizontal: 8),
+//                         padding: const EdgeInsets.all(12),
+//                         decoration: BoxDecoration(
+//                           color: isMe ? Colors.green[100] : Colors.grey[300],
+//                           borderRadius: BorderRadius.circular(12),
+//                         ),
+//                         child: Text(message.content),
+//                       ),
+//                     );
+//                   },
 //                 );
-//               },
-//             ),
+//               } else if (state is ChatError) {
+//                 return Center(child: Text("خطأ: ${state.message}"));
+//               } else {
+//                 return Container();
+//               }
+//             },
 //           ),
-//           Row(
+//         ),
+//         Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+//           child: Row(
 //             children: [
-//               Expanded(child: TextField(controller: _controller)),
-//               IconButton(icon: const Icon(Icons.send), onPressed: sendMessage),
+//               Expanded(
+//                 child: TextField(
+//                   controller: _controller,
+//                   decoration: const InputDecoration(hintText: 'اكتب رسالة...'),
+//                 ),
+//               ),
+//               IconButton(
+//                 icon: const Icon(Icons.send),
+//                 onPressed: () {
+//                   final text = _controller.text.trim();
+//                   if (text.isNotEmpty) {
+//                     context.read<ChatCubit>().sendMessage(
+//                           receiverId: widget.receiverId,
+//                           senderId: widget.senderId,
+//                           content: text,
+//                         );
+//                     _controller.clear();
+//                   }
+//                 },
+//               )
 //             ],
-//           )
-//         ],
-//       ),
+//           ),
+//         ),
+//       ],
 //     );
 //   }
 // }
