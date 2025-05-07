@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
-import 'package:petsica/features/chatt/view/chat_view.dart';
+import 'package:petsica/features/chatBoot/widgets/message_bubble.dart';
+import 'package:petsica/features/chatt/chatapp.dart';
 import 'package:petsica/features/community/views/publish_post_view.dart';
 import 'package:petsica/core/utils/home.dart';
 import 'package:petsica/features/chatBoot/views/chat_boot_onboarding_view.dart';
@@ -69,7 +70,7 @@ abstract class AppRouter {
   static const kUserSignUp = '/userSignUp';
   static const kUserProfile = '/userProfile';
   static const kUserSettings = '/userSettings';
-  
+
   // pets part
   static const kMyPet = '/myPet';
   static const kPetDetails = '/petDetails';
@@ -119,7 +120,7 @@ abstract class AppRouter {
   static const kChatBoot = '/chatBoot';
 
 //chat
-  static const kChat = '/chat';
+  static const kSignalRChatApp = '/signalRChatApp';
 
   //community
   static const kCommunityChat = '/communityChat';
@@ -139,6 +140,10 @@ abstract class AppRouter {
       GoRoute(
         path: '/',
         builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: kSignalRChatApp,
+        builder: (context, state) => const SignalRChatApp(),
       ),
       GoRoute(
         path: kOnboarding,
@@ -235,11 +240,12 @@ abstract class AppRouter {
       ),
 
       GoRoute(
-          path: kPetDetails,
-builder: (context, state) {
-    final pet = state.extra as GetPetModel;
-    return PetDetailsView(pet: pet);
-  },),
+        path: kPetDetails,
+        builder: (context, state) {
+          final pet = state.extra as GetPetModel;
+          return PetDetailsView(pet: pet);
+        },
+      ),
       GoRoute(
         path: kEditPet,
         builder: (context, state) => const EditPetView(),
@@ -345,11 +351,14 @@ builder: (context, state) {
 //     );
 //   },
 // ),
-
-      // GoRoute(
-      //   path: kCommunityChat,
-      //   builder: (context, state) => const CommunityChatView(),
-      // ),
+// GoRoute(
+//         path: '/chat',
+//         name: 'chat',
+//         builder: (context, state) {
+//           final receiverId = state.uri.queryParameters['receiverId']!;
+//           final senderId = state.uri.queryParameters['senderId']!;
+//           return CChatScreen(receiverId: receiverId, senderId: senderId);
+//         },),
     ],
   );
 }

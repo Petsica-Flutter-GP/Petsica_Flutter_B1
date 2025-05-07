@@ -32,6 +32,7 @@ dependencies:
   shared_preferences: ^2.5.3
   shared_preferences_android: ^2.4.6
   shimmer: ^3.0.0
+  signalr_netcore: ^1.4.3
   typewritertext: ^3.0.9
   web_socket_channel: ^3.0.3
 
