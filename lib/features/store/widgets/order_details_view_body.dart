@@ -7,7 +7,6 @@ import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/store/cubit/ordersC/userOrderDetails/userorderdetails_cubit.dart';
 import 'package:petsica/features/store/cubit/ordersC/userOrderDetails/userorderdetails_state.dart';
-import 'package:petsica/features/store/cubit/ordersC/userorder/userorder_cubit.dart';
 import 'package:petsica/features/store/models/order_model.dart';
 import 'package:petsica/features/store/models/user_order_model.dart';
 
@@ -26,7 +25,6 @@ class _OrderDetailsViewBodyState extends State<OrderDetailsViewBody>
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
-  @override
   @override
   void initState() {
     super.initState();
@@ -47,7 +45,7 @@ class _OrderDetailsViewBodyState extends State<OrderDetailsViewBody>
 
     _animationController.forward();
 
-    // هنا نستخدم الـ orderID اللي جاي من بره
+    // Fetch user order details from the API using orderID
     context.read<UserOrderDetailsCubit>().fetchUserOrder(widget.orderID);
   }
 
@@ -80,6 +78,9 @@ class _OrderDetailsViewBodyState extends State<OrderDetailsViewBody>
             return const Center(child: CircularProgressIndicator());
           } else if (state is UserOrderDetailsLoaded) {
             final order = state.order;
+            int totalQuantity =
+                order.orderItems.fold(0, (sum, item) => sum + item.quantity);
+
             return SingleChildScrollView(
               padding: EdgeInsets.symmetric(
                 horizontal: screenWidth > 600 ? screenWidth * 0.15 : 16,
@@ -88,20 +89,20 @@ class _OrderDetailsViewBodyState extends State<OrderDetailsViewBody>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 🛒 رقم الطلب والسعر
+                  // Order #
                   _buildOrderHeader(order.orderID.toString(), order.totalPrice),
                   const SizedBox(height: 20),
                   const Divider(thickness: 1.2),
                   const SizedBox(height: 20),
 
-                  // 🏠 العنوان
+                  // 🏠 Address
                   _buildInfoRow(
                     icon: Icons.location_on_outlined,
                     text: order.address,
                   ),
                   const SizedBox(height: 16),
 
-                  // 🕒 التاريخ
+                  // 🕒 Date
                   _buildInfoRow(
                     icon: Icons.calendar_today_outlined,
                     text: DateFormat('dd MMM yyyy, hh:mm a').format(
@@ -110,7 +111,14 @@ class _OrderDetailsViewBodyState extends State<OrderDetailsViewBody>
                   ),
                   const SizedBox(height: 16),
 
-                  // 🔄 الحالة مع AnimatedContainer
+                  // 📞 Phone Number
+                  _buildInfoRow(
+                    icon: Icons.phone_outlined,
+                    text: order.phoneNumber,
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 🔄 AnimatedContainer state
                   _buildStatusRow(order.status),
                   const SizedBox(height: 30),
 
@@ -118,6 +126,12 @@ class _OrderDetailsViewBodyState extends State<OrderDetailsViewBody>
                   Text(
                     'Products:',
                     style: Styles.textStyleQui28,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Total Quantity: $totalQuantity',
+                    style: Styles.textStyleCom18
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
 
@@ -227,8 +241,98 @@ class _OrderDetailsViewBodyState extends State<OrderDetailsViewBody>
               ),
             ),
           ),
+          Text(
+            "\$${(product.price * product.quantity).toStringAsFixed(2)}",
+            style: Styles.textStyleQui18.copyWith(color: Colors.green),
+          ),
         ],
       ),
     );
   }
+}
+
+Widget _buildOrderHeader(String orderId, double totalPrice) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text(
+        "Order #$orderId",
+        style: Styles.textStyleQui28,
+      ),
+      Text(
+        "\$${totalPrice.toStringAsFixed(2)}",
+        style: Styles.textStyleQui20.copyWith(color: Colors.green),
+      ),
+    ],
+  );
+}
+
+Widget _buildInfoRow({required IconData icon, required String text}) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Icon(icon, size: 28, color: kProductTxtColor),
+      const SizedBox(width: 8),
+      Expanded(
+        child: Text(
+          text,
+          style: Styles.textStyleCom18,
+        ),
+      ),
+    ],
+  );
+}
+
+Widget _buildStatusRow(bool status) {
+  return Row(
+    children: [
+      AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: status
+              ? Colors.green.withOpacity(0.2)
+              : Colors.orange.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              Icons.info_outline,
+              size: 22,
+              color: status ? Colors.green : Colors.orange,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              status ? 'Completed' : 'Pending',
+              style: Styles.textStyleCom16.copyWith(
+                color: status ? Colors.green : Colors.orange,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
+Widget _buildProductItem(OrderItemModel product) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 6),
+    child: Row(
+      children: [
+        const Icon(Icons.check_circle_outline, size: 30, color: Colors.grey),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            "- ${product.productName} x${product.quantity}",
+            style: Styles.textStyleCom20.copyWith(
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }

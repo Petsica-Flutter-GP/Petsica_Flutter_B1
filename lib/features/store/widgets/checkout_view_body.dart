@@ -8,12 +8,9 @@ import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/store/cubit/ordersC/userorder/userorder_cubit.dart';
 import 'package:petsica/features/store/cubit/ordersC/userorder/userorder_state.dart';
-import 'package:petsica/features/store/models/user_order_model.dart'; // علشان تنسيق التاريخ
-import 'package:petsica/features/store/views/order_details_view.dart';
+import 'package:petsica/features/store/models/user_order_model.dart'; // For date formatting
 import 'package:petsica/features/store/views/order_details_view.dart';
 import 'package:shimmer/shimmer.dart';
-
-import '../views/order_details_view.dart'; // تأكد من إضافة المكتبة
 
 class CheckOutViewBody extends StatelessWidget {
   const CheckOutViewBody({super.key});
@@ -26,16 +23,15 @@ class CheckOutViewBody extends StatelessWidget {
         title: Text('My Orders', style: Styles.textStyleQu28),
         centerTitle: true,
       ),
-      body: BlocBuilder<UserOrderCubit, UserOrderState>(
+      body: BlocBuilder<UserOrderCubit, UserOrderState>(  // BlocConsumer can also be used if needed for side effects
         builder: (context, state) {
           if (state is UserOrderLoading) {
-            // استخدام Shimmer بدل CircularProgressIndicator
+            // Shimmer for loading state
             return ListView.builder(
-              itemCount: 5, // عدد العناصر التي ستظهر أثناء التحميل
+              itemCount: 5, // Show 5 loading items
               itemBuilder: (context, index) {
                 return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: Shimmer.fromColors(
                     baseColor: Colors.grey[300]!,
                     highlightColor: Colors.grey[100]!,
@@ -53,24 +49,18 @@ class CheckOutViewBody extends StatelessWidget {
             );
           } else if (state is UserOrderLoaded) {
             if (state.orders.isEmpty) {
-              return const Center(
-                child: Text('No orders found.'),
-              );
+              return const Center(child: Text('No orders found.'));
             }
             return ListView.builder(
               itemCount: state.orders.length,
               itemBuilder: (context, index) {
                 final UserOrderModel order = state.orders[index];
                 return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(15),
                     onTap: () {
-                      GoRouter.of(context).go(
-                        AppRouter.kOrderDetails,
-                        extra: order.orderID
-                      );
+                      GoRouter.of(context).go(AppRouter.kOrderDetails, extra: order.orderID);
                     },
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -82,7 +72,7 @@ class CheckOutViewBody extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 🛒 رقم الطلب وسعره
+                            // 🛒 Order number and price
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -92,18 +82,16 @@ class CheckOutViewBody extends StatelessWidget {
                                 ),
                                 Text(
                                   "\$${order.totalPrice.toStringAsFixed(2)}",
-                                  style: Styles.textStyleQui18
-                                      .copyWith(color: Colors.green),
+                                  style: Styles.textStyleQui18.copyWith(color: Colors.green),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 8),
 
-                            // 🏠 العنوان
+                            // 🏠 Address
                             Row(
                               children: [
-                                const Icon(Icons.location_on_outlined,
-                                    size: 22),
+                                const Icon(Icons.location_on_outlined, size: 22),
                                 const SizedBox(width: 5),
                                 Expanded(
                                   child: Text(
@@ -116,11 +104,10 @@ class CheckOutViewBody extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
 
-                            // 🕒 التاريخ
+                            // 🕒 Date
                             Row(
                               children: [
-                                const Icon(Icons.calendar_today_outlined,
-                                    size: 18),
+                                const Icon(Icons.calendar_today_outlined, size: 18),
                                 const SizedBox(width: 5),
                                 Text(
                                   DateFormat('dd MMM yyyy, hh:mm a').format(
@@ -130,11 +117,9 @@ class CheckOutViewBody extends StatelessWidget {
                                 ),
                               ],
                             ),
-
                             const SizedBox(height: 8),
 
-                            // 🔄 الحالة
-                            // 🔄 الحالة
+                            // 🔄 Status
                             Row(
                               children: [
                                 const Icon(Icons.info_outline, size: 22),
@@ -142,16 +127,14 @@ class CheckOutViewBody extends StatelessWidget {
                                 Text(
                                   order.status ? 'Completed' : 'Pending',
                                   style: Styles.textStyleCom14.copyWith(
-                                    color: order.status
-                                        ? Colors.green
-                                        : Colors.orange,
+                                    color: order.status ? Colors.green : Colors.orange,
                                   ),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 10),
 
-                            // 👇 زرار الإلغاء لو الطلب Pending
+                            // 👇 Cancel button if order is Pending
                             if (!order.status)
                               Align(
                                 alignment: Alignment.centerRight,
@@ -170,28 +153,20 @@ class CheckOutViewBody extends StatelessWidget {
                                         actions: [
                                           TextButton(
                                             onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(); // تقفلي الـ Dialog لو اختارت No
+                                              Navigator.of(context).pop();
                                             },
-                                            child: Text('No',
-                                                style: Styles.textStyleCom16
-                                                    .copyWith(
-                                                  color: kProductTxtColor,
-                                                  decoration: TextDecoration
-                                                      .underline, // تحتها خط ✍️
-                                                )),
+                                            child: Text('No', style: Styles.textStyleCom16.copyWith(
+                                              color: kProductTxtColor,
+                                              decoration: TextDecoration.underline,
+                                            )),
                                           ),
                                           TextButton(
                                             onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(); // تقفلي الـ Dialog
-                                              // وبعدها تعملي كود إلغاء الطلب نفسه لو عندك API
+                                              Navigator.of(context).pop();
+                                              // Cancel the order with API call here
                                             },
-                                            child: Text('yes',
-                                                style: Styles.textStyleCom16
-                                                    .copyWith(
-                                                        color:
-                                                            kProductTxtColor)),
+                                            child: Text('Yes', style: Styles.textStyleCom16.copyWith(
+                                              color: kProductTxtColor)),
                                           ),
                                         ],
                                       ),
@@ -199,31 +174,24 @@ class CheckOutViewBody extends StatelessWidget {
                                   },
                                   child: Text(
                                     'Cancel Order',
-                                    style: Styles.textStyleCom14
-                                        .copyWith(color: kWhiteGroundColor),
+                                    style: Styles.textStyleCom14.copyWith(color: kWhiteGroundColor),
                                   ),
                                 ),
                               ),
-
                             const SizedBox(height: 10),
 
-                            // 🛍️ المنتجات المختصرة
+                            // 🛍️ Products list
                             if (order.orderItems.isNotEmpty)
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Products:',
-                                    style: Styles.textStyleQui20,
-                                  ),
+                                  Text('Products:', style: Styles.textStyleQui20),
                                   const SizedBox(height: 5),
                                   ...order.orderItems.map((item) => Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 4),
+                                        padding: const EdgeInsets.only(bottom: 4),
                                         child: Text(
                                           '- ${item.productName}   x${item.quantity}',
-                                          style: Styles.textStyleCom16.copyWith(
-                                              fontWeight: FontWeight.w500),
+                                          style: Styles.textStyleCom16.copyWith(fontWeight: FontWeight.w500),
                                         ),
                                       )),
                                 ],
