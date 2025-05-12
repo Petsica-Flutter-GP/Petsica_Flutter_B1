@@ -3,17 +3,16 @@ import 'package:petsica/features/store/cubit/ordersC/userorder/userorder_state.d
 import 'package:petsica/features/store/models/user_order_model.dart';
 import 'package:petsica/features/store/services/order_services.dart';
 
-
-class UserOrderCubit extends Cubit< UserOrderState> {
-   UserOrderCubit() : super( UserOrderInitial());
+class UserOrderCubit extends Cubit<UserOrderState> {
+  UserOrderCubit() : super(UserOrderInitial());
 
   Future<void> fetchUserOrders() async {
-    emit( UserOrderLoading());
+    emit(UserOrderLoading());
     try {
       final List<UserOrderModel> orders = await OrderService.getUserOrders();
-      emit( UserOrderLoaded(orders));
+      emit(UserOrderLoaded(orders));
     } catch (e) {
-      emit( UserOrderError(e.toString()));
+      emit(UserOrderError(e.toString()));
     }
   }
 }

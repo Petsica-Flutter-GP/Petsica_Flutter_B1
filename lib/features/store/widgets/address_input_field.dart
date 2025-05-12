@@ -6,7 +6,6 @@ import 'package:petsica/features/store/services/order_services.dart';
 import '../../../core/utils/app_button.dart';
 import '../../../../../core/constants.dart';
 
-/// 📍 Address Input Field
 class AddressInputField extends StatefulWidget {
   final String label;
   final TextEditingController? controller;
@@ -34,7 +33,7 @@ class _AddressInputFieldState extends State<AddressInputField> {
         controller: widget.controller,
         keyboardType: widget.keyboardType,
         minLines: 1,
-        maxLines: 5,
+        maxLines: widget.keyboardType == TextInputType.text ? 5 : 1,
         decoration: InputDecoration(
           filled: true,
           fillColor: kInputFieldBackgroundColor,
@@ -70,7 +69,6 @@ class _AddressInputFieldState extends State<AddressInputField> {
     );
   }
 
-  // ⬇️ هذه الدالة نخليها عامة عشان نستدعيها من بره
   void validate() {
     setState(() {
       _isRequired = widget.controller?.text.trim().isEmpty ?? true;
@@ -78,10 +76,14 @@ class _AddressInputFieldState extends State<AddressInputField> {
   }
 }
 
-/// 📍 Dialog to Confirm Address and Make Order
+/// 📍 Dialog to Confirm Address and Phone Number
 Future<dynamic> showDialogMessageCart(BuildContext context) {
   final TextEditingController addressController = TextEditingController();
-  final GlobalKey<_AddressInputFieldState> fieldKey =
+  final TextEditingController phoneController = TextEditingController();
+
+  final GlobalKey<_AddressInputFieldState> addressFieldKey =
+      GlobalKey<_AddressInputFieldState>();
+  final GlobalKey<_AddressInputFieldState> phoneFieldKey =
       GlobalKey<_AddressInputFieldState>();
 
   return showDialog(
@@ -92,13 +94,25 @@ Future<dynamic> showDialogMessageCart(BuildContext context) {
           borderRadius: BorderRadius.circular(15),
         ),
         title: const Text(
-          "Enter your address",
+          "Enter your address and phone number",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        content: AddressInputField(
-          key: fieldKey, // ✅ حطينا المفتاح هنا عشان نقدر نتحكم بالحقل
-          label: "Your Address",
-          controller: addressController,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AddressInputField(
+              key: addressFieldKey,
+              label: "Your Address",
+              controller: addressController,
+            ),
+            const SizedBox(height: 10),
+            AddressInputField(
+              key: phoneFieldKey,
+              label: "Phone Number",
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+            ),
+          ],
         ),
         actions: [
           Center(
@@ -109,17 +123,19 @@ Future<dynamic> showDialogMessageCart(BuildContext context) {
               height: 55,
               onTap: () async {
                 final address = addressController.text.trim();
+                final phoneNumber = phoneController.text.trim();
 
-                // ✅ استدعاء validate للحقل
-                fieldKey.currentState?.validate();
+                // ✅ استدعاء التحقق للحقلين
+                addressFieldKey.currentState?.validate();
+                phoneFieldKey.currentState?.validate();
 
-                if (address.isEmpty) {
-                  // لا تغلق الديالوج، بس بيّن الخطأ
+                if (address.isEmpty || phoneNumber.isEmpty) {
+                  // لا تغلق الديالوج، ولكن بيّن الخطأ
                   return;
                 }
 
                 try {
-                  await OrderService.makeOrder(address);
+                  await OrderService.makeOrder(address, phoneNumber);
                   Navigator.pop(context);
 
                   ScaffoldMessenger.of(context).showSnackBar(

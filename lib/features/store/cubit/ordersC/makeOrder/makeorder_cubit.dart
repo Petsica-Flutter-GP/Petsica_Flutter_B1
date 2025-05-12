@@ -6,10 +6,10 @@ import 'package:petsica/features/store/services/order_services.dart';
 class MakeOrderCubit extends Cubit<MakeOrderState> {
   MakeOrderCubit() : super(MakeOrderInitial());
 
-  Future<void> makeOrder(String address) async {
+  Future<void> makeOrder(String address, String phoneNumber) async {
     emit(MakeOrderLoading());
     try {
-      await OrderService.makeOrder(address);
+      await OrderService.makeOrder(address, phoneNumber);
       emit(MakeOrderSuccess());
     } catch (e) {
       log('Order Error: $e');

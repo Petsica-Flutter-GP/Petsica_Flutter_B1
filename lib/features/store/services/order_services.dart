@@ -4,14 +4,17 @@ import 'package:petsica/core/utils/send_Authorized_Request.dart';
 import 'package:petsica/features/store/models/user_order_model.dart';
 
 class OrderService {
-  static Future<void> makeOrder(String address) async {
+  static Future<void> makeOrder(String address, String phonenumber) async {
     final url = Uri.parse('http://petsica.runasp.net/api/orders/create');
 
     try {
       final response = await sendAuthorizedRequest(
         url: url,
         method: 'POST',
-        body: jsonEncode({'address': address}),
+        body: jsonEncode({
+          'address': address,
+          'phonenumber': phonenumber, // إضافة رقم الهاتف
+        }),
         headers: {'Content-Type': 'application/json'},
       );
 
@@ -29,66 +32,65 @@ class OrderService {
     }
   }
 
-
-
 //get user order
  static Future<List<UserOrderModel>> getUserOrders() async {
-    final url = Uri.parse('http://petsica.runasp.net/api/Orders/userorders');
+  final url = Uri.parse('http://petsica.runasp.net/api/Orders/userorders');
 
-    try {
-      final response = await sendAuthorizedRequest(
-        url: url,
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'},
-      );
+  try {
+    final response = await sendAuthorizedRequest(
+      url: url,
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
+    );
 
-      if (response.statusCode == 200) {
-        final List data = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final List data = jsonDecode(response.body);
 
-        final orders = data.map((order) => UserOrderModel.fromJson(order)).toList();
+      final orders = data.map((order) => UserOrderModel.fromJson(order)).toList();
 
-        print('✅ Orders fetched successfully');
-        return orders.cast<UserOrderModel>();
-      } else {
-        print('❌ فشل في جلب الطلبات: ${response.statusCode}');
-        print('تفاصيل الخطأ: ${response.body}');
-        throw Exception('❌ فشل في جلب الطلبات: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('❌ حدث خطأ أثناء جلب الطلبات: $e');
-      rethrow;
+      print('✅ Orders fetched successfully');
+      return orders.cast<UserOrderModel>();
+    } else {
+      print('❌ فشل في جلب الطلبات: ${response.statusCode}');
+      print('تفاصيل الخطأ: ${response.body}');
+      throw Exception('❌ فشل في جلب الطلبات: ${response.statusCode}');
     }
+  } catch (e) {
+    print('❌ حدث خطأ أثناء جلب الطلبات: $e');
+    rethrow;
   }
-
+}
 
   //get user order details
-  static Future<UserOrderModel> getUserOrderById(int orderID) async {
-    final url = Uri.parse('http://petsica.runasp.net/api/Orders/$orderID');
+ static Future<UserOrderModel> getUserOrderById(int orderID) async {
+  final url = Uri.parse('http://petsica.runasp.net/api/Orders/$orderID');
 
-    try {
-      final response = await sendAuthorizedRequest(
-        url: url,
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'},
-      );
+  try {
+    final response = await sendAuthorizedRequest(
+      url: url,
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
+    );
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
 
-        // تحويل البيانات إلى نموذج UserOrderModel
-        final order = UserOrderModel.fromJson(data);
+      // تحويل البيانات إلى نموذج UserOrderModel
+      final order = UserOrderModel.fromJson(data);
 
-        print('✅ Order fetched successfully');
-        return order;
-      } else {
-        print('❌ فشل في جلب الطلب: ${response.statusCode}');
-        print('تفاصيل الخطأ: ${response.body}');
-        throw Exception('❌ فشل في جلب الطلب: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('❌ حدث خطأ أثناء جلب الطلب: $e');
-      rethrow; // لإعادة رمي الخطأ بعد تسجيله
+      print('✅ Order fetched successfully');
+      return order;
+    } else {
+      print('❌ فشل في جلب الطلب: ${response.statusCode}');
+      print('تفاصيل الخطأ: ${response.body}');
+      throw Exception('❌ فشل في جلب الطلب: ${response.statusCode}');
     }
+  } catch (e) {
+    print('❌ حدث خطأ أثناء جلب الطلب: $e');
+    rethrow; // لإعادة رمي الخطأ بعد تسجيله
   }
+}
+
+
 
 }

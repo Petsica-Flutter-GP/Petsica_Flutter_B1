@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:http/http.dart' as http;
 import 'package:petsica/core/utils/send_Authorized_Request.dart';
 import 'package:petsica/features/store/models/cart_model.dart';
 
 import 'package:petsica/core/utils/send_Authorized_Request.dart';
 import 'package:petsica/features/store/models/cart_model.dart';
+import 'package:petsica/features/store/services/store_services.dart';
 
 class CartService {
   /// ✅ إضافة منتج إلى السلة
@@ -34,39 +36,95 @@ class CartService {
     }
   }
 
-  static Future<void> updateCartItem({
-    required int productId,
-    required int quantity,
-  }) async {
+  //   /// ✅ تحديث كمية المنتج في السلة
+  // static Future<void> updateCartItem({
+  //   required int productId,
+  //   required int quantity,
+  // }) async {
+  //   try {
+  //     // ✅ جلب بيانات المنتج للتحقق من الكمية المتاحة
+  //     final product = await StoreService.getProductByID(productId);
+
+  //     // ✅ التحقق من أن الكمية المطلوبة أقل من الكمية المتاحة
+  //     if (quantity > product.quantity) {
+  //       throw Exception(
+  //           'لا يمكن طلب كمية أكبر من المتاحة: ${product.quantity}');
+  //     }
+
+  //     final url = Uri.parse('http://petsica.runasp.net/api/Carts/update');
+
+  //     final response = await sendAuthorizedRequest(
+  //       url: url,
+  //       method: 'PUT',
+  //       body: jsonEncode({
+  //         "productId": productId,
+  //         "quantity": quantity,
+  //       }),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     );
+
+  //     // طباعة response body في حالة نجاح الطلب
+  //     log('@@@@@@Response Body: ${response.body}');
+
+  //     if (response.statusCode == 200) {
+  //       return;
+  //     } else {
+  //       throw Exception('فشل في تحديث المنتج: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     // طباعة الاستثناء في حالة حدوث أي خطأ
+  //     print('Error: $e');
+  //     rethrow; // لإعادة رمي الاستثناء
+  //   }
+  // }
+
+/// ✅ تحديث كمية المنتج في السلة
+static Future<http.Response> updateCartItem({
+  required int productId,
+  required int quantity,
+}) async {
+  try {
+    // ✅ جلب بيانات المنتج للتحقق من الكمية المتاحة
+    final product = await StoreService.getProductByID(productId);
+
+    // ✅ التحقق من أن الكمية المطلوبة أقل من الكمية المتاحة
+    if (quantity > product.quantity) {
+      throw Exception(
+          'لا يمكن طلب كمية أكبر من المتاحة: ${product.quantity}');
+    }
+
     final url = Uri.parse('http://petsica.runasp.net/api/Carts/update');
 
-    try {
-      final response = await sendAuthorizedRequest(
-        url: url,
-        method: 'PUT',
-        body: jsonEncode({
-          "productId": productId,
-          "quantity": quantity,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      );
+    final response = await sendAuthorizedRequest(
+      url: url,
+      method: 'PUT',
+      body: jsonEncode({
+        "productId": productId,
+        "quantity": quantity,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
 
-      // طباعة response body في حالة نجاح الطلب
-      log('@@@@@@Response Body: ${response.body}');
+    // طباعة response body في حالة نجاح الطلب
+    log('@@@@@@Response Body: ${response.body}');
 
-      if (response.statusCode == 200) {
-        return;
-      } else {
-        throw Exception('Updated Successfuly ${response.statusCode}');
-      }
-    } catch (e) {
-      // طباعة الاستثناء في حالة حدوث أي خطأ
-      print('Error: $e');
-      rethrow; // لإعادة رمي الاستثناء علشان يتعامل معه في الكيوبت
+    if (response.statusCode == 200) {
+      return response; // إرجاع الاستجابة في حال نجاح التحديث
+    } else {
+      throw Exception('فشل في تحديث المنتج: ${response.statusCode}');
     }
+  } catch (e) {
+    // طباعة الاستثناء في حالة حدوث أي خطأ
+    print('Error: $e');
+    rethrow; // لإعادة رمي الاستثناء
   }
+}
+
+
 
   /// ✅ جلب كل عناصر السلة
   static Future<CartResponseModel> getCartItems() async {
