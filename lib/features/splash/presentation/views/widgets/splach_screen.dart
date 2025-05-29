@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsica/core/utils/taken_storage.dart';
@@ -13,6 +14,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Timer? _refreshTimer;
+
   @override
   void initState() {
     super.initState();
@@ -32,18 +35,33 @@ class _SplashScreenState extends State<SplashScreen> {
         final newAccessToken = await TokenStorage.getAccessToken();
         final roles = TokenDecoder.getRoles(newAccessToken!);
 
+        _startPeriodicTokenRefresh();
+
         if (roles.contains('ADMIN')) {
           context.go('/adminDashboard');
         } else {
-          context.go(AppRouter.kPost);
+          context.go(AppRouter.kHome);
         }
       } else {
-        await TokenStorage.clearTokens();
-        context.go(AppRouter.kOnboarding);
+        // Don't clear tokens immediately, allow app to retry later
+        context.go(AppRouter.kHome); // fallback to home, not onboarding
       }
     } else {
       context.go(AppRouter.kOnboarding);
     }
+  }
+
+  void _startPeriodicTokenRefresh() {
+    _refreshTimer?.cancel();
+    _refreshTimer = Timer.periodic(const Duration(minutes: 20), (_) async {
+      await TokenRefresher.refreshToken();
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
   }
 
   @override

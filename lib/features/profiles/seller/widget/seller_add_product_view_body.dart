@@ -246,7 +246,7 @@ import 'package:petsica/features/profiles/seller/cubit/add/add_product_cubit.dar
 import 'package:petsica/features/profiles/seller/services/product_services.dart';
 import 'package:petsica/features/profiles/seller/widget/seller_camera_placeholder.dart';
 import 'package:petsica/features/profiles/widgets/app_drop_down_button.dart';
-import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
+import 'package:petsica/features/Login/presentation/views/widgets/input_field.dart';
 import 'package:petsica/features/profiles/seller/cubit/add/add_product_cubit_state.dart';
 
 class SellerAddProductViewBody extends StatefulWidget {

@@ -2,13 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/styles.dart';
-import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
+import 'package:petsica/features/Login/presentation/views/widgets/input_field.dart';
 import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
 import 'package:petsica/services/signup/auth_service_user.dart';
 import '../../../../../core/utils/app_router.dart';
 import '../../../../../core/utils/app_arrow_back.dart';
-import '../../../../registeration/presentation/views/widgets/login_word.dart';
-import '../../../../registeration/presentation/views/widgets/password_field.dart';
+import '../../../../Login/presentation/views/widgets/login_word.dart';
+import '../../../../Login/presentation/views/widgets/password_field.dart';
 import '../../../../../core/constants.dart';
 
 class UserSignUpViewBody extends StatefulWidget {

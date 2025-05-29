@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:petsica/features/community/views/home_page.dart';
 import 'package:petsica/features/community/views/publish_post_view.dart';
 import 'package:petsica/core/utils/home.dart';
 import 'package:petsica/features/chatBoot/views/chat_boot_onboarding_view.dart';
@@ -41,7 +42,7 @@ import 'package:petsica/features/signup/presentation/views/seller/seller_signup_
 import 'package:petsica/features/signup/presentation/views/user/user_signup_view.dart';
 import 'package:petsica/features/splash/presentation/views/widgets/splach_screen.dart';
 import 'package:petsica/features/onboarding/presentation/views/onboarding.dart';
-import 'package:petsica/features/registeration/presentation/views/welcome_back_view.dart';
+import 'package:petsica/features/Login/presentation/views/login_view.dart';
 import 'package:petsica/features/store/views/cart_view.dart';
 import 'package:petsica/features/store/views/checkout_view.dart';
 import 'package:petsica/features/store/views/order_details_view.dart';
@@ -130,6 +131,7 @@ abstract class AppRouter {
   //community
   static const kCommunityChat = '/communityChat';
   static const kPost = '/Post';
+  static const kHome = '/Home';
 
 
   //other
@@ -140,8 +142,8 @@ abstract class AppRouter {
   //routes
   static final router = GoRouter(
 
-    //  initialLocation: '/', // البداية من SplashScreen
-    initialLocation: kWelcomeBack,
+    initialLocation: '/', // البداية من SplashScreen
+    //initialLocation: kWelcomeBack,
 
     routes: [
       GoRoute(
@@ -297,6 +299,11 @@ GoRoute(
       GoRoute(
         path: kPost,
         builder: (context, state) => const PublishPostView(),
+
+      ),
+      GoRoute(
+        path: kHome,
+        builder: (context, state) => const HomePage(),
 
       ),
       GoRoute(

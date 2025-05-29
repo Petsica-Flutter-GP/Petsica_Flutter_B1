@@ -1,10 +1,10 @@
-// services/auth_service.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:petsica/core/utils/taken_storage.dart';
 import 'package:petsica/services/signup/auth_response_model.dart';
 
 class AuthService {
-  static const String _loginUrl = 'http://petsica.runasp.net/Auth/Login'; // Replace with your actual endpoint
+  static const String _loginUrl = 'http://petsica.runasp.net/Auth/Login';
 
   static Future<LoginResponse?> login(String email, String password) async {
     final response = await http.post(
@@ -14,7 +14,13 @@ class AuthService {
     );
 
     if (response.statusCode == 200) {
-      return LoginResponse.fromJson(jsonDecode(response.body));
+      final loginResponse = LoginResponse.fromJson(jsonDecode(response.body));
+      await TokenStorage.saveTokens(
+        accessToken: loginResponse.token,
+        refreshToken: loginResponse.refreshToken,
+        userId: loginResponse.id,
+      );
+      return loginResponse;
     } else {
       print('Login failed: ${response.body}');
       return null;
