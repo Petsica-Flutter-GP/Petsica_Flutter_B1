@@ -314,9 +314,14 @@ abstract class AppRouter {
         builder: (context, state) => const SellerOrdersView(),
       ),
       GoRoute(
-        path: kSellerOrderDetails,
-        builder: (context, state) => const SellerOrdersDetailsView(),
-      ),
+  path: kSellerOrderDetails,
+  builder: (context, state) {
+    final orderId = state.extra as int; 
+    return SellerOrdersDetailsView(orderId: orderId);
+  },
+),
+
+
       GoRoute(
         path: kAdminSellerRequests,
         builder: (context, state) => const AdminSellerRequestsView(),
