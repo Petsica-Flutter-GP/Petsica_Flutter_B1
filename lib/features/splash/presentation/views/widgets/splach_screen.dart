@@ -40,11 +40,11 @@ class _SplashScreenState extends State<SplashScreen> {
         if (roles.contains('ADMIN')) {
           context.go('/adminDashboard');
         } else {
-          context.go(AppRouter.kHome);
+          context.go(AppRouter.kPost);
         }
       } else {
         // Don't clear tokens immediately, allow app to retry later
-        context.go(AppRouter.kHome); // fallback to home, not onboarding
+        context.go(AppRouter.kPost); // fallback to home, not onboarding
       }
     } else {
       context.go(AppRouter.kOnboarding);

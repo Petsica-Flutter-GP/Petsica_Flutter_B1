@@ -33,7 +33,6 @@ import 'package:petsica/features/profiles/sitter/view/sitter_new_services_view.d
 import 'package:petsica/features/profiles/sitter/view/sitter_edit_services_view.dart';
 import 'package:petsica/features/profiles/sitter/view/sitter_pet_details_view.dart';
 import 'package:petsica/features/profiles/sitter/view/sitter_profile_view.dart';
-import 'package:petsica/features/profiles/sitter/widget/sitter_add_pet_view.dart';
 import 'package:petsica/features/profiles/sitter/widget/sitter_settings_page.dart';
 import 'package:petsica/features/profiles/views/add_pet_view.dart';
 import 'package:petsica/features/profiles/views/edit_pet_view.dart';
