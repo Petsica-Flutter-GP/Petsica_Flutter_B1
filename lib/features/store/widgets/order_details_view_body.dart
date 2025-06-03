@@ -140,9 +140,25 @@ class _OrderDetailsViewBodyState extends State<OrderDetailsViewBody>
                     child: SlideTransition(
                       position: _slideAnimation,
                       child: Column(
-                        children: order.orderItems
-                            .map((product) => _buildProductItem(product))
-                            .toList(),
+                        children:
+                            List.generate(order.orderItems.length, (index) {
+                          final product = order.orderItems[index];
+                          return AnimatedBuilder(
+                            animation: _animationController,
+                            builder: (context, child) {
+                              final animationValue =
+                                  (_animationController.value - (index * 0.1))
+                                      .clamp(0.0, 1.0);
+                              return Opacity(
+                                opacity: animationValue,
+                                child: Transform.translate(
+                                  offset: Offset(0, 20 * (1 - animationValue)),
+                                  child: _buildProductItem(product),
+                                ),
+                              );
+                            },
+                          );
+                        }),
                       ),
                     ),
                   ),
@@ -251,88 +267,88 @@ class _OrderDetailsViewBodyState extends State<OrderDetailsViewBody>
   }
 }
 
-Widget _buildOrderHeader(String orderId, double totalPrice) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(
-        "Order #$orderId",
-        style: Styles.textStyleQui28,
-      ),
-      Text(
-        "\$${totalPrice.toStringAsFixed(2)}",
-        style: Styles.textStyleQui20.copyWith(color: Colors.green),
-      ),
-    ],
-  );
-}
+// Widget _buildOrderHeader(String orderId, double totalPrice) {
+//   return Row(
+//     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//     children: [
+//       Text(
+//         "Order #$orderId",
+//         style: Styles.textStyleQui28,
+//       ),
+//       Text(
+//         "\$${totalPrice.toStringAsFixed(2)}",
+//         style: Styles.textStyleQui20.copyWith(color: Colors.green),
+//       ),
+//     ],
+//   );
+// }
 
-Widget _buildInfoRow({required IconData icon, required String text}) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Icon(icon, size: 28, color: kProductTxtColor),
-      const SizedBox(width: 8),
-      Expanded(
-        child: Text(
-          text,
-          style: Styles.textStyleCom18,
-        ),
-      ),
-    ],
-  );
-}
+// Widget _buildInfoRow({required IconData icon, required String text}) {
+//   return Row(
+//     crossAxisAlignment: CrossAxisAlignment.start,
+//     children: [
+//       Icon(icon, size: 28, color: kProductTxtColor),
+//       const SizedBox(width: 8),
+//       Expanded(
+//         child: Text(
+//           text,
+//           style: Styles.textStyleCom18,
+//         ),
+//       ),
+//     ],
+//   );
+// }
 
-Widget _buildStatusRow(bool status) {
-  return Row(
-    children: [
-      AnimatedContainer(
-        duration: const Duration(milliseconds: 500),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: status
-              ? Colors.green.withOpacity(0.2)
-              : Colors.orange.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.info_outline,
-              size: 22,
-              color: status ? Colors.green : Colors.orange,
-            ),
-            const SizedBox(width: 6),
-            Text(
-              status ? 'Completed' : 'Pending',
-              style: Styles.textStyleCom16.copyWith(
-                color: status ? Colors.green : Colors.orange,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ],
-  );
-}
+// Widget _buildStatusRow(bool status) {
+//   return Row(
+//     children: [
+//       AnimatedContainer(
+//         duration: const Duration(milliseconds: 500),
+//         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+//         decoration: BoxDecoration(
+//           color: status
+//               ? Colors.green.withOpacity(0.2)
+//               : Colors.orange.withOpacity(0.2),
+//           borderRadius: BorderRadius.circular(12),
+//         ),
+//         child: Row(
+//           children: [
+//             Icon(
+//               Icons.info_outline,
+//               size: 22,
+//               color: status ? Colors.green : Colors.orange,
+//             ),
+//             const SizedBox(width: 6),
+//             Text(
+//               status ? 'Completed' : 'Pending',
+//               style: Styles.textStyleCom16.copyWith(
+//                 color: status ? Colors.green : Colors.orange,
+//                 fontWeight: FontWeight.bold,
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     ],
+//   );
+// }
 
-Widget _buildProductItem(OrderItemModel product) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 6),
-    child: Row(
-      children: [
-        const Icon(Icons.check_circle_outline, size: 30, color: Colors.grey),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            "- ${product.productName} x${product.quantity}",
-            style: Styles.textStyleCom20.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
+// Widget _buildProductItem(OrderItemModel product) {
+//   return Padding(
+//     padding: const EdgeInsets.symmetric(vertical: 6),
+//     child: Row(
+//       children: [
+//         const Icon(Icons.check_circle_outline, size: 30, color: Colors.grey),
+//         const SizedBox(width: 8),
+//         Expanded(
+//           child: Text(
+//             "- ${product.productName} x${product.quantity}",
+//             style: Styles.textStyleCom20.copyWith(
+//               fontWeight: FontWeight.w500,
+//             ),
+//           ),
+//         ),
+//       ],
+//     ),
+//   );
+// }

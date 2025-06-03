@@ -7,12 +7,13 @@ class UserOrderCubit extends Cubit<UserOrderState> {
   UserOrderCubit() : super(UserOrderInitial());
 
   Future<void> fetchUserOrders() async {
+    if (isClosed) return;
     emit(UserOrderLoading());
     try {
       final List<UserOrderModel> orders = await OrderService.getUserOrders();
-      emit(UserOrderLoaded(orders));
+      if (!isClosed) emit(UserOrderLoaded(orders));
     } catch (e) {
-      emit(UserOrderError(e.toString()));
+      if (!isClosed) emit(UserOrderError(e.toString()));
     }
   }
 }
