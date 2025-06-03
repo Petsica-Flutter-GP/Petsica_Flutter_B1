@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import 'package:petsica/features/chatBoot/widgets/message_bubble.dart';
 import 'package:petsica/features/chatt/chatapp.dart';
 import 'package:petsica/features/community/views/publish_post_view.dart';
 import 'package:petsica/core/utils/home.dart';
@@ -34,7 +33,6 @@ import 'package:petsica/features/profiles/sitter/view/sitter_new_services_view.d
 import 'package:petsica/features/profiles/sitter/view/sitter_edit_services_view.dart';
 import 'package:petsica/features/profiles/sitter/view/sitter_pet_details_view.dart';
 import 'package:petsica/features/profiles/sitter/view/sitter_profile_view.dart';
-import 'package:petsica/features/profiles/sitter/widget/sitter_add_pet_view.dart';
 import 'package:petsica/features/profiles/sitter/widget/sitter_settings_page.dart';
 import 'package:petsica/features/profiles/views/add_pet_view.dart';
 import 'package:petsica/features/profiles/views/edit_pet_view.dart';
@@ -45,7 +43,7 @@ import 'package:petsica/features/signup/presentation/views/seller/seller_signup_
 import 'package:petsica/features/signup/presentation/views/user/user_signup_view.dart';
 import 'package:petsica/features/splash/presentation/views/widgets/splach_screen.dart';
 import 'package:petsica/features/onboarding/presentation/views/onboarding.dart';
-import 'package:petsica/features/registeration/presentation/views/welcome_back_view.dart';
+import 'package:petsica/features/Login/presentation/views/login_view.dart';
 import 'package:petsica/features/store/views/cart_view.dart';
 import 'package:petsica/features/store/views/checkout_view.dart';
 import 'package:petsica/features/store/views/order_details_view.dart';
@@ -126,6 +124,7 @@ abstract class AppRouter {
   static const kCommunityChat = '/communityChat';
   static const kPost = '/Post';
 
+
   //other
   static const kWhereProfile = '/whereProfile';
   static const kWhoEdit = '/whoEdit';
@@ -133,6 +132,7 @@ abstract class AppRouter {
 
   //routes
   static final router = GoRouter(
+
     //  initialLocation: '/', // البداية من SplashScreen
     initialLocation: kWelcomeBack,
 
@@ -259,8 +259,9 @@ abstract class AppRouter {
       GoRoute(
         path: kPost,
         builder: (context, state) => const PublishPostView(),
-      ),
 
+      ),
+     
       GoRoute(
         path: kUserSettings,
         builder: (context, state) => const UserSettingsScreen(),

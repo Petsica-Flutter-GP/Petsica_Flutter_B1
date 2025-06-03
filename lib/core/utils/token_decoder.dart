@@ -1,4 +1,3 @@
-// utils/token_decoder.dart
 import 'dart:convert';
 
 class TokenDecoder {
@@ -21,5 +20,11 @@ class TokenDecoder {
   static String? getUserId(String token) {
     final decoded = decodeToken(token);
     return decoded['sub'];
+  }
+
+  static DateTime? getExpiration(String token) {
+    final decoded = decodeToken(token);
+    final exp = decoded['exp'] as int?;
+    return exp != null ? DateTime.fromMillisecondsSinceEpoch(exp * 1000) : null;
   }
 }
