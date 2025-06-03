@@ -18,6 +18,7 @@ class UserProfileViewBody extends StatelessWidget {
   const UserProfileViewBody({super.key});
 
   @override
+  
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ProfileImageCubit(), // إنشاء `Cubit`
@@ -94,7 +95,7 @@ class UserProfileViewBody extends StatelessWidget {
                   label: 'Add Pet',
                   height: 50,
                   onTap: () {
-                    GoRouter.of(context).go(AppRouter.kUserMyPet);
+                    GoRouter.of(context).go(AppRouter.kMyPet);
                     print("user add pet");
                   },
                 ),

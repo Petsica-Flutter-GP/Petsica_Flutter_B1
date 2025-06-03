@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:petsica/features/community/views/home_page.dart';
+import 'package:petsica/features/chatt/chatapp.dart';
 import 'package:petsica/features/community/views/publish_post_view.dart';
 import 'package:petsica/core/utils/home.dart';
 import 'package:petsica/features/chatBoot/views/chat_boot_onboarding_view.dart';
@@ -15,6 +15,7 @@ import 'package:petsica/features/profiles/clinic/view/clinic_my_pet_view.dart';
 import 'package:petsica/features/profiles/clinic/view/clinic_add_pet_view.dart';
 import 'package:petsica/features/profiles/clinic/widget/clinic_settings_page.dart';
 import 'package:petsica/features/profiles/edit.dart';
+import 'package:petsica/features/profiles/model/get_pet_model.dart';
 import 'package:petsica/features/profiles/seller/view/seller_add_product_view.dart';
 import 'package:petsica/features/profiles/seller/view/seller_edit_pet_view.dart';
 import 'package:petsica/features/profiles/seller/view/seller_edit_product_view.dart';
@@ -34,7 +35,8 @@ import 'package:petsica/features/profiles/sitter/view/sitter_pet_details_view.da
 import 'package:petsica/features/profiles/sitter/view/sitter_profile_view.dart';
 import 'package:petsica/features/profiles/sitter/widget/sitter_add_pet_view.dart';
 import 'package:petsica/features/profiles/sitter/widget/sitter_settings_page.dart';
-import 'package:petsica/features/profiles/user/views/user_add_pet_view.dart';
+import 'package:petsica/features/profiles/views/add_pet_view.dart';
+import 'package:petsica/features/profiles/views/edit_pet_view.dart';
 import 'package:petsica/features/profiles/user/views/user_profile_view.dart';
 import 'package:petsica/features/profiles/user/widgets/user_settings_page.dart';
 import 'package:petsica/features/profiles/where.dart';
@@ -51,9 +53,8 @@ import 'package:petsica/features/who/presentation/views/who_view.dart';
 import '../../features/profiles/clinic/view/clinic_pet_details_view.dart';
 import '../../features/profiles/clinic/view/clinic_profile_view.dart';
 import '../../features/profiles/seller/view/seller_profile_view.dart';
-import '../../features/profiles/user/views/user_my_pet_view.dart';
-import '../../features/profiles/user/views/user_edit_pet_view.dart';
-import '../../features/profiles/user/views/user_pet_details_view.dart';
+import '../../features/profiles/views/my_pet_view.dart';
+import '../../features/profiles/views/pet_details_view.dart';
 import '../../features/signup/presentation/views/clinic/clinic_signup_view.dart';
 import '../../features/signup/presentation/views/sitter/sitter_signup_view.dart';
 import '../../features/store/views/store_view.dart';
@@ -67,45 +68,35 @@ abstract class AppRouter {
   //user
   static const kUserSignUp = '/userSignUp';
   static const kUserProfile = '/userProfile';
-  static const kUserMyPet = '/userMyPet';
-  static const kUserPetDetails = '/userPetDetails';
-  static const kUserEditPet = '/userEditPet';
-  static const kUserAddPet = '/userAddPet';
   static const kUserSettings = '/userSettings';
+
+  // pets part
+  static const kMyPet = '/myPet';
+  static const kPetDetails = '/petDetails';
+  static const kEditPet = '/editPet';
+  static const kAddPet = '/addPet';
 
   //seller
   static const kSellerSignUp = '/sellerSignUp';
   static const kSellerProfile = '/sellerProfile';
-  static const kSellerMyPet = '/sellerMyPet';
-  static const kSellerEditPet = '/sellerEditPet';
   static const kSellerMyStore = '/sellerMyStore';
   static const kSellerAddProduct = '/sellerAddProduct';
   static const kSellerEditProduct = '/sellerEditProduct';
   static const kSellerOrders = '/sellerOrders';
   static const kSellerOrderDetails = '/sellerOrderDetails';
-  static const kSellerPetDetails = '/sellerPetDetails';
   static const kSellerSettings = '/sellerSettings';
-  static const kSellerAddPet = '/sellerAddPet';
 
   //sitter
   static const kSitterSignUp = '/sitterSignUp';
   static const kSitterProfile = '/sitterProfile';
-  static const kSitterMyPet = '/sitterMyPet';
-  static const kSitterPetDetails = '/sitterPetDetails';
   static const kSitterSettings = '/sitterSettings';
-  static const kSitterAddPet = '/sitterAddPet';
   static const kSitterMyServices = '/sitterMyServices';
   static const kSitterNewServices = '/sitterNewServices';
   static const kSitterEditServices = '/sitterEditServices';
-  static const kSitterEditPet = '/sitterEditPet';
 
   //clinic
   static const kClinicSignUp = '/clinicSignUp';
   static const kClinicProfile = '/clinicProfile';
-  static const kClinicMyPet = '/clinicMyPet';
-  static const kClinicPetDetails = '/clinicPetDetails';
-  static const kClinicEditPet = '/clinicEditPet';
-  static const kClinicAddPet = '/clinicAddPet';
   static const kClinicSettings = '/clinicSettings';
 
   //admin
@@ -127,11 +118,12 @@ abstract class AppRouter {
   static const kChatBootOnboarding = '/chatBootOnboarding';
   static const kChatBoot = '/chatBoot';
 
+//chat
+  static const kSignalRChatApp = '/signalRChatApp';
 
   //community
   static const kCommunityChat = '/communityChat';
   static const kPost = '/Post';
-  static const kHome = '/Home';
 
 
   //other
@@ -142,8 +134,8 @@ abstract class AppRouter {
   //routes
   static final router = GoRouter(
 
-    initialLocation: '/', // البداية من SplashScreen
-    //initialLocation: kWelcomeBack,
+    //  initialLocation: '/', // البداية من SplashScreen
+    initialLocation: kWelcomeBack,
 
     routes: [
       GoRoute(
@@ -151,12 +143,16 @@ abstract class AppRouter {
         builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
+        path: kSignalRChatApp,
+        builder: (context, state) => const SignalRChatApp(),
+      ),
+      GoRoute(
         path: kOnboarding,
         builder: (context, state) => const Onboarding(),
       ),
       GoRoute(
         path: kCheckOut,
-        builder: (context, state) =>  CheckOutView(),
+        builder: (context, state) => const CheckOutView(),
       ),
       GoRoute(
         path: kHomeScreen,
@@ -193,23 +189,23 @@ abstract class AppRouter {
         path: kStore,
         builder: (context, state) => const StoreView(),
       ),
-      
- GoRoute(
-  path: kProductDetails,
-  builder: (context, state) {
-    final productId = state.extra as int; // نأخذ المنتج ID من extra
-    return ProductDetailsView(productId: productId); // نمرره في الـ constructor
-  },
-),
 
+      GoRoute(
+        path: kProductDetails,
+        builder: (context, state) {
+          final productId = state.extra as int; // نأخذ المنتج ID من extra
+          return ProductDetailsView(
+              productId: productId); // نمرره في الـ constructor
+        },
+      ),
 
-GoRoute(
-  path: kOrderDetails,
-  builder: (context, state) {
-    final orderID = state.extra as int;
-    return OrderDetailsView(orderID: orderID);
-  },
-),
+      GoRoute(
+        path: kOrderDetails,
+        builder: (context, state) {
+          final orderID = state.extra as int;
+          return OrderDetailsView(orderID: orderID);
+        },
+      ),
 
       GoRoute(
         path: kCart,
@@ -240,84 +236,33 @@ GoRoute(
         builder: (context, state) => const WhereProf(),
       ),
       GoRoute(
-        path: kUserMyPet,
-        builder: (context, state) => const UserMyPetView(),
+        path: kMyPet,
+        builder: (context, state) => const MyPetView(),
+      ),
+
+      GoRoute(
+        path: kPetDetails,
+        builder: (context, state) {
+          final pet = state.extra as GetPetModel;
+          return PetDetailsView(pet: pet);
+        },
       ),
       GoRoute(
-        path: kClinicMyPet,
-        builder: (context, state) => const ClinicMyPetView(),
+        path: kEditPet,
+        builder: (context, state) => const EditPetView(),
       ),
+
       GoRoute(
-        path: kSellerMyPet,
-        builder: (context, state) => const SellerMyPetView(),
+        path: kAddPet,
+        builder: (context, state) => const AddPetView(),
       ),
-      GoRoute(
-        path: kSitterMyPet,
-        builder: (context, state) => const SitterMyPetView(),
-      ),
-      GoRoute(
-        path: kSitterMyPet,
-        builder: (context, state) => const SitterMyPetView(),
-      ),
-      GoRoute(
-          path: kUserPetDetails,
-          builder: (context, state) => const UserPetDetailsView()),
-      GoRoute(
-          path: kSitterPetDetails,
-          builder: (context, state) => const SitterPetDetailsView()),
-      GoRoute(
-          path: kSellerPetDetails,
-          builder: (context, state) => const SellerPetDetailsView()),
-      GoRoute(
-          path: kClinicPetDetails,
-          builder: (context, state) => const ClinicPetDetailsView()),
-      GoRoute(
-        path: kWhoEdit,
-        builder: (context, state) => const WhereEdit(),
-      ),
-      GoRoute(
-        path: kUserEditPet,
-        builder: (context, state) => const UserEditPetView(),
-      ),
-      GoRoute(
-        path: kSitterEditPet,
-        builder: (context, state) => const SitterEditPetView(),
-      ),
-      GoRoute(
-        path: kSellerEditPet,
-        builder: (context, state) => const SellerEditPetView(),
-      ),
-      GoRoute(
-        path: kClinicEditPet,
-        builder: (context, state) => const ClinicEditPetView(),
-      ),
-      GoRoute(
-        path: kUserAddPet,
-        builder: (context, state) => UserAddPetView(),
-      ),
-      
+
       GoRoute(
         path: kPost,
         builder: (context, state) => const PublishPostView(),
 
       ),
-      GoRoute(
-        path: kHome,
-        builder: (context, state) => const HomePage(),
-
-      ),
-      GoRoute(
-        path: kSitterAddPet,
-        builder: (context, state) => const SitterAddPetView(),
-      ),
-      GoRoute(
-        path: kSellerAddPet,
-        builder: (context, state) => const SellerAddPetView(),
-      ),
-      GoRoute(
-        path: kClinicAddPet,
-        builder: (context, state) => const ClinicAddPetView(),
-      ),
+     
       GoRoute(
         path: kUserSettings,
         builder: (context, state) => const UserSettingsScreen(),
@@ -354,13 +299,13 @@ GoRoute(
         path: kSellerMyStore,
         builder: (context, state) => const SellerMyStoreView(),
       ),
-     GoRoute(
-  path: kSellerEditProduct,
-  builder: (context, state) {
-    final productId = state.extra as int;
-    return SellerEditProductView(productId: productId);
-  },
-),
+      GoRoute(
+        path: kSellerEditProduct,
+        builder: (context, state) {
+          final productId = state.extra as int;
+          return SellerEditProductView(productId: productId);
+        },
+      ),
 
       GoRoute(
         path: kSellerAddProduct,
@@ -371,9 +316,14 @@ GoRoute(
         builder: (context, state) => const SellerOrdersView(),
       ),
       GoRoute(
-        path: kSellerOrderDetails,
-        builder: (context, state) => const SellerOrdersDetailsView(),
-      ),
+  path: kSellerOrderDetails,
+  builder: (context, state) {
+    final orderId = state.extra as int; 
+    return SellerOrdersDetailsView(orderId: orderId);
+  },
+),
+
+
       GoRoute(
         path: kAdminSellerRequests,
         builder: (context, state) => const AdminSellerRequestsView(),
@@ -398,10 +348,24 @@ GoRoute(
         path: kChatBoot,
         builder: (context, state) => const ChatBootView(),
       ),
-      // GoRoute(
-      //   path: kCommunityChat,
-      //   builder: (context, state) => const CommunityChatView(),
-      // ),
+//       GoRoute(
+//   path: kChat,
+//   builder: (context, state) {
+//     final data = state.extra as Map<String, String>;
+//     return ChatView(
+//       senderId: data['senderId']!,
+//       receiverId: data['receiverId']!,
+//     );
+//   },
+// ),
+// GoRoute(
+//         path: '/chat',
+//         name: 'chat',
+//         builder: (context, state) {
+//           final receiverId = state.uri.queryParameters['receiverId']!;
+//           final senderId = state.uri.queryParameters['senderId']!;
+//           return CChatScreen(receiverId: receiverId, senderId: senderId);
+//         },),
     ],
   );
 }

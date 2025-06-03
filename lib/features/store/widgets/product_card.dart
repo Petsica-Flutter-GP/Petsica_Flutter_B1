@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -9,7 +8,7 @@ import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/profiles/seller/services/product_services.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends StatefulWidget {
   final Product product;
 
   const ProductCard({
@@ -18,9 +17,36 @@ class ProductCard extends StatelessWidget {
   });
 
   @override
+  _ProductCardState createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..repeat(reverse: true);
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.2).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // تحويل الصورة من Base64
-    Uint8List imageBytes = base64Decode(product.photo);
+    Uint8List imageBytes = base64Decode(widget.product.photo);
 
     return Container(
       decoration: BoxDecoration(
@@ -59,10 +85,42 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  ],
+                  if (!widget.product.isAvailable)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ),
+                  if (!widget.product.isAvailable)
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: ScaleTransition(
+                        scale: _scaleAnimation,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text(
+                            'Sold out',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
-            // 📝 معلومات المنتج
             Padding(
               padding: const EdgeInsets.only(bottom: 12, left: 12, right: 12),
               child: Column(
@@ -70,23 +128,29 @@ class ProductCard extends StatelessWidget {
                 children: [
                   const SizedBox(height: 12),
                   Text(
-                    product.productName,
-                    style:
-                        Styles.textStyleCom18.copyWith(color: kProductTxtColor),
+                    widget.product.productName,
+                    style: Styles.textStyleCom18.copyWith(
+                      color: widget.product.isAvailable
+                          ? kProductTxtColor
+                          : Colors.grey,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    product.category,
-                    style:
-                        Styles.textStyleCom16.copyWith(color: kProductTxtColor),
+                    widget.product.category,
+                    style: Styles.textStyleCom16.copyWith(
+                      color: widget.product.isAvailable
+                          ? kProductTxtColor
+                          : Colors.grey,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Tooltip(
-                    message: product.description,
+                    message: widget.product.description,
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.black87,
@@ -94,9 +158,12 @@ class ProductCard extends StatelessWidget {
                     ),
                     textStyle: const TextStyle(color: Colors.white),
                     child: Text(
-                      product.description,
-                      style: Styles.textStyleCom16
-                          .copyWith(color: kProductTxtColor),
+                      widget.product.description,
+                      style: Styles.textStyleCom16.copyWith(
+                        color: widget.product.isAvailable
+                            ? kProductTxtColor
+                            : Colors.grey,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -106,14 +173,23 @@ class ProductCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${product.price} EGP',
-                        style: Styles.textStyleQui18
-                            .copyWith(color: kProducPriceColor),
+                        '${widget.product.price} EGP',
+                        style: Styles.textStyleQui18.copyWith(
+                          color: widget.product.isAvailable
+                              ? kProducPriceColor
+                              : Colors.grey,
+                          decoration: widget.product.isAvailable
+                              ? TextDecoration.none
+                              : TextDecoration.lineThrough,
+                        ),
                       ),
                       Text(
-                        '${product.discount} %',
-                        style: Styles.textStyleQui18
-                            .copyWith(color: kProducPriceColor),
+                        '${widget.product.discount} %',
+                        style: Styles.textStyleQui18.copyWith(
+                          color: widget.product.isAvailable
+                              ? kProducPriceColor
+                              : Colors.grey,
+                        ),
                       ),
                     ],
                   ),
@@ -125,6 +201,4 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
-
-
 }

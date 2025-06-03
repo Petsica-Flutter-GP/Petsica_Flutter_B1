@@ -184,7 +184,7 @@ class SellerCameraPlaceholder extends StatefulWidget {
   final double? height;
   final IconData? icon;
   final BorderRadius? borderRadius; // ✅ البراميتر الجديد
-
+  final Color? color;
   const SellerCameraPlaceholder({
     super.key,
     this.onImageSelected,
@@ -193,11 +193,13 @@ class SellerCameraPlaceholder extends StatefulWidget {
     this.width,
     this.height,
     this.icon,
+    this.color,
     this.borderRadius, // ✅ لا تنسي تضيفيه هنا
   });
 
   @override
-  State<SellerCameraPlaceholder> createState() => _SellerCameraPlaceholderState();
+  State<SellerCameraPlaceholder> createState() =>
+      _SellerCameraPlaceholderState();
 }
 
 class _SellerCameraPlaceholderState extends State<SellerCameraPlaceholder> {
@@ -289,8 +291,9 @@ class _SellerCameraPlaceholderState extends State<SellerCameraPlaceholder> {
                 width: widget.width ?? double.infinity,
                 height: widget.height ?? 230,
                 decoration: BoxDecoration(
-                  color: kLightContainerColor,
-                  borderRadius: widget.borderRadius ?? BorderRadius.circular(10), // ✅ استخدام البراميتر الجديد
+                  color: widget.color ?? kLightContainerColor,
+                  borderRadius: widget.borderRadius ??
+                      BorderRadius.circular(10), // ✅ استخدام البراميتر الجديد
                   border: hasError
                       ? Border.all(
                           color: const Color.fromARGB(255, 179, 11, 25),

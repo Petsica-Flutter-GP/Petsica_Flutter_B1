@@ -5,18 +5,17 @@ import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/profiles/widgets/app_drop_down_button.dart';
 import 'package:petsica/features/profiles/widgets/pet_camera_placeholder.dart';
-import 'package:petsica/features/Login/presentation/views/widgets/input_field.dart';
-import '../../../../core/utils/app_arrow_back.dart';
+import 'package:petsica/features/registeration/presentation/views/widgets/input_field.dart';
+import '../../../core/utils/app_arrow_back.dart';
 
-class UserEditPetPageViewBody extends StatefulWidget {
-  const UserEditPetPageViewBody({super.key});
+class EditPetPageViewBody extends StatefulWidget {
+  const EditPetPageViewBody({super.key});
 
   @override
-  State<UserEditPetPageViewBody> createState() =>
-      _UserEditPetPageViewBodyState();
+  State<EditPetPageViewBody> createState() => _EditPetPageViewBodyState();
 }
 
-class _UserEditPetPageViewBodyState extends State<UserEditPetPageViewBody> {
+class _EditPetPageViewBodyState extends State<EditPetPageViewBody> {
   String selectedPetName = 'Cat';
   String selectedType = 'Cat';
   String selectedGender = 'Female';
@@ -31,7 +30,7 @@ class _UserEditPetPageViewBodyState extends State<UserEditPetPageViewBody> {
       appBar: AppBar(
         title: Text("UEdit Your Pet Information", style: Styles.textStyleQui24),
         centerTitle: true,
-        leading: const AppArrowBack(destination: AppRouter.kUserPetDetails),
+        leading: const AppArrowBack(destination: AppRouter.kPetDetails),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
