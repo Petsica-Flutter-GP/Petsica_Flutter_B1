@@ -40,7 +40,7 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
       await TokenStorage.saveTokens(
         accessToken: response.token,
         refreshToken: response.refreshToken,
-        userId : response.id,
+        userId: response.id,
       );
       final roles = TokenDecoder.getRoles(response.token);
       final userId = TokenDecoder.getUserId(response.token);
@@ -60,9 +60,9 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
         context.go('/adminDashboard');
       } else {
         // context.go(AppRouter.kPost);
-        // context.go(AppRouter.kStore);
+        // context.go(AppRouter.kSellerProfile);
         // context.go(AppRouter.kSellerMyStore);
-        context.go(AppRouter.kPost);
+        context.go(AppRouter.kStore);
       }
     } else {
       if (!mounted) return;

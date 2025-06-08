@@ -1,13 +1,21 @@
-import 'package:petsica/features/profiles/seller/models/seller_orders_model.dart';
+import 'package:equatable/equatable.dart';
 
-class SellerOrdersChangeState {
-  final List<SellerOrderModel> orders;
+abstract class SellerOrderCompleteState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
 
-  SellerOrdersChangeState({required this.orders});
+class SellerOrderCompleteInitial extends SellerOrderCompleteState {}
 
-  SellerOrdersChangeState copyWith({List<SellerOrderModel>? orders}) {
-    return SellerOrdersChangeState(
-      orders: orders ?? this.orders,
-    );
-  }
+class SellerOrderCompleteLoading extends SellerOrderCompleteState {}
+
+class SellerOrderCompleteSuccess extends SellerOrderCompleteState {}
+
+class SellerOrderCompleteFailure extends SellerOrderCompleteState {
+  final String error;
+
+  SellerOrderCompleteFailure(this.error);
+
+  @override
+  List<Object?> get props => [error];
 }

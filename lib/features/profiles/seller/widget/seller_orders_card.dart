@@ -10,16 +10,26 @@ import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/profiles/seller/cubit/orderChangeState/order_change_state_cubit.dart';
 import 'package:petsica/features/profiles/seller/models/seller_orders_model.dart';
 
-class SellerOrdersCard extends StatelessWidget {
+class SellerOrdersCard extends StatefulWidget {
   final SellerOrderModel? order;
+  final int index;
 
-  const SellerOrdersCard({super.key, required this.order});
+  const SellerOrdersCard({
+    super.key,
+    required this.order,
+    required this.index,
+  });
+
+  @override
+  State<SellerOrdersCard> createState() => _SellerOrdersCardState();
+}
+
+class _SellerOrdersCardState extends State<SellerOrdersCard> {
+  bool isDone = false;
 
   @override
   Widget build(BuildContext context) {
-    // استخدام MediaQuery لأخذ عرض وارتفاع الشاشة
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return Card(
       elevation: 3,
@@ -30,17 +40,16 @@ class SellerOrdersCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: InkWell(
         borderRadius: BorderRadius.circular(14),
-        onTap: order == null
+        onTap: widget.order == null
             ? null
             : () {
-                debugPrint('Tapped on order #${order!.orderId}');
-                if (order?.orderId != null) {
+                debugPrint('Tapped on order #${widget.order!.orderId}');
+                if (widget.order?.orderId != null) {
                   GoRouter.of(context).go(
                     AppRouter.kSellerOrderDetails,
-                    extra: order!.orderId, // بعد التحقق نقدر نستخدم !
+                    extra: widget.order!.orderId,
                   );
                 } else {
-                  // ممكن تعرضي رسالة أو تتجاهلي الضغط
                   print('Order ID is null!');
                 }
               },
@@ -49,9 +58,8 @@ class SellerOrdersCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // الأيقونة مع أبعاد متناسبة
               Container(
-                width: screenWidth * 0.12, // تقريبا 12% من عرض الشاشة
+                width: screenWidth * 0.12,
                 height: screenWidth * 0.12,
                 decoration: BoxDecoration(
                   color: kAppColor.withOpacity(0.1),
@@ -64,15 +72,13 @@ class SellerOrdersCard extends StatelessWidget {
                 ),
               ),
               SizedBox(width: screenWidth * 0.04),
-              // تفاصيل الطلب مع Expanded ليأخذ المساحة المتاحة
               Expanded(
-                child: order == null
+                child: widget.order == null
                     ? _buildShimmerLoading()
                     : _buildOrderDetails(),
               ),
               SizedBox(width: screenWidth * 0.04),
-              // زر الإجراء مع حجم متناسب
-              order == null
+              widget.order == null
                   ? _buildShimmerLoading(width: screenWidth * 0.25, height: 40)
                   : _buildOrderAction(context,
                       width: screenWidth * 0.25, height: 45),
@@ -87,10 +93,10 @@ class SellerOrdersCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min, // مهم جدا لتجنب overflow
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          'Order #${order?.orderId ?? "loading"}',
+          'Order #${widget.index + 1} ',
           style: Styles.textStyleCom20.copyWith(
             color: kBurgColor,
             fontWeight: FontWeight.bold,
@@ -99,11 +105,9 @@ class SellerOrdersCard extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: 6),
-        if (order?.createdAt != null)
+        if (widget.order?.createdAt != null)
           Text(
-            order?.createdAt != null
-                ? 'Created at: ${DateFormat('dd/MM/yyyy - hh:mm a').format(DateTime.parse(order!.createdAt))}'
-                : 'Loading...',
+            'Created at: ${DateFormat('dd/MM/yyyy - hh:mm a').format(DateTime.parse(widget.order!.createdAt))}',
             style: Styles.textStyleCom14.copyWith(
               color: Colors.grey[600],
             ),
@@ -116,24 +120,22 @@ class SellerOrdersCard extends StatelessWidget {
 
   Widget _buildOrderAction(BuildContext context,
       {double width = 110, double height = 45}) {
+    final isCompleted = widget.order?.status == true || isDone;
+
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 400),
       transitionBuilder: (child, animation) => ScaleTransition(
         scale: animation,
         child: child,
       ),
-      child: order?.status == true
+      child: isCompleted
           ? Container(
               key: const ValueKey('done'),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
               child: Text(
-                'Done',
-                style: Styles.textStyleCom18.copyWith(
-                  color: Colors.green[700],
+                'Completed',
+                style: Styles.textStyleCom20.copyWith(
+                  color: Colors.green[800],
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -145,19 +147,20 @@ class SellerOrdersCard extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: kBurgColor,
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(10), // مثلا نفس قيمة border 10
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  minimumSize: const Size(110, 45), // نفس الحجم السابق لو تحب
+                  minimumSize: const Size(110, 45),
                 ),
                 onPressed: () {
-                  final id = order?.orderId;
-                  if (id != null) {
+                  if (widget.order?.orderId != null) {
+                    print(
+                        '🟢 Trying to complete order ID: ${widget.order!.orderId}');
                     context
-                        .read<SellerOrdersChangeCubit>()
-                        .markOrderAsCompleted(id);
-                  } else {
-                    debugPrint('❌ Order ID is null, cannot complete order.');
+                        .read<SellerOrderCompleteCubit>()
+                        .completeOrder(widget.order!.sellerOrderId);
+                    setState(() {
+                      isDone = true;
+                    });
                   }
                 },
                 child: Text(
