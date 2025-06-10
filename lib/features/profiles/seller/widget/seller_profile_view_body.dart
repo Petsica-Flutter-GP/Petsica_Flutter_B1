@@ -53,11 +53,11 @@ class SellerProfileViewBody extends StatelessWidget {
 
               /// 🔹 معلومات المستخدم
               Text(
-                "Puerto Rico",
+                "Mohammed Ahmed",
                 style: Styles.textStyleCom26,
               ),
               Text(
-                "youremail@domain.com | +01 234 567 89",
+                "Mohammed1@gmail.com | +01227606613",
                 style: Styles.textStyleCom16,
               ),
               const SizedBox(height: 20),
@@ -100,14 +100,14 @@ class SellerProfileViewBody extends StatelessWidget {
               /// 🔹 القائمة الجانبية
               Column(
                 children: [
-                   ProfileListTile(
+                  ProfileListTile(
                     iconasset: AssetData.orderIcon,
                     label: 'My order',
                     height: 50,
                     onTap: () {
                       GoRouter.of(context).go(
-            AppRouter.kSellerOrders,
-          );
+                        AppRouter.kSellerOrders,
+                      );
                     },
                   ),
                   const SizedBox(height: 30),

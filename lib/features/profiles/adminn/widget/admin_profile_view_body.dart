@@ -110,6 +110,16 @@ class AdminProfileViewBody extends StatelessWidget {
                       );
                     },
                   ),
+                  ProfileListTile(
+                    iconasset: AssetData.storeIcon,
+                    label: 'Orders',
+                    height: 35,
+                    onTap: () {
+                      GoRouter.of(context).go(
+                        AppRouter.kChooseOrderScreen,
+                      );
+                    },
+                  ),
                   const SizedBox(height: 30),
                   ProfileListTile(
                     iconasset: AssetData.serviceIcon,
@@ -133,7 +143,7 @@ class AdminProfileViewBody extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 30),
-                   ProfileListTile(
+                  ProfileListTile(
                     iconasset: AssetData.settingsIcon,
                     label: 'Settings',
                     height: 50,

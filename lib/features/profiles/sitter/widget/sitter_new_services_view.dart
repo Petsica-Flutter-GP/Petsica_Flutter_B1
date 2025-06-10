@@ -33,7 +33,7 @@ class _SitterNewServicesViewBodyState extends State<SitterNewServicesViewBody> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const InputField(
-                label: 'Sitter Name',
+                label: 'Service Type',
               ),
               const SizedBox(
                 height: 30,
@@ -69,12 +69,45 @@ class _SitterNewServicesViewBodyState extends State<SitterNewServicesViewBody> {
               const SizedBox(
                 height: 50,
               ),
-              const Align(
+              Align(
                 alignment: Alignment.bottomRight,
                 child: AppButton(
                   text: 'Add',
                   border: 10,
                   width: 120,
+                  onTap: () {
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   SnackBar(
+                    //     behavior: SnackBarBehavior.floating,
+                    //     margin: const EdgeInsets.symmetric(
+                    //         horizontal: 20, vertical: 20),
+                    //     padding: const EdgeInsets.symmetric(
+                    //         horizontal: 20, vertical: 16),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(12),
+                    //     ),
+                    //     backgroundColor: Colors.red.shade600,
+                    //     duration: const Duration(seconds: 2),
+                    //     content: Row(
+                    //       children: [
+                    //         const Icon(Icons.warning_amber_rounded,
+                    //             color: Colors.white),
+                    //         const SizedBox(width: 12),
+                    //         Expanded(
+                    //           child: Text(
+                    //             'Please fill all required fields!',
+                    //             style: Styles.textStyleCom16.copyWith(
+                    //               color: Colors.white,
+                    //               fontWeight: FontWeight.w600,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // );
+                  
+                  },
                 ),
               )
             ],
