@@ -5,10 +5,13 @@ import 'package:petsica/core/utils/home.dart';
 import 'package:petsica/features/chatBoot/views/chat_boot_onboarding_view.dart';
 import 'package:petsica/features/chatBoot/views/chat_boot_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_clinic_requests_view.dart';
+import 'package:petsica/features/profiles/adminn/view/admin_all_orders_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_profile_view.dart';
+import 'package:petsica/features/profiles/adminn/view/admin_seller_orders_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_seller_requests_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_seller_request_details_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_sitter_requests_view.dart';
+import 'package:petsica/features/profiles/adminn/view/choose_order_screen_view.dart';
 import 'package:petsica/features/profiles/adminn/widget/admin_settings_page.dart';
 import 'package:petsica/features/profiles/clinic/view/clinic_edit_pet_view.dart';
 import 'package:petsica/features/profiles/clinic/view/clinic_my_pet_view.dart';
@@ -105,6 +108,8 @@ abstract class AppRouter {
   static const kAdminClinicRequests = '/adminClinicRequests';
   static const kAdminSitterRequests = '/adminSitterRequests';
   static const kAdminRequestDetails = '/adminRequestDetails';
+  static const kAdminAllOrders = '/adminAllOrders';
+  static const kAdminSellerOrders = '/adminSellerOrders';
 
   //store
   static const kStore = '/store';
@@ -124,15 +129,14 @@ abstract class AppRouter {
   static const kCommunityChat = '/communityChat';
   static const kPost = '/Post';
 
-
   //other
   static const kWhereProfile = '/whereProfile';
   static const kWhoEdit = '/whoEdit';
   static const kHomeScreen = '/homeScreen';
+  static const kChooseOrderScreen = '/chooseOrderScreen';
 
   //routes
   static final router = GoRouter(
-
     //  initialLocation: '/', // البداية من SplashScreen
     initialLocation: kWelcomeBack,
 
@@ -259,9 +263,8 @@ abstract class AppRouter {
       GoRoute(
         path: kPost,
         builder: (context, state) => const PublishPostView(),
-
       ),
-     
+
       GoRoute(
         path: kUserSettings,
         builder: (context, state) => const UserSettingsScreen(),
@@ -281,6 +284,18 @@ abstract class AppRouter {
       GoRoute(
         path: kAdminSettings,
         builder: (context, state) => const AdminSettingsScreen(),
+      ),
+      GoRoute(
+        path: kAdminAllOrders,
+        builder: (context, state) => const AdminAllOrdersView(),
+      ),
+      GoRoute(
+        path: kAdminSellerOrders,
+        builder: (context, state) => const AdminSellerOrdersView(),
+      ),
+      GoRoute(
+        path: kChooseOrderScreen,
+        builder: (context, state) => const ChooseOrderScreen(),
       ),
       GoRoute(
         path: kSitterMyServices,
@@ -315,13 +330,12 @@ abstract class AppRouter {
         builder: (context, state) => const SellerOrdersView(),
       ),
       GoRoute(
-  path: kSellerOrderDetails,
-  builder: (context, state) {
-    final orderId = state.extra as int; 
-    return SellerOrdersDetailsView(orderId: orderId);
-  },
-),
-
+        path: kSellerOrderDetails,
+        builder: (context, state) {
+          final orderId = state.extra as int;
+          return SellerOrdersDetailsView(orderId: orderId);
+        },
+      ),
 
       GoRoute(
         path: kAdminSellerRequests,
