@@ -22,13 +22,12 @@ class _AppFloatingButtonState extends State<AppFloatingButton> {
   @override
   void initState() {
     super.initState();
-    // نستخدم WidgetsBinding عشان ننتظر لما الشاشة ترسم بالكامل قبل نحسب الموقع
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final screenSize = MediaQuery.of(context).size;
       setState(() {
         position = Offset(
-          screenSize.width - 70, // اليمين
-          screenSize.height - 160, // تحت فوق الـ bottom nav
+          screenSize.width - 70,
+          screenSize.height - 200, // ✅ ارفعيه زيادة عن السابق
         );
       });
     });
@@ -37,7 +36,7 @@ class _AppFloatingButtonState extends State<AppFloatingButton> {
   @override
   Widget build(BuildContext context) {
     if (position == null) {
-      return const SizedBox(); // ما نعرضش الزر لحد ما يتحدد مكانه
+      return const SizedBox();
     }
 
     final mediaQuery = MediaQuery.of(context);
@@ -47,6 +46,8 @@ class _AppFloatingButtonState extends State<AppFloatingButton> {
 
     const appBarHeight = kToolbarHeight;
     const bottomNavBarHeight = 60.0;
+    const snackBarHeight = 56.0;
+    const snackBarSafePadding = 16.0;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -75,7 +76,9 @@ class _AppFloatingButtonState extends State<AppFloatingButton> {
                   final maxY = screenSize.height -
                       bottomNavBarHeight -
                       bottomPadding -
-                      70;
+                      70 -
+                      snackBarHeight -
+                      snackBarSafePadding;
 
                   newY = newY.clamp(minY, maxY);
 
@@ -96,8 +99,8 @@ class _AppFloatingButtonState extends State<AppFloatingButton> {
     return Opacity(
       opacity: opacity,
       child: SizedBox(
-        width: 60,
-        height: 60,
+        width: 56, // ✅ قللنا الحجم
+        height: 56,
         child: FloatingActionButton(
           backgroundColor: widget.color,
           shape: const CircleBorder(),
@@ -108,4 +111,3 @@ class _AppFloatingButtonState extends State<AppFloatingButton> {
     );
   }
 }
-

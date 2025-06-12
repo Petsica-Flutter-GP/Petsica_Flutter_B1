@@ -42,6 +42,7 @@ import 'package:petsica/features/profiles/views/edit_pet_view.dart';
 import 'package:petsica/features/profiles/user/views/user_profile_view.dart';
 import 'package:petsica/features/profiles/user/widgets/user_settings_page.dart';
 import 'package:petsica/features/profiles/where.dart';
+import 'package:petsica/features/profiles/widgets/edit_profile.dart';
 import 'package:petsica/features/signup/presentation/views/seller/seller_signup_view.dart';
 import 'package:petsica/features/signup/presentation/views/user/user_signup_view.dart';
 import 'package:petsica/features/splash/presentation/views/widgets/splach_screen.dart';
@@ -133,6 +134,7 @@ abstract class AppRouter {
   static const kWhereProfile = '/whereProfile';
   static const kWhoEdit = '/whoEdit';
   static const kHomeScreen = '/homeScreen';
+  static const kEditProfile = '/editProfile';
   static const kChooseOrderScreen = '/chooseOrderScreen';
 
   //routes
@@ -360,6 +362,10 @@ abstract class AppRouter {
       GoRoute(
         path: kChatBoot,
         builder: (context, state) => const ChatBootView(),
+      ),
+      GoRoute(
+        path: kEditProfile,
+        builder: (context, state) =>  EditProfileView(),
       ),
 //       GoRoute(
 //   path: kChat,
