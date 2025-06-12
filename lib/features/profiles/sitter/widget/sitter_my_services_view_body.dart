@@ -1,70 +1,64 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/app_floating_button.dart';
 import 'package:petsica/core/utils/app_router.dart';
-import 'package:petsica/core/utils/asset_data.dart';
 import 'package:petsica/core/utils/styles.dart';
-import 'package:petsica/features/profiles/sitter/widget/sitter_services_card.dart';
-
-import '../../../../core/constants.dart';
+import 'package:petsica/features/profiles/sitter/cubit/getService/get_my_service_cubit.dart';
+import 'package:petsica/features/profiles/sitter/cubit/getService/get_my_service_state.dart';
+import 'package:petsica/features/profiles/sitter/widget/sitter_card.dart';
 
 class SitterMyServicesViewBody extends StatelessWidget {
   const SitterMyServicesViewBody({super.key});
 
-  final List<Service> services = const [
-    Service(
-      headline: 'Full-Day Pet Sitting',
-      serviceType: 'Dogs',
-      price: '\$20 / hour',
-      image: AssetData.profileImage,
-    ),
-    Service(
-      headline: 'Cat Grooming',
-      serviceType: 'Cats',
-      price: '\$15 / hour',
-      image: AssetData.profileImage,
-    ),
-    Service(
-      headline: 'Dog Walking',
-      serviceType: 'Dogs',
-      price: '\$10 / hour',
-      image: AssetData.profileImage,
-    ),
-    Service(
-      headline: 'Overnight Pet Care',
-      serviceType: 'Dogs & Cats',
-      price: '\$25 / hour',
-      image: AssetData.profileImage,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: AppFloatingButton(
-        color: kProducPriceColor,
-        icon: const Icon(
-          Icons.add,
-          size: 35,
-          color: kWhiteGroundColor,
-        ),
-        onPressed: () {
-          GoRouter.of(context).go(AppRouter.kSitterNewServices);
-        },
-      ),
       backgroundColor: kWhiteGroundColor,
       appBar: AppBar(
         title: Text("My Services", style: Styles.textStyleQu28),
         centerTitle: true,
         leading: const AppArrowBack(destination: AppRouter.kSitterProfile),
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: services.length,
-        itemBuilder: (context, index) {
-          return SitterCard(service: services[index]);
+      floatingActionButton: AppFloatingButton(
+        color: kProducPriceColor,
+        icon: const Icon(Icons.add, size: 35, color: kWhiteGroundColor),
+        onPressed: () {
+          GoRouter.of(context).go(AppRouter.kSitterNewServices);
         },
+      ),
+      body: BlocProvider(
+        create: (_) => SitterServicesCubit()..fetchSitterServices(),
+        child: BlocBuilder<SitterServicesCubit, SitterServicesState>(
+          builder: (context, state) {
+            if (state is SitterServicesLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is SitterServicesLoaded) {
+              final services = state.services;
+
+              if (services.isEmpty) {
+                return const Center(child: Text("No services yet"));
+              }
+
+          return ListView.builder(
+  padding: const EdgeInsets.all(16),
+  itemCount: services.length,
+  itemBuilder: (context, index) {
+    return SitterCard(service: services[index]);
+  },
+);
+
+
+            } else if (state is SitterServicesError) {
+              return Center(child: Text("Error: ${state.message}"));
+            } else {
+              return const SizedBox();
+            }
+          },
+        ),
       ),
     );
   }
