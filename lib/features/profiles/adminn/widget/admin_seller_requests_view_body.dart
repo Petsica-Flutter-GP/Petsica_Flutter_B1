@@ -45,12 +45,9 @@ class AdminSellerRequestsViewBody extends StatelessWidget {
                 return AdminRequestsCard(
                   sitter: Seller,
                   onAccept: () {
-                    onAccept:
-                    () {
-                      context
-                          .read<SellerApprovalCubit>()
-                          .approveSeller(Seller.id);
-                    };
+                    context
+                        .read<SellerApprovalCubit>()
+                        .approveSeller(Seller.id);
                   },
                   onDelete: () {
                     // نفس الفكرة - حذف أو تجاهل الطلب
