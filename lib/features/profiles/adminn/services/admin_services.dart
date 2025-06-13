@@ -4,211 +4,128 @@ import 'dart:developer';
 import 'package:petsica/core/utils/send_Authorized_Request.dart';
 
 class AdminServices {
-  // Cancel order by admin
-  static Future<void> cancelOrderByAdmin(int orderID) async {
-    final url =
-        Uri.parse('http://petsica.runasp.net/api/Orders/admin/cancel/$orderID');
+  // ----------------------- Orders Management -----------------------
 
-    try {
-      final response = await sendAuthorizedRequest(
-        url: url,
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        _logSuccess('Order #$orderID canceled successfully by admin.');
-      } else {
-        await _handleError(response.statusCode, response.body);
-      }
-    } catch (error) {
-      _logException(error);
-      rethrow;
-    }
+  /// ✅ Cancel an order by admin
+  static Future<void> cancelOrder(int orderId) async {
+    final url = Uri.parse('http://petsica.runasp.net/api/Orders/admin/cancel/$orderId');
+    await _sendPutRequest(url, 'Order #$orderId canceled successfully by admin.');
   }
 
-// Make order complete by admin
-  static Future<void> completeOrderByAdmin(int orderID) async {
-    final url = Uri.parse(
-        'http://petsica.runasp.net/api/Orders/admin/complete/$orderID');
-
-    try {
-      final response = await sendAuthorizedRequest(
-        url: url,
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        _logSuccess('Order #$orderID marked as complete by admin.');
-      } else {
-        await _handleError(response.statusCode, response.body);
-      }
-    } catch (error) {
-      _logException(error);
-      rethrow;
-    }
+  /// ✅ Complete an order by admin
+  static Future<void> completeOrder(int orderId) async {
+    final url = Uri.parse('http://petsica.runasp.net/api/Orders/admin/complete/$orderId');
+    await _sendPutRequest(url, 'Order #$orderId marked as complete by admin.');
   }
 
-  // Get all orders by admin
-  static Future<List<dynamic>> getAllOrdersByAdmin() async {
+  /// ✅ Get all orders
+  static Future<List<dynamic>> getAllOrders() async {
     final url = Uri.parse('http://petsica.runasp.net/api/Orders/all');
-
-    try {
-      final response = await sendAuthorizedRequest(
-        url: url,
-        method: 'GET',
-      );
-
-      if (response.statusCode == 200) {
-        final data = response.body; // Assuming response.body is JSON string
-        return _parseJsonList(data);
-      } else {
-        await _handleError(response.statusCode, response.body);
-        return [];
-      }
-    } catch (error) {
-      _logException(error);
-      rethrow;
-    }
+    return await _sendGetListRequest(url);
   }
 
-  // Get all seller orders by admin
-  static Future<List<dynamic>> getAllSellerOrdersByAdmin() async {
-    final url =
-        Uri.parse('http://petsica.runasp.net/api/Orders/all/sellerorders');
-
-    try {
-      final response = await sendAuthorizedRequest(
-        url: url,
-        method: 'GET',
-      );
-
-      if (response.statusCode == 200) {
-        final data = response.body;
-        return _parseJsonList(data);
-      } else {
-        await _handleError(response.statusCode, response.body);
-        return [];
-      }
-    } catch (error) {
-      _logException(error);
-      rethrow;
-    }
+  /// ✅ Get all seller orders
+  static Future<List<dynamic>> getAllSellerOrders() async {
+    final url = Uri.parse('http://petsica.runasp.net/api/Orders/all/sellerorders');
+    return await _sendGetListRequest(url);
   }
 
-  // Get seller order by ID by admin
+  /// ✅ Get order by ID
+  static Future<dynamic> getOrderById(int orderId) async {
+    final url = Uri.parse('http://petsica.runasp.net/api/Orders/admin/$orderId');
+    return await _sendGetObjectRequest(url);
+  }
+
+  /// ✅ Get seller order by ID
   static Future<dynamic> getSellerOrderById(int sellerOrderId) async {
-    final url = Uri.parse(
-        'http://petsica.runasp.net/api/Orders/admin/seller/$sellerOrderId');
+    final url = Uri.parse('http://petsica.runasp.net/api/Orders/admin/seller/$sellerOrderId');
+    return await _sendGetObjectRequest(url);
+  }
 
+  // ----------------------- Helpers -----------------------
+
+  static Future<void> _sendPutRequest(Uri url, String successMessage) async {
     try {
       final response = await sendAuthorizedRequest(
         url: url,
-        method: 'GET',
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
       );
 
       if (response.statusCode == 200) {
-        final data = response.body;
-        return _parseJsonObject(data);
+        _logSuccess(successMessage);
       } else {
         await _handleError(response.statusCode, response.body);
-        return null;
       }
-    } catch (error) {
-      _logException(error);
-      rethrow;
-    }
-  }
-
-  // Get order by ID by admin
-  static Future<dynamic> getOrderById(int orderID) async {
-    final url =
-        Uri.parse('http://petsica.runasp.net/api/Orders/admin/$orderID');
-
-    try {
-      final response = await sendAuthorizedRequest(
-        url: url,
-        method: 'GET',
-      );
-
-      if (response.statusCode == 200) {
-        final data = response.body;
-        return _parseJsonObject(data);
-      } else {
-        await _handleError(response.statusCode, response.body);
-        return null;
-      }
-    } catch (error) {
-      _logException(error);
-      rethrow;
-    }
-  }
-
-  // --- Helpers ---
-
-  static void _logSuccess(String message) {
-    print('✅ $message');
-  }
-
-  // static Future<void> _handleError(int statusCode, String responseBody) async {
-  //   log('❌ Request failed with status code: $statusCode');
-  //   log('Error details: $responseBody');
-
-  //   try {
-  //     final decoded = jsonDecode(responseBody);
-
-  //     final description = decoded['description'] ??
-  //         decoded['message'] ??
-  //         decoded['error'] ??
-  //         responseBody;
-
-  //     throw Exception(description);
-  //   } catch (e) {
-  //     throw Exception(responseBody);
-  //   }
-  // }
-
-
-static Future<void> _handleError(int statusCode, String responseBody) async {
-  log('❌ Request failed with status code: $statusCode');
-  log('Error details: $responseBody');
-
-  try {
-    final decoded = jsonDecode(responseBody);
-
-    final description = decoded['description'] ??
-        decoded['message'] ??
-        decoded['error'] ??
-        "Unexpected error";
-
-    throw Exception(description); // رسالة نصية مباشرة
-  } catch (e) {
-    throw Exception("Server error");
-  }
-}
-
-  static void _logException(dynamic error) {
-    print('❌ Exception occurred: $error');
-  }
-
-  // Parse a JSON list string to dynamic list
-  static List<dynamic> _parseJsonList(String jsonString) {
-    try {
-      return jsonDecode(jsonString) as List<dynamic>;
     } catch (e) {
-      print('❌ Failed to parse JSON list: $e');
+      _logException(e);
+      rethrow;
+    }
+  }
+
+  static Future<List<dynamic>> _sendGetListRequest(Uri url) async {
+    try {
+      final response = await sendAuthorizedRequest(url: url, method: 'GET');
+
+      if (response.statusCode == 200) {
+        return _parseJsonList(response.body);
+      } else {
+        await _handleError(response.statusCode, response.body);
+        return [];
+      }
+    } catch (e) {
+      _logException(e);
+      rethrow;
+    }
+  }
+
+  static Future<dynamic> _sendGetObjectRequest(Uri url) async {
+    try {
+      final response = await sendAuthorizedRequest(url: url, method: 'GET');
+
+      if (response.statusCode == 200) {
+        return _parseJsonObject(response.body);
+      } else {
+        await _handleError(response.statusCode, response.body);
+        return null;
+      }
+    } catch (e) {
+      _logException(e);
+      rethrow;
+    }
+  }
+
+  static List<dynamic> _parseJsonList(String jsonStr) {
+    try {
+      return jsonDecode(jsonStr) as List<dynamic>;
+    } catch (e) {
+      log('❌ Failed to parse list: $e');
       return [];
     }
   }
 
-  // Parse a JSON object string to dynamic map
-  static dynamic _parseJsonObject(String jsonString) {
+  static dynamic _parseJsonObject(String jsonStr) {
     try {
-      return jsonDecode(jsonString);
+      return jsonDecode(jsonStr);
     } catch (e) {
-      print('❌ Failed to parse JSON object: $e');
+      log('❌ Failed to parse object: $e');
       return null;
     }
   }
+
+  static Future<void> _handleError(int statusCode, String responseBody) async {
+    log('❌ Request failed with status: $statusCode');
+    log('Error: $responseBody');
+
+    try {
+      final decoded = jsonDecode(responseBody);
+      final msg = decoded['description'] ?? decoded['message'] ?? decoded['error'] ?? "Unexpected error";
+      throw Exception(msg);
+    } catch (_) {
+      throw Exception("Server error");
+    }
+  }
+
+  static void _logSuccess(String message) => log('✅ $message');
+  static void _logException(dynamic error) => log('❌ Exception: $error');
 }

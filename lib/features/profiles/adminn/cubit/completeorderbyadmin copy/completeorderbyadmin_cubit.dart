@@ -8,7 +8,7 @@ class CompleteOrderCubit extends Cubit<CompleteOrderState> {
   Future<void> completeOrder(int orderId) async {
     emit(CompleteOrderLoading());
     try {
-      await AdminServices.completeOrderByAdmin(orderId); // ✅ تصحيح هنا
+      await AdminServices.completeOrder(orderId); // ✅ تصحيح هنا
       emit(CompleteOrderSuccess());
     } catch (e) {
       emit(CompleteOrderErrorState(
