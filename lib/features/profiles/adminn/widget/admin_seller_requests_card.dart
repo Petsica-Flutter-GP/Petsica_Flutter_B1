@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/features/profiles/adminn/services/model/sitter_approval_model.dart';
+import 'package:petsica/features/profiles/adminn/widget/admin_clinic_requests_details.dart';
 import 'package:petsica/features/profiles/adminn/widget/admin_request_deletion_show_dialog.dart';
 import '../../../../core/utils/asset_data.dart';
 import '../../../../core/utils/styles.dart';
@@ -28,6 +29,15 @@ class AdminRequestsCard extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
+           onTap: () { // هنا بيودي عالديتيلز
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ClinicDetailsView(userId: sitter.id),
+    ),
+  );
+},
+
             contentPadding: const EdgeInsets.symmetric(horizontal: 0),
             leading: ClipOval(
               child: _buildImage(),
