@@ -9,7 +9,7 @@ class AdminSellerOrdersCubit extends Cubit<AdminSellerOrdersState> {
     emit(AdminSellerOrderLoading());
 
     try {
-      final orders = await AdminServices.getAllSellerOrdersByAdmin();
+      final orders = await AdminServices.getAllSellerOrders();
 
       emit(AdminSellerOrderLoaded(orders));
     } catch (e) {

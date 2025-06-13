@@ -8,7 +8,7 @@ class CancelOrderCubit extends Cubit<CancelOrderState> {
   Future<void> cancelOrder(int orderId) async {
     emit(CancelOrderLoading());
     try {
-      await AdminServices.completeOrderByAdmin(orderId); // ✅ تصحيح هنا
+      await AdminServices.cancelOrder(orderId); // ✅ تصحيح هنا
       emit(CancelOrderSuccess());
     } catch (e) {
       emit(CancelOrderFailure(e.toString().replaceAll('Exception: ', ''))); // ✅ شيل كلمة Exception

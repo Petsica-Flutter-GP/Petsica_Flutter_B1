@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsica/features/profiles/sitter/cubit/getService/get_my_service_state.dart';
-import 'package:petsica/features/profiles/sitter/services/sitter_sercies.dart';
+import 'package:petsica/features/profiles/sitter/services/sitter_services.dart';
 
 
 class SitterServicesCubit extends Cubit<SitterServicesState> {
