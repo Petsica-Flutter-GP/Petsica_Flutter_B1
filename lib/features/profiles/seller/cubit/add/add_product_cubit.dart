@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsica/features/profiles/seller/cubit/add/add_product_cubit_state.dart';
 import 'package:petsica/features/profiles/seller/services/product_services.dart';
-import 'package:petsica/helpers/http_helper.dart';
 
 class AddProductCubit extends Cubit<AddProductState> {
   AddProductCubit() : super(AddProductInitial());

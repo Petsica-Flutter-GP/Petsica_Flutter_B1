@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class AuthService {
+class AuthServiceUser {
   static const String _baseUrl = "http://petsica.runasp.net/Auth/registerUser";
 
   static Future<Map<String, dynamic>> registerUser({
