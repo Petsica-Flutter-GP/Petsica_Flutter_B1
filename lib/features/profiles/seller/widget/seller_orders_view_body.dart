@@ -30,12 +30,22 @@ class SellerOrdersViewBody extends StatelessWidget {
               if (state.orders.isEmpty) {
                 return const Center(child: Text('No orders found.'));
               }
-              return ListView.builder(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 25),
+              return
+                  // ListView.builder(
+                  //   padding:
+                  //       const EdgeInsets.symmetric(horizontal: 10, vertical: 25),
+                  //   itemCount: state.orders.length,
+                  //   itemBuilder: (context, index) {
+                  //     return SellerOrdersCard(order: state.orders[index]);
+                  //   },
+                  // );
+                  ListView.builder(
                 itemCount: state.orders.length,
                 itemBuilder: (context, index) {
-                  return SellerOrdersCard(order: state.orders[index]);
+                  return SellerOrdersCard(
+                    order: state.orders[index],
+                    index: index, 
+                  );
                 },
               );
             } else if (state is SellerOrdersFailure) {

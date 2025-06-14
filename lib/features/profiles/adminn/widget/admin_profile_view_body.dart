@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsica/core/utils/app_arrow_back.dart';
 import 'package:petsica/core/utils/asset_data.dart';
+import 'package:petsica/features/profiles/adminn/widget/admin_profile_menu.dart';
+import 'package:petsica/features/profiles/logic/viewProfile/profile_cubit.dart';
 import 'package:petsica/features/profiles/user/cubit/profile_image_cubit.dart';
 import 'package:petsica/features/profiles/widgets/profile_list_tile.dart';
 
@@ -19,7 +21,8 @@ class AdminProfileViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ProfileImageCubit(), // إنشاء `Cubit`
+      create: (context) =>
+          ProfileCubit()..getProfile(), // 👉 تحميل البيانات هنا
       child: Scaffold(
         backgroundColor: kWhiteGroundColor,
         appBar: AppBar(
@@ -27,138 +30,91 @@ class AdminProfileViewBody extends StatelessWidget {
           centerTitle: true,
           leading: const AppArrowBack(destination: AppRouter.kWhereProfile),
         ),
-        body: SingleChildScrollView(
-          // 📌 جعل الصفحة قابلة للتمرير
-          padding: const EdgeInsets.symmetric(
-              horizontal: 20, vertical: 20), // إضافة هامش
-          child: Column(
-            children: [
-              const SizedBox(height: 30),
+        body: BlocBuilder<ProfileCubit, ProfileState>(
+          builder: (context, state) {
+            if (state is ProfileLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is ProfileFailure) {
+              return Center(child: Text('❌ ${state.error}'));
+            } else if (state is ProfileSuccess) {
+              final profile = state.profile;
 
-              /// 🔹 استخدام `BlocBuilder` للحصول على الصورة من `Cubit`
-              BlocBuilder<ProfileImageCubit, File?>(
-                builder: (context, profileImage) {
-                  return CircleProfileImagePicker(
-                    image: profileImage, // الصورة المختارة
-                    assetImage: AssetData.profileImage, // الصورة الافتراضية
-                    name: 'user',
-                    onImageSelected: (File? image) {
-                      context.read<ProfileImageCubit>().emit(image);
-                    },
-                  );
-                },
-              ),
-
-              const SizedBox(height: 10),
-
-              /// 🔹 معلومات المستخدم
-              Text(
-                "Puerto Rico",
-                style: Styles.textStyleCom26,
-              ),
-              Text(
-                "youremail@domain.com | +01 234 567 89",
-                style: Styles.textStyleCom16,
-              ),
-              const SizedBox(height: 20),
-
-              /// 🔹 الأزرار
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: AppButton(
-                      text: 'View Profile',
-                      border: 15,
-                      style: Styles.textStyleQui20.copyWith(
-                          color: Colors.white, fontWeight: FontWeight.normal),
+              return SingleChildScrollView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    CircleProfileImagePicker(
+                      image: null,
+                      assetImage: AssetData.profileImage,
+                      name: profile.userName,
+                      onImageSelected: (File? image) {},
                     ),
-                  ),
-                  const SizedBox(width: 10), // هامش بين الأزرار
-                  Expanded(
-                    child: AppButton(
-                      text: 'Edit',
-                      border: 15,
-                      style: Styles.textStyleQui20.copyWith(
-                          color: Colors.white, fontWeight: FontWeight.normal),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
+                    const SizedBox(height: 10),
 
-              /// 🔹 خط فاصل
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: const Divider(
-                  thickness: 1,
-                  height: 40,
-                  color: Colors.black,
+                    /// 🔹 معلومات المستخدم
+                    Text(
+                      profile.userName ?? 'No name',
+                      style: Styles.textStyleCom26,
+                    ),
+                    Text(
+                      profile.email,
+                      style: Styles.textStyleCom16,
+                    ),
+                    const SizedBox(height: 20),
+
+                    /// 🔹 الأزرار
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: AppButton(
+                            text: 'View Profile',
+                            border: 15,
+                            style: Styles.textStyleQui20.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: AppButton(
+                            text: 'Edit',
+                            onTap: () {
+                              GoRouter.of(context).go(
+                                AppRouter.kEditProfile,
+                              );
+                            },
+                            border: 15,
+                            style: Styles.textStyleQui20.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: const Divider(
+                        thickness: 1,
+                        height: 40,
+                        color: Colors.black,
+                      ),
+                    ),
+
+                    /// 🔹 القائمة الجانبية
+                    const AdminProfileMenu(),
+                  ],
                 ),
-              ),
-
-              /// 🔹 القائمة الجانبية
-              Column(
-                children: [
-                  ProfileListTile(
-                    iconasset: AssetData.storeIcon,
-                    label: 'Seller requests',
-                    height: 35,
-                    onTap: () {
-                      GoRouter.of(context).go(
-                        AppRouter.kAdminSellerRequests,
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                  ProfileListTile(
-                    iconasset: AssetData.serviceIcon,
-                    label: 'Sitter requests',
-                    height: 35,
-                    onTap: () {
-                      GoRouter.of(context).go(
-                        AppRouter.kAdminSitterRequests,
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                  ProfileListTile(
-                    iconasset: AssetData.clinicIcon,
-                    label: 'Clinic requests',
-                    height: 40,
-                    onTap: () {
-                      GoRouter.of(context).go(
-                        AppRouter.kAdminClinicRequests,
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                   ProfileListTile(
-                    iconasset: AssetData.settingsIcon,
-                    label: 'Settings',
-                    height: 50,
-                    onTap: () {
-                      GoRouter.of(context).go(
-                        AppRouter.kAdminSettings,
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                  const ProfileListTile(
-                    iconasset: AssetData.aboutUsIcon,
-                    label: 'About us',
-                    height: 45,
-                  ),
-                  const SizedBox(height: 30),
-                  const ProfileListTile(
-                    iconasset: AssetData.logoutIcon,
-                    label: 'Log out',
-                    height: 37,
-                  ),
-                ],
-              ),
-            ],
-          ),
+              );
+            } else {
+              return const SizedBox();
+            }
+          },
         ),
       ),
     );

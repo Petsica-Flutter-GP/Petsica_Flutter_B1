@@ -200,35 +200,66 @@ class _AddPetPageViewBodyState extends State<AddPetPageViewBody> {
                         width: 100,
                         backgroundColor: kProducPriceColor,
                         onTap: () async {
-                          if (_formKey.currentState!.validate()) {
-                            if (_selectedImage == null) {
-                              setState(() {
-                                isImageRequired = true;
-                              });
-                              return;
-                            }
+                          // if (_formKey.currentState!.validate()) {
+                          //   if (_selectedImage == null) {
+                          //     setState(() {
+                          //       isImageRequired = true;
+                          //     });
+                          //     return;
+                          //   }
 
-                            final bytes = await _selectedImage!.readAsBytes();
-                            final base64Image = base64Encode(bytes);
+                          //   final bytes = await _selectedImage!.readAsBytes();
+                          //   final base64Image = base64Encode(bytes);
 
-                            setState(() {
-                              isLoading = true;
-                            });
+                          //   setState(() {
+                          //     isLoading = true;
+                          //   });
 
-                            await cubit.addPet(
-                              PetModel(
-                                name: _petNameController.text.trim(),
-                                age: _petAgeController.text.trim(),
-                                type: selectedType,
-                                gender: selectedGender,
-                                photo: base64Image,
+                          //   await cubit.addPet(
+                          //     PetModel(
+                          //       name: _petNameController.text.trim(),
+                          //       age: _petAgeController.text.trim(),
+                          //       type: selectedType,
+                          //       gender: selectedGender,
+                          //       photo: base64Image,
+                          //     ),
+                          //   );
+
+                          //   setState(() {
+                          //     isLoading = false;
+                          //   });
+                          // }
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 20),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                            );
-
-                            setState(() {
-                              isLoading = false;
-                            });
-                          }
+                              backgroundColor: Colors.red.shade600,
+                              duration: const Duration(seconds: 2),
+                              content: Row(
+                                children: [
+                                  const Icon(Icons.warning_amber_rounded,
+                                      color: Colors.white),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      'Failed to add pet.. !!',
+                                      style: Styles.textStyleCom16.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ),

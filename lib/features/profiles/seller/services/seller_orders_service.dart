@@ -75,4 +75,36 @@ class SellerOrderService {
       throw Exception('Something went wrong');
     }
   }
+
+
+
+static Future<void> makeOrderComplete(int sellerOrderId) async {
+  try {
+    final token = await TokenStorage.getAccessToken();
+    final url = '$_baseUrl/Orders/complete/$sellerOrderId';
+
+    final response = await http.put(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    log('📩 Complete Order Status Code: ${response.statusCode}');
+    log('📦 Complete Order Response Body: ${response.body}');
+
+    if (response.statusCode != 200) {
+      log('❌ Failed to complete order: ${response.reasonPhrase}');
+      throw Exception('Failed to complete order');
+    }
+  } catch (e) {
+    log('🚨 Error in makeOrderComplete: $e');
+    throw Exception('Something went wrong');
+  }
+}
+
+
+
+ 
 }

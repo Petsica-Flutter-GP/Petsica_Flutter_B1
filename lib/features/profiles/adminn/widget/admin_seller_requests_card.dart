@@ -1,18 +1,24 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_button.dart';
+import 'package:petsica/features/profiles/adminn/services/model/sitter_approval_model.dart';
+import 'package:petsica/features/profiles/adminn/widget/admin_clinic_requests_details.dart';
 import 'package:petsica/features/profiles/adminn/widget/admin_request_deletion_show_dialog.dart';
 import '../../../../core/utils/asset_data.dart';
 import '../../../../core/utils/styles.dart';
 
-class AdminSellerRequestsCard extends StatelessWidget {
+class AdminRequestsCard extends StatelessWidget {
+  final SitterApprovalModel sitter;
   final VoidCallback onDelete;
+  final VoidCallback onAccept;
 
-  const AdminSellerRequestsCard({
-    Key? key,
+  const AdminRequestsCard({
+    super.key,
+    required this.sitter,
     required this.onDelete,
-  }) : super(key: key);
+    required this.onAccept,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,24 +29,28 @@ class AdminSellerRequestsCard extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
+           onTap: () { // هنا بيودي عالديتيلز
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ClinicDetailsView(userId: sitter.id),
+    ),
+  );
+},
+
             contentPadding: const EdgeInsets.symmetric(horizontal: 0),
             leading: ClipOval(
-              child: Image.asset(
-                AssetData.profileImage,
-                height: 60,
-                width: 60,
-                fit: BoxFit.cover,
-              ),
+              child: _buildImage(),
             ),
             title: Text(
-              'User Name',
+              sitter.userName,
               style: Styles.textStyleCom22.copyWith(
                 color: kBurgColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
             subtitle: Text(
-              'Fayoum',
+              sitter.address,
               style: Styles.textStyleCom16.copyWith(
                 color: kProductTxtColor,
               ),
@@ -56,17 +66,12 @@ class AdminSellerRequestsCard extends StatelessWidget {
                   ),
                   border: 10,
                   width: 75,
-                  onTap: () {
-                    // GoRouter.of(context).go(
-                    //   AppRouter.kSellerOrderDetails,
-                    // );
-                  },
+                  onTap: onAccept,
                 ),
                 const SizedBox(width: 15),
                 IconButton(
                   onPressed: () {
                     _showDeleteDialog(context);
-                    print("Item Deleted");
                   },
                   icon: const Icon(
                     Icons.close_outlined,
@@ -85,7 +90,73 @@ class AdminSellerRequestsCard extends StatelessWidget {
     );
   }
 
-  // ✅ دالة داخل الكلاس وتقدر توصل للـ onDelete
+  Widget _buildImage() {
+    if (sitter.photo.isEmpty) {
+      // 👉 مفيش صورة: نعرض الأيقونة
+      return const Icon(
+        Icons.person,
+        size: 60,
+        color: kWordColor,
+      );
+    }
+
+    try {
+      final decodedImage = base64Decode(sitter.photo);
+      return Image.memory(
+        decodedImage,
+        height: 60,
+        width: 60,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => const Icon(
+          Icons.person,
+          size: 60,
+          color: kWordColor,
+        ),
+      );
+    } catch (_) {
+      // 👉 الصورة مش صالحة: نعرض الأيقونة
+      return const Icon(
+        Icons.person,
+        size: 60,
+        color: Color.fromARGB(255, 138, 75, 80),
+      );
+    }
+  }
+
+  // /// ✅ دالة عرض الصورة سواء base64 أو placeholder
+  // Widget _buildImage() {
+  //   try {
+  //     if (sitter.photo.isEmpty) {
+  //       return const Icon(
+  //         Icons.person,
+  //         size: 60,
+  //         color: kWordColor,
+  //       );
+  //     } else {
+  //       final decodedImage = base64Decode(sitter.photo);
+  //       return Image.memory(
+  //         decodedImage,
+  //         height: 60,
+  //         width: 60,
+  //         fit: BoxFit.cover,
+  //         errorBuilder: (_, __, ___) => Image.asset(
+  //           AssetData.profileImage,
+  //           height: 60,
+  //           width: 60,
+  //           fit: BoxFit.cover,
+  //         ),
+  //       );
+  //     }
+  //   } catch (_) {
+  //     return Image.asset(
+  //       AssetData.profileImage,
+  //       height: 60,
+  //       width: 60,
+  //       fit: BoxFit.cover,
+  //     );
+  //   }
+  // }
+
   void _showDeleteDialog(BuildContext context) {
     AdminRequestDeletionShowDialog(context, onDelete);
   }

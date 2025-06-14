@@ -149,7 +149,6 @@ class SellerMyStoreViewBody extends StatelessWidget {
                       Center(
                           child: Text("No products yet 🛒",
                               style: TextStyle(fontSize: 20))),
-                      AnimatedArrow(), // السهم المتحرك
                     ],
                   );
                 }
@@ -199,130 +198,130 @@ class SellerMyStoreViewBody extends StatelessWidget {
   }
 }
 
-class AnimatedArrowHint extends StatefulWidget {
-  const AnimatedArrowHint({super.key});
+// class AnimatedArrowHint extends StatefulWidget {
+//   const AnimatedArrowHint({super.key});
 
-  @override
-  State<AnimatedArrowHint> createState() => _AnimatedArrowHintState();
-}
+//   @override
+//   State<AnimatedArrowHint> createState() => _AnimatedArrowHintState();
+// }
 
-class _AnimatedArrowHintState extends State<AnimatedArrowHint>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Offset> _offsetAnimation;
+// class _AnimatedArrowHintState extends State<AnimatedArrowHint>
+//     with SingleTickerProviderStateMixin {
+//   late AnimationController _controller;
+//   late Animation<Offset> _offsetAnimation;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 1),
-      vsync: this,
-    )..repeat(reverse: true);
+//   @override
+//   void initState() {
+//     super.initState();
+//     _controller = AnimationController(
+//       duration: const Duration(seconds: 1),
+//       vsync: this,
+//     )..repeat(reverse: true);
 
-    _offsetAnimation =
-        Tween<Offset>(begin: const Offset(0, -0.3), end: const Offset(0, 0.3))
-            .animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-  }
+//     _offsetAnimation =
+//         Tween<Offset>(begin: const Offset(0, -0.3), end: const Offset(0, 0.3))
+//             .animate(
+//       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+//     );
+//   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+//   @override
+//   void dispose() {
+//     _controller.dispose();
+//     super.dispose();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SlideTransition(
-      position: _offsetAnimation,
-      child: Row(
-        children: [
-          Text(
-            'Add Product',
-            style: Styles.textStyleCom22,
-          ),
-          const Icon(Icons.north, size: 40, color: kBurgColor),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return SlideTransition(
+//       position: _offsetAnimation,
+//       child: Row(
+//         children: [
+//           Text(
+//             'Add Product',
+//             style: Styles.textStyleCom22,
+//           ),
+//           const Icon(Icons.north, size: 40, color: kBurgColor),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-class CurvedArrowPainter extends CustomPainter {
-  final double progress;
+// class CurvedArrowPainter extends CustomPainter {
+//   final double progress;
 
-  CurvedArrowPainter(this.progress);
+//   CurvedArrowPainter(this.progress);
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.orange
-      ..strokeWidth = 4
-      ..style = PaintingStyle.stroke;
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final paint = Paint()
+//       ..color = Colors.orange
+//       ..strokeWidth = 4
+//       ..style = PaintingStyle.stroke;
 
-    final path = Path();
+//     final path = Path();
 
-    // من منتصف الشاشة إلى أعلى اليمين
-    path.moveTo(size.width / 2, size.height / 2);
+//     // من منتصف الشاشة إلى أعلى اليمين
+//     path.moveTo(size.width / 2, size.height / 2);
 
-    // المسار المموج
-    path.quadraticBezierTo(
-      size.width * 0.75,
-      size.height * 0.35,
-      size.width * progress,
-      0,
-    );
+//     // المسار المموج
+//     path.quadraticBezierTo(
+//       size.width * 0.75,
+//       size.height * 0.35,
+//       size.width * progress,
+//       0,
+//     );
 
-    canvas.drawPath(path, paint);
-  }
+//     canvas.drawPath(path, paint);
+//   }
 
-  @override
-  bool shouldRepaint(covariant CurvedArrowPainter oldDelegate) {
-    return oldDelegate.progress != progress;
-  }
-}
+//   @override
+//   bool shouldRepaint(covariant CurvedArrowPainter oldDelegate) {
+//     return oldDelegate.progress != progress;
+//   }
+// }
 
-class AnimatedArrow extends StatefulWidget {
-  const AnimatedArrow({super.key});
+// class AnimatedArrow extends StatefulWidget {
+//   const AnimatedArrow({super.key});
 
-  @override
-  State<AnimatedArrow> createState() => _AnimatedArrowState();
-}
+//   @override
+//   State<AnimatedArrow> createState() => _AnimatedArrowState();
+// }
 
-class _AnimatedArrowState extends State<AnimatedArrow>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
+// class _AnimatedArrowState extends State<AnimatedArrow>
+//     with SingleTickerProviderStateMixin {
+//   late AnimationController _controller;
+//   late Animation<double> _animation;
 
-  @override
-  void initState() {
-    super.initState();
+//   @override
+//   void initState() {
+//     super.initState();
 
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat(reverse: true);
+//     _controller = AnimationController(
+//       vsync: this,
+//       duration: const Duration(seconds: 2),
+//     )..repeat(reverse: true);
 
-    _animation = Tween<double>(begin: 0.5, end: 1.0).animate(_controller);
-  }
+//     _animation = Tween<double>(begin: 0.5, end: 1.0).animate(_controller);
+//   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+//   @override
+//   void dispose() {
+//     _controller.dispose();
+//     super.dispose();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (_, __) {
-        return CustomPaint(
-          size: MediaQuery.of(context).size,
-          painter: CurvedArrowPainter(_animation.value),
-        );
-      },
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return AnimatedBuilder(
+//       animation: _animation,
+//       builder: (_, __) {
+//         return CustomPaint(
+//           size: MediaQuery.of(context).size,
+//           painter: CurvedArrowPainter(_animation.value),
+//         );
+//       },
+//     );
+//   }
+// }
