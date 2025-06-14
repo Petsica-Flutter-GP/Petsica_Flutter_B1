@@ -106,27 +106,7 @@ class AppNavBar extends StatelessWidget {
           ),
           label: "",
         ),
-        BottomNavigationBarItem(
-          icon: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.access_time,
-                size: currentIndex == 4 ? 35 : 30,
-                color: currentIndex == 4 ? kBurgColor : kInputWordColor,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                "Alarm",
-                style: TextStyle(
-                  fontSize: currentIndex == 4 ? 16 : 14,
-                  color: currentIndex == 4 ? kBurgColor : kInputWordColor,
-                ),
-              ),
-            ],
-          ),
-          label: "",
-        ),
+        
       ],
     );
   }

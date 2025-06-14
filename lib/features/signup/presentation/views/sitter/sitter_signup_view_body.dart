@@ -7,6 +7,7 @@ import 'package:petsica/features/Login/presentation/views/widgets/input_field.da
 import 'package:petsica/features/signup/custom_snack_bar.dart';
 import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
 import 'package:petsica/features/signup/presentation/widgets/otp_confirm.dart';
+import 'package:petsica/features/signup/presentation/widgets/verification_id_input_field.dart';
 import '../../../../../core/constants.dart';
 import '../../../../../core/utils/app_button.dart';
 import '../../../../../core/utils/app_router.dart';
@@ -31,9 +32,9 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   bool _isLoading = false;
+  // String? _nationalIdImageBase64; // Store base64-encoded image
 
   Future<void> _signUpSitter() async {
     if (!_formKey.currentState!.validate()) return;
@@ -46,6 +47,7 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
 
     if (_profileImageBase64 == null) {
       showCustomSnackBar(context, "Profile photo is required");
+
 
       return;
     }
@@ -63,6 +65,7 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
         email: email,
         userName: username,
         nationalId: _profileImageBase64!,
+
         location: location,
         password: password,
       );
@@ -78,6 +81,7 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(result["message"]), backgroundColor: Colors.red),
+
         );
       }
     } catch (e) {
@@ -95,6 +99,7 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
           leading: const AppArrowBack(destination: AppRouter.kWhoAreYou),
+
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -164,6 +169,7 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
                       ),
                       const SizedBox(height: 20),
                       InputField(
+
                         label: 'Location',
                         controller: _locationController,
                         icon: const Icon(Icons.place, color: kIconsColor),

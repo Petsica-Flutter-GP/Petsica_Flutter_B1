@@ -41,7 +41,7 @@ class _UserSignUpViewBodyState extends State<UserSignUpViewBody> {
       _isLoading = true;
     });
 
-    final result = await AuthService.registerUser(
+    final result = await AuthServiceUser.registerUser(
       email: email,
       userName: username,
       password: password,
@@ -64,8 +64,8 @@ class _UserSignUpViewBodyState extends State<UserSignUpViewBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-
           leading: const AppArrowBack(destination: AppRouter.kWhoAreYou),
+
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
