@@ -15,14 +15,14 @@ class WhoViewBody extends StatefulWidget {
 class _WhoViewBodyState extends State<WhoViewBody> {
   String? selectedOption;
 
-  void _navigateToWelcomeBack(String option) {
-    setState(() {
-      selectedOption = option;
-    });
+  // void _navigateToWelcomeBack(String option) {
+  //   setState(() {
+  //     selectedOption = option;
+  //   });
 
-    context.go(AppRouter.kWelcomeBack,
-        extra: option); // ✅ الانتقال إلى WelcomeBack
-  }
+  //   context.go(AppRouter.kWelcomeBack,
+  //       extra: option); // ✅ الانتقال إلى WelcomeBack
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +42,20 @@ class _WhoViewBodyState extends State<WhoViewBody> {
               WhoAreYouBox(
                 text: 'Pet Parent',
                 image: AssetData.parentImage,
-                onTap: () => _navigateToWelcomeBack('Pet Parent'),
+                onTap: () {
+                  GoRouter.of(context).go(
+                    AppRouter.kUserSignUp,
+                  );
+                },
               ),
               WhoAreYouBox(
                 text: 'Pet Sitter',
                 image: AssetData.sitterImage,
-                onTap: () => _navigateToWelcomeBack('Pet Sitter'),
+                onTap: () {
+                  GoRouter.of(context).go(
+                    AppRouter.kSitterSignUp,
+                  );
+                },
               ),
             ],
           ),
@@ -58,12 +66,20 @@ class _WhoViewBodyState extends State<WhoViewBody> {
               WhoAreYouBox(
                 text: 'Clinic',
                 image: AssetData.clinicImage,
-                onTap: () => _navigateToWelcomeBack('Clinic'),
+                onTap: () {
+                  GoRouter.of(context).go(
+                    AppRouter.kClinicSignUp,
+                  );
+                },
               ),
               WhoAreYouBox(
                 text: 'Pet Seller',
                 image: AssetData.sellerImage,
-                onTap: () => _navigateToWelcomeBack('Pet Seller'),
+                onTap: () {
+                  GoRouter.of(context).go(
+                    AppRouter.kSellerSignUp,
+                  );
+                },
               ),
             ],
           ),

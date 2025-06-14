@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/Login/presentation/views/widgets/input_field.dart';
+import 'package:petsica/features/signup/custom_snack_bar.dart';
 import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
 import 'package:petsica/features/signup/presentation/widgets/otp_confirm.dart';
 import 'package:petsica/features/signup/presentation/widgets/verification_id_input_field.dart';
@@ -23,10 +24,12 @@ class SitterSignUpViewBody extends StatefulWidget {
 }
 
 class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   File? _profileImage;
+  String? _profileImageBase64;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _idController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
@@ -34,30 +37,24 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
   // String? _nationalIdImageBase64; // Store base64-encoded image
 
   Future<void> _signUpSitter() async {
-    print("Attempting sitter sign-up...");
+    if (!_formKey.currentState!.validate()) return;
+
     String email = _emailController.text.trim();
     String username = _usernameController.text.trim();
     String location = _locationController.text.trim();
     String password = _passwordController.text.trim();
     String confirmPassword = _confirmPasswordController.text.trim();
 
-    // Check if all fields, including the image, are provided
-    if (email.isEmpty ||
-        username.isEmpty ||
-        // _nationalIdImageBase64 == null ||
-        location.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("All fields are required, including national ID photo")),
-      );
+    if (_profileImageBase64 == null) {
+      showCustomSnackBar(context, "Profile photo is required");
+
+
       return;
     }
 
     if (password != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Passwords do not match")),
-      );
+      showCustomSnackBar(context, "Passwords do not match");
+
       return;
     }
 
@@ -67,13 +64,13 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
       final result = await AuthServiceSitter.registerSitter(
         email: email,
         userName: username,
-        // nationalId: _nationalIdImageBase64!, // Send base64 image as nationalId
+        nationalId: _profileImageBase64!,
+
         location: location,
         password: password,
       );
 
       if (result["success"]) {
-        // Navigate to OTP confirmation page with the email
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -82,7 +79,9 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(result["message"]), backgroundColor: Colors.red),
+          SnackBar(
+              content: Text(result["message"]), backgroundColor: Colors.red),
+
         );
       }
     } catch (e) {
@@ -99,7 +98,8 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: const AppArrowBack(destination: AppRouter.kWhoAreYou),
+          leading: const AppArrowBack(destination: AppRouter.kWhoAreYou),
+
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -127,64 +127,86 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 26),
-                    CircleProfileImagePicker(
-                      name: 'user',
-                      image: _profileImage,
-                      onImageSelected: (File? image) {
-                        setState(() => _profileImage = image);
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    InputField(
-                        label: 'Email address', controller: _emailController),
-                    const SizedBox(height: 20),
-                    InputField(
-                        label: "User Name", controller: _usernameController),
-                    const SizedBox(height: 20),
-                    // VerificationIdInputField(
-                    //   label: 'National ID',
-                    //   onSelectImage: () async {
-                    //     final picker = ImagePicker();
-                    //     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-                    //     if (pickedFile != null) {
-                    //       final bytes = await File(pickedFile.path).readAsBytes();
-                    //       setState(() {
-                    //         _nationalIdImageBase64 = base64Encode(bytes);
-                    //       });
-                    //     }
-                    //   },
-                    //   controller: _idController,
-                    // ),
-                    const SizedBox(height: 20),
-                    InputField(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 26),
+                      CircleProfileImagePicker(
+                        name: 'user',
+                        image: _profileImage,
+                        onImageSelected: (File? image) async {
+                          if (image != null) {
+                            final bytes = await image.readAsBytes();
+                            setState(() {
+                              _profileImage = image;
+                              _profileImageBase64 = base64Encode(bytes);
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      InputField(
+                        label: 'Email address',
+                        controller: _emailController,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Required';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      InputField(
+                        label: "User Name",
+                        controller: _usernameController,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Required';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      InputField(
+
                         label: 'Location',
                         controller: _locationController,
-                        icon: const Icon(Icons.place, color: kIconsColor)),
-                    const SizedBox(height: 20),
-                    PasswordField(
-                        text: 'Password', controller: _passwordController),
-                    const SizedBox(height: 20),
-                    PasswordField(
+                        icon: const Icon(Icons.place, color: kIconsColor),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Required';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      PasswordField(
+                        text: 'Password',
+                        controller: _passwordController,
+                      ),
+                      const SizedBox(height: 20),
+                      PasswordField(
                         text: 'Confirm password',
-                        controller: _confirmPasswordController),
-                    const SizedBox(height: 20),
-                    _isLoading
-                        ? const CircularProgressIndicator()
-                        : AppButton(
-                            text: "Create Account",
-                            border: 20,
-                            onTap: _signUpSitter,
-                          ),
-                    const SizedBox(height: 20),
-                    const LoginWord(
+                        controller: _confirmPasswordController,
+                      ),
+                      const SizedBox(height: 20),
+                      _isLoading
+                          ? const CircularProgressIndicator()
+                          : AppButton(
+                              text: "Create Account",
+                              border: 20,
+                              onTap: _signUpSitter,
+                            ),
+                      const SizedBox(height: 20),
+                      const LoginWord(
                         text1: 'Already have an account?',
                         text2: 'Login',
-                        userType: 'Pet Sitter'),
-                    const SizedBox(height: 40),
-                  ],
+                        userType: 'Pet Sitter',
+                      ),
+                      const SizedBox(height: 40),
+                    ],
+                  ),
                 ),
               ),
             ),

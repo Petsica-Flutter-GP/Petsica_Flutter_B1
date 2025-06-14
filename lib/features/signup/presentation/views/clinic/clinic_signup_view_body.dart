@@ -24,12 +24,15 @@ class ClinicSignUpViewBody extends StatefulWidget {
 }
 
 class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
+  final _formKey = GlobalKey<FormState>();
+
   final _emailController = TextEditingController();
   final _clinicNameController = TextEditingController();
   final _phoneNumberController = TextEditingController();
   final _workingHoursController = TextEditingController();
   final _locationController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _verificationController = TextEditingController();
 
   File? _profileImage;
   File? _verificationImage;
@@ -44,9 +47,12 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
       }
 
       setState(() => _verificationImage = File(image.path));
-      SnackbarHelper.show(context, "Image selected successfully", isError: false);
+      _verificationController.text = image.path.split('/').last;
+      SnackbarHelper.show(context, "Image selected successfully",
+          isError: false);
     } catch (error) {
-      SnackbarHelper.show(context, "Error picking image: ${error.toString()}", isError: true);
+      SnackbarHelper.show(context, "Error picking image: \${error.toString()}",
+          isError: true);
     }
   }
 
@@ -80,6 +86,8 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
   }
 
   Future<void> _signUpClinic() async {
+    if (!_formKey.currentState!.validate()) return;
+
     final email = _emailController.text.trim();
     final clinicName = _clinicNameController.text.trim();
     final phone = _phoneNumberController.text.trim();
@@ -87,19 +95,13 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
     final location = _locationController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (email.isEmpty ||
-        clinicName.isEmpty ||
-        phone.isEmpty ||
-        workingHours.isEmpty ||
-        location.isEmpty ||
-        password.isEmpty) {
-      SnackbarHelper.show(context, "All fields are required", isError: true);
+    if (_verificationImage == null) {
+      SnackbarHelper.show(context, "Please select a verification image",
+          isError: true);
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
 
     final result = await AuthServiceClinic.registerClinic(
       email: email,
@@ -107,13 +109,12 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
       password: password,
       address: location,
       workingHours: workingHours,
-      phone : phone,
-      
+      phone: phone,
+      verificationImage: _verificationImage!,
+      profileImage: _profileImage,
     );
 
-    setState(() {
-      _isLoading = false;
-    });
+    setState(() => _isLoading = false);
 
     SnackbarHelper.show(
       context,
@@ -134,105 +135,143 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Center(
-                child: Column(
-                  children: [
-                    Text("Sign Up", style: Styles.textStyleQu28.copyWith(color: kWordColor)),
-                    const SizedBox(height: 8),
-                    Text("Please enter the details to continue", style: Styles.textStyleCom18.copyWith(color: kWordColor)),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                alignment: Alignment.topCenter,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
                   child: Column(
                     children: [
-                      const SizedBox(height: 26),
-                      CircleProfileImagePicker(
-                        name: 'clinic',
-                        image: _profileImage,
-                        onImageSelected: (File? image) {
-                          setState(() {
-                            _profileImage = image;
-                          });
-
-                          if (image != null) {
-                            SnackbarHelper.show(context, "Profile picture updated successfully", isError: false);
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      InputField(label: 'Email address', controller: _emailController),
-                      const SizedBox(height: 20),
-                      InputField(label: "Clinic Name", controller: _clinicNameController),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InputField(
-                              label: "Working hours",
-                              controller: _workingHoursController,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: PhoneNumberInputField(
-                              label: "Phone Number",
-                              controller: _phoneNumberController,
-                              inputType: TextInputType.phone,
-                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                              maxLength: 11,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      VerificationIdInputField(
-                        label: "Verification ID",
-                        onSelectImage: () {
-                          _showImageSourceDialog(context);
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      InputField(
-                        label: 'Location',
-                        icon: const Icon(Icons.place, color: kIconsColor),
-                        controller: _locationController,
-                      ),
-                      const SizedBox(height: 30),
-                      PasswordField(
-                        text: 'Password',
-                        controller: _passwordController,
-                      ),
-                      const SizedBox(height: 20),
-                      AppButton(
-                        text: _isLoading ? "Creating..." : "Create Account",
-                        border: 20,
-                        onTap: _isLoading ? null : _signUpClinic,
-                      ),
-                      const LoginWord(
-                        text1: 'Already have an account?',
-                        text2: 'Login',
-                        userType: 'Clinic',
-                      ),
-                      const SizedBox(height: 20),
+                      Text("Sign Up",
+                          style:
+                              Styles.textStyleQu28.copyWith(color: kWordColor)),
+                      const SizedBox(height: 8),
+                      Text("Please enter the details to continue",
+                          style: Styles.textStyleCom18
+                              .copyWith(color: kWordColor)),
                     ],
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                Container(
+                  width: double.infinity,
+                  alignment: Alignment.topCenter,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(30)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 26),
+                        CircleProfileImagePicker(
+                          name: 'clinic',
+                          image: _profileImage,
+                          onImageSelected: (File? image) {
+                            setState(() => _profileImage = image);
+                            if (image != null) {
+                              SnackbarHelper.show(context,
+                                  "Profile picture updated successfully",
+                                  isError: false);
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        InputField(
+                          label: 'Email address',
+                          controller: _emailController,
+                          validator: (value) =>
+                              value == null || value.trim().isEmpty
+                                  ? 'Required'
+                                  : null,
+                        ),
+                        const SizedBox(height: 20),
+                        InputField(
+                          label: "Clinic Name",
+                          controller: _clinicNameController,
+                          validator: (value) =>
+                              value == null || value.trim().isEmpty
+                                  ? 'Required'
+                                  : null,
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: InputField(
+                                label: "Working hours",
+                                controller: _workingHoursController,
+                                validator: (value) =>
+                                    value == null || value.trim().isEmpty
+                                        ? 'Required'
+                                        : null,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: PhoneNumberInputField(
+                                label: "Phone Number",
+                                controller: _phoneNumberController,
+                                inputType: TextInputType.phone,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
+                                maxLength: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        VerificationIdInputField(
+                          label: "Verification ID",
+                          controller: _verificationController,
+                          onSelectImage: (File? image) {
+                            if (image != null) {
+                              setState(() => _verificationImage = image);
+                              _verificationController.text =
+                                  image.path.split('/').last;
+                              SnackbarHelper.show(
+                                  context, "Image selected successfully",
+                                  isError: false);
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        InputField(
+                          label: 'Location',
+                          icon: const Icon(Icons.place, color: kIconsColor),
+                          controller: _locationController,
+                          validator: (value) =>
+                              value == null || value.trim().isEmpty
+                                  ? 'Required'
+                                  : null,
+                        ),
+                        const SizedBox(height: 30),
+                        PasswordField(
+                          text: 'Password',
+                          controller: _passwordController,
+                        ),
+                        const SizedBox(height: 20),
+                        AppButton(
+                          text: _isLoading ? "Creating..." : "Create Account",
+                          border: 20,
+                          onTap: _isLoading ? null : _signUpClinic,
+                        ),
+                        const LoginWord(
+                          text1: 'Already have an account?',
+                          text2: 'Login',
+                          userType: 'Clinic',
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
