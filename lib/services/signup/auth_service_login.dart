@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:petsica/core/utils/taken_storage.dart';
 import 'package:petsica/services/signup/auth_response_model.dart';
 
-class AuthService {
+class AuthServiceLogin {
   static const String _loginUrl = 'http://petsica.runasp.net/Auth/Login';
 
   static Future<LoginResponse?> login(String email, String password) async {
@@ -20,10 +20,11 @@ class AuthService {
         accessToken: loginResponse.token,
         refreshToken: loginResponse.refreshToken,
         userId: loginResponse.id,
+        refreshTokenExpiration: loginResponse.refreshTokenExpiration,
       );
       return loginResponse;
     } else {
-      print('Login failed: ${response.body}');
+      print('Login failed: ${response.statusCode} -> ${response.body}');
       return null;
     }
   }

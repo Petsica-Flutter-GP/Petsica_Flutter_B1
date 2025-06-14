@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/asset_data.dart';
+import 'package:petsica/core/utils/reusable_fab.dart';
+import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/community/PostBlocs/post_bloc.dart';
 import 'package:petsica/features/community/PostBlocs/post_event.dart';
 import 'package:petsica/features/community/PostBlocs/post_state.dart';
@@ -49,7 +52,10 @@ class _HomePageState extends State<HomePage> {
       value: _postBloc,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Community Posts'),
+          title: Text(
+            'P E T S I C A',
+            style: Styles.textStyleCom32.copyWith(color: kBurgColor),
+          ),
           centerTitle: true,
         ),
         body: Column(
@@ -67,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: const CircleAvatar(
                       radius: 24,
-                      backgroundImage:const AssetImage(AssetData.profileIcon),
+                      backgroundImage: AssetImage(AssetData.profileIcon),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -143,6 +149,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
+        floatingActionButton: const ReusableFAB(), // Use the reusable FAB
       ),
     );
   }

@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/Login/presentation/views/widgets/input_field.dart';
 import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
+import 'package:petsica/features/signup/presentation/widgets/otp_confirm.dart';
 import 'package:petsica/features/signup/presentation/widgets/verification_id_input_field.dart';
 import '../../../../../core/constants.dart';
 import '../../../../../core/utils/app_button.dart';
@@ -26,27 +29,27 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   bool _isLoading = false;
+  // String? _nationalIdImageBase64; // Store base64-encoded image
 
   Future<void> _signUpSitter() async {
     print("Attempting sitter sign-up...");
     String email = _emailController.text.trim();
     String username = _usernameController.text.trim();
-    String nationalId = _idController.text.trim();
     String location = _locationController.text.trim();
     String password = _passwordController.text.trim();
     String confirmPassword = _confirmPasswordController.text.trim();
 
+    // Check if all fields, including the image, are provided
     if (email.isEmpty ||
         username.isEmpty ||
-        nationalId.isEmpty ||
+        // _nationalIdImageBase64 == null ||
         location.isEmpty ||
         password.isEmpty ||
         confirmPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("All fields are required")),
+        const SnackBar(content: Text("All fields are required, including national ID photo")),
       );
       return;
     }
@@ -64,16 +67,24 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
       final result = await AuthServiceSitter.registerSitter(
         email: email,
         userName: username,
-        nationalId: nationalId,
+        // nationalId: _nationalIdImageBase64!, // Send base64 image as nationalId
         location: location,
         password: password,
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(result["message"]),
-            backgroundColor: result["success"] ? Colors.green : Colors.red),
-      );
+      if (result["success"]) {
+        // Navigate to OTP confirmation page with the email
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpConfirmPage(email: email),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(result["message"]), backgroundColor: Colors.red),
+        );
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error: $e"), backgroundColor: Colors.red),
@@ -88,10 +99,7 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-
-
-        leading:const AppArrowBack(destination: AppRouter.kWhoAreYou),
-
+        leading: const AppArrowBack(destination: AppRouter.kWhoAreYou),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -136,10 +144,20 @@ class _SitterSignUpViewBodyState extends State<SitterSignUpViewBody> {
                     InputField(
                         label: "User Name", controller: _usernameController),
                     const SizedBox(height: 20),
-                    VerificationIdInputField(
-                        label: 'National ID',
-                        onSelectImage: () {},
-                        controller: _idController),
+                    // VerificationIdInputField(
+                    //   label: 'National ID',
+                    //   onSelectImage: () async {
+                    //     final picker = ImagePicker();
+                    //     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+                    //     if (pickedFile != null) {
+                    //       final bytes = await File(pickedFile.path).readAsBytes();
+                    //       setState(() {
+                    //         _nationalIdImageBase64 = base64Encode(bytes);
+                    //       });
+                    //     }
+                    //   },
+                    //   controller: _idController,
+                    // ),
                     const SizedBox(height: 20),
                     InputField(
                         label: 'Location',

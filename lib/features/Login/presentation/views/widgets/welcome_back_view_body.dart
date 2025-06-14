@@ -34,13 +34,14 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    final response = await AuthService.login(email, password);
+    final response = await AuthServiceLogin.login(email, password);
 
     if (response != null) {
       await TokenStorage.saveTokens(
         accessToken: response.token,
         refreshToken: response.refreshToken,
         userId: response.id,
+        refreshTokenExpiration: response.refreshTokenExpiration,
       );
       final roles = TokenDecoder.getRoles(response.token);
       final userId = TokenDecoder.getUserId(response.token);
@@ -59,10 +60,11 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
       if (roles.contains("Admin")) {
         context.go('/adminDashboard');
       } else {
+        context.go(AppRouter.KHome);
         // context.go(AppRouter.kPost);
         // context.go(AppRouter.kSellerProfile);
         // context.go(AppRouter.kSellerMyStore);
-        context.go(AppRouter.kAdminProfile);
+
       }
     } else {
       if (!mounted) return;
@@ -88,7 +90,7 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
             child: Column(
               children: [
                 Text(
-                  "Welcome Back , name!",
+                  "Welcome Back, name!",
                   style: Styles.textStyleQu28.copyWith(color: kWordColor),
                 ),
                 const SizedBox(height: 8),
@@ -138,12 +140,6 @@ class _WelcomeBackViewBodyState extends State<WelcomeBackViewBody> {
                       text: _isLoading ? "Logging in..." : "Login",
                       border: 20,
                       onTap: _isLoading ? null : _handleLogin,
-
-                      // onTap: () {
-                      //   GoRouter.of(context).go(
-                      //     AppRouter.kSellerMyStore,
-                      //   );
-                      // },
                     ),
                     SignupWord(
                       text1: "Don’t have an account?",

@@ -27,34 +27,51 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _handleSplashLogic() async {
     await Future.delayed(const Duration(seconds: 2));
     final accessToken = await TokenStorage.getAccessToken();
+    final refreshTokenExpirationStr = await TokenStorage.getRefreshTokenExpiration();
 
-    if (accessToken != null) {
-      final success = await TokenRefresher.refreshToken();
+    if (accessToken != null && refreshTokenExpirationStr != null) {
+      final refreshTokenExpiration = DateTime.tryParse(refreshTokenExpirationStr);
+      if (refreshTokenExpiration == null || DateTime.now().isAfter(refreshTokenExpiration)) {
+        print("Refresh token expired or invalid. Clearing tokens and redirecting to onboarding.");
+        await TokenStorage.clearTokens();
+        context.go(AppRouter.kOnboarding);
+        return;
+      }
 
-      if (success) {
-        final newAccessToken = await TokenStorage.getAccessToken();
-        final roles = TokenDecoder.getRoles(newAccessToken!);
+      await TokenRefresher.checkAndRefreshToken(); // Check expiration before refreshing
 
+      final newAccessToken = await TokenStorage.getAccessToken();
+      if (newAccessToken != null) {
+        final roles = TokenDecoder.getRoles(newAccessToken);
         _startPeriodicTokenRefresh();
 
-        if (roles.contains('ADMIN')) {
-          context.go('/adminDashboard');
+        if (roles.isNotEmpty) { // Ensure roles are decoded successfully
+          if (roles.contains('ADMIN')) {
+            print("User is ADMIN, redirecting to admin dashboard.");
+            context.go('/adminDashboard');
+          } else {
+            print("User has valid token but is not ADMIN, redirecting to home.");
+            context.go(AppRouter.KHome);
+          }
         } else {
-          context.go(AppRouter.kPost);
+          print("No valid roles found in token. Redirecting to onboarding.");
+          context.go(AppRouter.kOnboarding);
         }
       } else {
-        // Don't clear tokens immediately, allow app to retry later
-        context.go(AppRouter.kPost); // fallback to home, not onboarding
+        print("No valid access token after refresh attempt. Redirecting to onboarding.");
+        context.go(AppRouter.kOnboarding);
       }
     } else {
+      print("No access token or refresh token expiration found. Redirecting to onboarding.");
       context.go(AppRouter.kOnboarding);
     }
   }
 
   void _startPeriodicTokenRefresh() {
     _refreshTimer?.cancel();
-    _refreshTimer = Timer.periodic(const Duration(minutes: 20), (_) async {
-      await TokenRefresher.refreshToken();
+    _refreshTimer = Timer.periodic(const Duration(minutes: 5), (_) async {
+      print("Periodic token refresh triggered.");
+      await TokenRefresher.checkAndRefreshToken();
     });
   }
 

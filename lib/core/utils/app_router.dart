@@ -1,9 +1,14 @@
 import 'package:go_router/go_router.dart';
 import 'package:petsica/features/chatt/chatapp.dart';
+import 'package:petsica/features/community/views/adoption_view.dart';
+import 'package:petsica/features/community/views/clinic_view.dart';
+import 'package:petsica/features/community/views/home_page.dart';
+import 'package:petsica/features/community/views/mating_view.dart';
 import 'package:petsica/features/community/views/publish_post_view.dart';
 import 'package:petsica/core/utils/home.dart';
 import 'package:petsica/features/chatBoot/views/chat_boot_onboarding_view.dart';
 import 'package:petsica/features/chatBoot/views/chat_boot_view.dart';
+import 'package:petsica/features/community/views/sitter_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_clinic_requests_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_all_orders_view.dart';
 import 'package:petsica/features/profiles/adminn/view/admin_profile_view.dart';
@@ -42,7 +47,9 @@ import 'package:petsica/features/profiles/views/edit_pet_view.dart';
 import 'package:petsica/features/profiles/user/views/user_profile_view.dart';
 import 'package:petsica/features/profiles/user/widgets/user_settings_page.dart';
 import 'package:petsica/features/profiles/where.dart';
+
 import 'package:petsica/features/profiles/widgets/edit_profile.dart';
+
 import 'package:petsica/features/signup/presentation/views/seller/seller_signup_view.dart';
 import 'package:petsica/features/signup/presentation/views/user/user_signup_view.dart';
 import 'package:petsica/features/splash/presentation/views/widgets/splach_screen.dart';
@@ -129,6 +136,12 @@ abstract class AppRouter {
   //community
   static const kCommunityChat = '/communityChat';
   static const kPost = '/Post';
+  static const KHome = '/home';
+  static const KAdoption = '/adoption';
+  static const KMating = '/mating';
+  static const KSitters = '/sitters';
+  static const KClinics = '/clinics';
+  static const KReminder = '/reminder';
 
   //other
   static const kWhereProfile = '/whereProfile';
@@ -139,8 +152,10 @@ abstract class AppRouter {
 
   //routes
   static final router = GoRouter(
+
+     initialLocation: '/', // البداية من SplashScreen
+    //initialLocation: kWelcomeBack,
     //  initialLocation: '/', // البداية من SplashScreen
-    initialLocation: kWelcomeBack,
 
     routes: [
       GoRoute(
@@ -266,6 +281,38 @@ abstract class AppRouter {
         path: kPost,
         builder: (context, state) => const PublishPostView(),
       ),
+
+      GoRoute(
+        path: KHome,
+        builder: (context, state) => const HomePage(),
+
+      ),
+      GoRoute(
+        path: KAdoption,
+        builder: (context, state) => const PetAdoptionPage(),
+
+      ),
+      GoRoute(
+        path: KMating,
+        builder: (context, state) => const PetMatingPage(),
+
+      ),
+      GoRoute(
+        path: KSitters,
+        builder: (context, state) => const PetSitterPage(),
+
+      ),
+      GoRoute(
+        path: KClinics,
+        builder: (context, state) => const ClinicsPage(),
+
+      ),
+      GoRoute(
+        path: KReminder,
+        builder: (context, state) => const ReminderApp(),
+
+      ),
+     
 
       GoRoute(
         path: kUserSettings,

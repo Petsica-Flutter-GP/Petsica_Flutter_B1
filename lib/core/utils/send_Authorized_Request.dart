@@ -48,6 +48,8 @@ import 'package:petsica/services/signup/token_refresher.dart';
 
 
 
+
+
 Future<http.Response> sendAuthorizedRequest({
   required Uri url,
   required String method,
@@ -57,8 +59,14 @@ Future<http.Response> sendAuthorizedRequest({
   headers ??= {};
   method = method.toUpperCase();
 
+  // Proactively check and refresh token
+  await TokenRefresher.checkAndRefreshToken();
+
   // Get the latest access token
   String? accessToken = await TokenStorage.getAccessToken();
+  if (accessToken == null) {
+    throw Exception('No access token available. Please log in again.');
+  }
 
   // Prepare headers with the current token
   Map<String, String> requestHeaders = {
@@ -72,9 +80,9 @@ Future<http.Response> sendAuthorizedRequest({
   http.Response response = await _sendRequest(method, url, requestHeaders, body);
 
   // If unauthorized, try refreshing token and retrying
-  if (response.statusCode == 401 && accessToken != null) {
+  if (response.statusCode == 401) {
+    print("Unauthorized request to $url: ${response.statusCode} -> ${response.body}");
     final refreshed = await TokenRefresher.refreshToken();
-
     if (refreshed) {
       final newAccessToken = await TokenStorage.getAccessToken();
       if (newAccessToken != null) {
@@ -85,7 +93,6 @@ Future<http.Response> sendAuthorizedRequest({
           'Content-Type': headers['Content-Type'] ?? 'application/json',
           'Accept': 'application/json',
         };
-
         // Retry the request
         response = await _sendRequest(method, url, requestHeaders, body);
       }
