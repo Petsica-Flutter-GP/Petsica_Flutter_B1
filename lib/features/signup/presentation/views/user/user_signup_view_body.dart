@@ -65,7 +65,7 @@ class _UserSignUpViewBodyState extends State<UserSignUpViewBody> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
 
-          leading: const AppArrowBack(destination: AppRouter.kWhereProfile),
+          leading: const AppArrowBack(destination: AppRouter.kWhoAreYou),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,

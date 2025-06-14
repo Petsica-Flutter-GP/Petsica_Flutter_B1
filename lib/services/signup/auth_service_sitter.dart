@@ -23,7 +23,7 @@ class AuthServiceSitter {
           "address": location, // Optional
           "type": "SITTER",
           "approvalPhoto": "string", // Optional
-          "nationalID": nationalId // Using location as address
+          "nationalID": "nationalId" // Using location as address
         }),
       );
 

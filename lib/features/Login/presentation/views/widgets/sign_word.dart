@@ -28,15 +28,16 @@ class SignupWord extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              if (userType == "Pet Parent") {
-                context.go(AppRouter.kUserSignUp); // ✅ ينتقل بدون تكديس الصفحات
-              } else if (userType == "Pet Sitter") {
-                context.go(AppRouter.kSitterSignUp);
-              } else if (userType == "Pet Seller") {
-                context.go(AppRouter.kSellerSignUp);
-              } else {
-                context.go(AppRouter.kClinicSignUp);
-              }
+              // if (userType == "Pet Parent") {
+              //   context.go(AppRouter.kUserSignUp); // ✅ ينتقل بدون تكديس الصفحات
+              // } else if (userType == "Pet Sitter") {
+              //   context.go(AppRouter.kSitterSignUp);
+              // } else if (userType == "Pet Seller") {
+              //   context.go(AppRouter.kSellerSignUp);
+              // } else {
+              //   context.go(AppRouter.kClinicSignUp);
+              // }
+              context.go(AppRouter.kWhoAreYou); // ✅ ينتقل بدون تكديس الصفحات
             },
             child: Text(
               text2,

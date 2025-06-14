@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/Login/presentation/views/widgets/input_field.dart';
+import 'package:petsica/features/signup/custom_snack_bar.dart';
 import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
 import 'package:petsica/features/signup/presentation/widgets/verification_id_input_field.dart';
 import 'package:petsica/services/signup/auth_service_seller.dart';
@@ -20,43 +22,44 @@ class SellerSignUpViewBody extends StatefulWidget {
 }
 
 class _SellerSignUpViewBodyState extends State<SellerSignUpViewBody> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   File? _profileImage;
+  File? _nationalIdImage;
+  String? _nationalIdBase64;
+  final TextEditingController _nationalIdController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
   Future<void> _signUpSeller() async {
-    String email = _emailController.text.trim();
-    String username = _usernameController.text.trim();
-    String password = _passwordController.text.trim();
+    if (!_formKey.currentState!.validate()) return;
 
-    if (email.isEmpty || username.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("All fields are required")),
-      );
+    final email = _emailController.text.trim();
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (_nationalIdBase64 == null) {
+      showCustomSnackBar(context, "National ID photo is required");
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
 
     final result = await AuthServiceSeller.registerSeller(
       email: email,
       userName: username,
       password: password,
+      nationalId: _nationalIdBase64!,
     );
 
-    setState(() {
-      _isLoading = false;
-    });
+    setState(() => _isLoading = false);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(result["message"]),
-        backgroundColor: result["success"] ? Colors.green : Colors.red,
-      ),
+    showCustomSnackBar(
+      context,
+      result["message"],
+      success: result["success"],
     );
   }
 
@@ -65,24 +68,16 @@ class _SellerSignUpViewBodyState extends State<SellerSignUpViewBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: AppArrowBack(destination: AppRouter.kWhoAreYou),
+          leading: const AppArrowBack(destination: AppRouter.kWhoAreYou),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Center(
             child: Column(
               children: [
-                Text(
-                  "Sign Up",
-                  style: Styles.textStyleQu28.copyWith(color: kWordColor),
-                ),
+                Text("Sign Up", style: Styles.textStyleQu28.copyWith(color: kWordColor)),
                 const SizedBox(height: 8),
-                Text(
-                  "Please enter the details to continue",
-                  style: Styles.textStyleCom18.copyWith(color: kWordColor),
-                ),
+                Text("Please enter the details to continue", style: Styles.textStyleCom18.copyWith(color: kWordColor)),
               ],
             ),
           ),
@@ -98,53 +93,75 @@ class _SellerSignUpViewBodyState extends State<SellerSignUpViewBody> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 26),
-                      CircleProfileImagePicker(
-                        name: 'seller',
-                        image: _profileImage,
-                        onImageSelected: (File? image) {
-                          setState(() {
-                            _profileImage = image;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      InputField(
-                        label: 'Email address',
-                        controller: _emailController,
-                      ),
-                      const SizedBox(height: 20),
-                      InputField(
-                        label: "User Name",
-                        controller: _usernameController,
-                      ),
-                      const SizedBox(height: 20),
-                      PasswordField(
-                        text: 'Password',
-                        controller: _passwordController,
-                      ),const SizedBox(height: 20),
-                      VerificationIdInputField(
-                        label: 'National ID',
-                        onSelectImage: () {},
-                      ),
-                      const SizedBox(height: 20),
-                      _isLoading
-                          ? const CircularProgressIndicator()
-                          : AppButton(
-                              text: "Create Account",
-                              border: 20,
-                              onTap: _signUpSeller,
-                            ),
-                      const SizedBox(height: 20),
-                      const LoginWord(
-                        text1: 'Already have an account?',
-                        text2: 'Login',
-                        userType: 'Pet Seller',
-                      ),
-                      const SizedBox(height: 20),
-                    ],
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 26),
+                        CircleProfileImagePicker(
+                          name: 'seller',
+                          image: _profileImage,
+                          onImageSelected: (File? image) {
+                            setState(() {
+                              _profileImage = image;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        InputField(
+                          label: 'Email address',
+                          controller: _emailController,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) return 'Required';
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        InputField(
+                          label: "User Name",
+                          controller: _usernameController,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) return 'Required';
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        PasswordField(
+                          text: 'Password',
+                          controller: _passwordController,
+                        ),
+                        const SizedBox(height: 20),
+                        VerificationIdInputField(
+  label: 'National ID',
+  controller: _nationalIdController,
+  onSelectImage: (File? image) async {
+    if (image != null) {
+      final bytes = await image.readAsBytes();
+      setState(() {
+        _nationalIdImage = image;
+        _nationalIdBase64 = base64Encode(bytes);
+      });
+    }
+  },
+),
+
+                        const SizedBox(height: 20),
+                        _isLoading
+                            ? const CircularProgressIndicator()
+                            : AppButton(
+                                text: "Create Account",
+                                border: 20,
+                                onTap: _signUpSeller,
+                              ),
+                        const SizedBox(height: 20),
+                        const LoginWord(
+                          text1: 'Already have an account?',
+                          text2: 'Login',
+                          userType: 'Pet Seller',
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -8,6 +8,7 @@ class AuthServiceSeller {
     required String userName,
     required String email,
     required String password,
+    required String nationalId,
   }) async {
     try {
       final response = await http.post(
