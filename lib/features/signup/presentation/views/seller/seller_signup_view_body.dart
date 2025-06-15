@@ -6,6 +6,7 @@ import 'package:petsica/core/utils/styles.dart';
 import 'package:petsica/features/Login/presentation/views/widgets/input_field.dart';
 import 'package:petsica/features/signup/custom_snack_bar.dart';
 import 'package:petsica/features/signup/presentation/widgets/circle_image_picker.dart';
+import 'package:petsica/features/signup/presentation/widgets/otp_confirm.dart';
 import 'package:petsica/features/signup/presentation/widgets/verification_id_input_field.dart';
 import 'package:petsica/services/signup/auth_service_seller.dart';
 import '../../../../../core/utils/app_router.dart';
@@ -47,20 +48,39 @@ class _SellerSignUpViewBodyState extends State<SellerSignUpViewBody> {
 
     setState(() => _isLoading = true);
 
-    final result = await AuthServiceSeller.registerSeller(
-      email: email,
-      userName: username,
-      password: password,
-      nationalId: _nationalIdBase64!,
-    );
+    try {
+      final result = await AuthServiceSeller.registerSeller(
+        email: email,
+        userName: username,
+        password: password,
+        nationalId: _nationalIdBase64!, // Sending base64-encoded image as nationalId
+      );
 
-    setState(() => _isLoading = false);
+      setState(() => _isLoading = false);
 
-    showCustomSnackBar(
-      context,
-      result["message"],
-      success: result["success"],
-    );
+      if (result["success"]) {
+        // Navigate to OTP confirmation page with the email
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpConfirmPage(email: email),
+          ),
+        );
+      } else {
+        showCustomSnackBar(
+          context,
+          result["message"],
+          success: false,
+        );
+      }
+    } catch (e) {
+      setState(() => _isLoading = false);
+      showCustomSnackBar(
+        context,
+        "Error: $e",
+        success: false,
+      );
+    }
   }
 
   @override
@@ -68,7 +88,7 @@ class _SellerSignUpViewBodyState extends State<SellerSignUpViewBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-          leading: const AppArrowBack(destination: AppRouter.kWhoAreYou),
+        leading: const AppArrowBack(destination: AppRouter.kWhoAreYou),
       ),
       body: Column(
         children: [
@@ -132,19 +152,18 @@ class _SellerSignUpViewBodyState extends State<SellerSignUpViewBody> {
                         ),
                         const SizedBox(height: 20),
                         VerificationIdInputField(
-  label: 'National ID',
-  controller: _nationalIdController,
-  onSelectImage: (File? image) async {
-    if (image != null) {
-      final bytes = await image.readAsBytes();
-      setState(() {
-        _nationalIdImage = image;
-        _nationalIdBase64 = base64Encode(bytes);
-      });
-    }
-  },
-),
-
+                          label: 'National ID',
+                          controller: _nationalIdController,
+                          onSelectImage: (File? image) async {
+                            if (image != null) {
+                              final bytes = await image.readAsBytes();
+                              setState(() {
+                                _nationalIdImage = image;
+                                _nationalIdBase64 = base64Encode(bytes);
+                              });
+                            }
+                          },
+                        ),
                         const SizedBox(height: 20),
                         _isLoading
                             ? const CircularProgressIndicator()

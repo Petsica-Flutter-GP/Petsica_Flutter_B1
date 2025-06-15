@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'dart:io';
 
 const int kBurgColor = 0xff70161E;
 
@@ -21,41 +19,6 @@ class _SetReminderScreenState extends State<SetReminderScreen> {
   String reminderName = "";
   String repeatOption = "Once"; // Default value for repeat option
   final TextEditingController nameController = TextEditingController();
-
-  // List of available sound resource names (without .mp3 extension)
-  final List<String> availableSounds = [
-    'notification_sound',
-    'alert_tone', // Add more as needed
-  ];
-  String? selectedSound; // Store the selected sound resource name
-
-  @override
-  void initState() {
-    super.initState();
-    _checkNotificationPermission();
-  }
-
-  Future<void> _checkNotificationPermission() async {
-    if (Platform.isAndroid) {
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
-      final bool? granted = await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
-          ?.areNotificationsEnabled();
-      
-      if (granted != null && !granted) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Notifications are disabled. Please enable them in settings."),
-              duration: Duration(seconds: 5),
-            ),
-          );
-        }
-      }
-    }
-  }
 
   String _formatTimeValue(int value) {
     return value < 10 ? "0$value" : "$value";
@@ -133,25 +96,6 @@ class _SetReminderScreenState extends State<SetReminderScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 20),
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Select Sound",
-                ),
-                value: selectedSound,
-                items: availableSounds.map((String sound) {
-                  return DropdownMenuItem<String>(
-                    value: sound,
-                    child: Text(sound, style: const TextStyle(fontSize: 18)),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedSound = newValue;
-                  });
-                },
-              ),
               const SizedBox(height: 60),
               SizedBox(
                 width: double.infinity,
@@ -173,7 +117,7 @@ class _SetReminderScreenState extends State<SetReminderScreen> {
                       "${_formatTimeValue(selectedHour)}:${_formatTimeValue(selectedMinute)}",
                       selectedPeriod,
                       repeatOption,
-                      selectedSound ?? 'notification_sound', // Default sound
+                      '', // Empty soundPath as it's no longer used
                     );
                     Navigator.pop(context);
                   },

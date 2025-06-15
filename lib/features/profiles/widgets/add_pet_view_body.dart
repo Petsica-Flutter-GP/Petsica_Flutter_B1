@@ -200,35 +200,35 @@ class _AddPetPageViewBodyState extends State<AddPetPageViewBody> {
                         width: 100,
                         backgroundColor: kProducPriceColor,
                         onTap: () async {
-                          // if (_formKey.currentState!.validate()) {
-                          //   if (_selectedImage == null) {
-                          //     setState(() {
-                          //       isImageRequired = true;
-                          //     });
-                          //     return;
-                          //   }
+                          if (_formKey.currentState!.validate()) {
+                            if (_selectedImage == null) {
+                              setState(() {
+                                isImageRequired = true;
+                              });
+                              return;
+                            }
 
-                          //   final bytes = await _selectedImage!.readAsBytes();
-                          //   final base64Image = base64Encode(bytes);
+                            final bytes = await _selectedImage!.readAsBytes();
+                            final base64Image = base64Encode(bytes);
 
-                          //   setState(() {
-                          //     isLoading = true;
-                          //   });
+                            setState(() {
+                              isLoading = true;
+                            });
 
-                          //   await cubit.addPet(
-                          //     PetModel(
-                          //       name: _petNameController.text.trim(),
-                          //       age: _petAgeController.text.trim(),
-                          //       type: selectedType,
-                          //       gender: selectedGender,
-                          //       photo: base64Image,
-                          //     ),
-                          //   );
+                            await cubit.addPet(
+                              PetModel(
+                                name: _petNameController.text.trim(),
+                                age: _petAgeController.text.trim(),
+                                type: selectedType,
+                                gender: selectedGender,
+                                photo: base64Image,
+                              ),
+                            );
 
-                          //   setState(() {
-                          //     isLoading = false;
-                          //   });
-                          // }
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
 
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

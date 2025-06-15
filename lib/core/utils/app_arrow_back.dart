@@ -30,9 +30,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 class AppArrowBack extends StatelessWidget {
   final String destination; // الوجهة التي سيذهب إليها الزر
-  
+
   const AppArrowBack({
     Key? key,
     required this.destination,
@@ -48,9 +49,7 @@ class AppArrowBack extends StatelessWidget {
       child: IconButton(
         icon: const Icon(Icons.arrow_back_ios_new),
         onPressed: () {
-          
-            context.go(destination);
-          
+          context.go(destination);
         },
       ),
     );

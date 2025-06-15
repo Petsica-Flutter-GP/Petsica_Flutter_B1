@@ -28,7 +28,7 @@ class SitterProfileViewBody extends StatelessWidget {
         appBar: AppBar(
           title: Text("Profile", style: Styles.textStyleQu28),
           centerTitle: true,
-          leading: const AppArrowBack(destination: AppRouter.kWhereProfile),
+          leading: const AppArrowBack(destination: AppRouter.KHome),
         ),
         body: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
@@ -47,8 +47,8 @@ class SitterProfileViewBody extends StatelessWidget {
                     const SizedBox(height: 30),
                     CircleProfileImagePicker(
                       image: null,
-                      assetImage: AssetData.profileImage,
-                      name: profile.userName,
+                      assetImage: AssetData.profileIcon,
+                      name: "Pero Osama",
                       onImageSelected: (File? image) {},
                     ),
                     const SizedBox(height: 10),

@@ -45,7 +45,7 @@ class _ChatBootViewBodyState extends State<ChatBootViewBody> {
     return Scaffold(
       backgroundColor: kChatBackGroundColor,
       appBar: AppBar(
-        title: Text("Chat-Boot", style: Styles.textStyleQui24),
+        title: Text("Chat-Bot", style: Styles.textStyleQui24),
         centerTitle: true,
         leading: const AppArrowBack(destination: AppRouter.kChatBootOnboarding),
       ),
@@ -74,7 +74,7 @@ class _ChatBootViewBodyState extends State<ChatBootViewBody> {
                           );
                         },
                       )
-                    : const Center(child: Text("ابدأ المحادثة مع البوت ✨")),
+                    : const Center(child: Text("ٍStart chat with chat-bot✨")),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -86,11 +86,11 @@ class _ChatBootViewBodyState extends State<ChatBootViewBody> {
                         child: TextField(
                           controller: _controller,
                           textDirection: TextDirection.rtl,
-                          textAlign: TextAlign.right,
+                          textAlign: TextAlign.left,
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: const Color(0xffeae1e2),
-                            hintText: 'اسأل أي شيء...',
+                            hintText: 'Ask any thing...',
                             labelStyle: Styles.textStyleQui20,
                             focusedBorder: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.transparent),

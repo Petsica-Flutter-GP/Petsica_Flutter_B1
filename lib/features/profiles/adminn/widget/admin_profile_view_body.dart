@@ -47,7 +47,7 @@ class AdminProfileViewBody extends StatelessWidget {
                     const SizedBox(height: 30),
                     CircleProfileImagePicker(
                       image: null,
-                      assetImage: AssetData.profileImage,
+                      assetImage: AssetData.profileIcon,
                       name: profile.userName,
                       onImageSelected: (File? image) {},
                     ),
