@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/asset_data.dart';
+import 'package:petsica/core/utils/taken_storage.dart';
+import 'package:petsica/features/profiles/widgets/logout_service.dart';
 import 'package:petsica/features/profiles/widgets/profile_list_tile.dart';
 
 class SitterProfileMenu extends StatelessWidget {
@@ -51,10 +53,15 @@ class SitterProfileMenu extends StatelessWidget {
         const SizedBox(
           height: 30,
         ),
-        const ProfileListTile(
+        ProfileListTile(
           iconasset: AssetData.logoutIcon,
           label: 'Log out',
           height: 37,
+          onTap: () async {
+            await revokeRefreshToken();
+            await TokenStorage.clearTokens();
+            GoRouter.of(context).go(AppRouter.kWelcomeBack);
+          },
         ),
       ],
     );

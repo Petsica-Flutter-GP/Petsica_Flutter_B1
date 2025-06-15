@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/asset_data.dart';
+import 'package:petsica/core/utils/reusable_fab.dart';
 import 'package:petsica/features/profiles/seller/services/product_services.dart';
 import 'package:petsica/core/utils/styles.dart';
 import 'package:go_router/go_router.dart';
@@ -257,6 +258,8 @@ class _StoreViewBodyState extends State<StoreViewBody> {
           },
         ),
       ),
+      floatingActionButton: const ReusableFAB(),
     );
   }
 }
+

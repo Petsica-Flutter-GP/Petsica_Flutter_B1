@@ -43,7 +43,7 @@ class AIChatCubit extends Cubit<AIChatState> {
 
       try {
         // 3. إرسال الطلب إلى API
-        final url = Uri.parse('https://0916-35-194-216-20.ngrok-free.app/ask');
+        final url = Uri.parse('https://7424-35-245-181-166.ngrok-free.app/ask');
         final response = await http.post(
           url,
           headers: {'Content-Type': 'application/json'},

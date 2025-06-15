@@ -4,6 +4,7 @@ import 'package:petsica/core/constants.dart';
 import 'package:petsica/core/utils/app_button.dart';
 import 'package:petsica/core/utils/app_router.dart';
 import 'package:petsica/core/utils/asset_data.dart';
+import 'package:petsica/core/utils/reusable_fab.dart';
 import 'package:petsica/core/utils/styles.dart';
 
 
@@ -68,6 +69,7 @@ class ChatBootOnboardingViewBody extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: const ReusableFAB(),
     );
   }
 }

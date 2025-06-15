@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,7 +26,6 @@ class ClinicSignUpViewBody extends StatefulWidget {
 
 class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
   final _formKey = GlobalKey<FormState>();
-
   final _emailController = TextEditingController();
   final _clinicNameController = TextEditingController();
   final _phoneNumberController = TextEditingController();
@@ -38,6 +38,13 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
   File? _verificationImage;
   bool _isLoading = false;
 
+  // لتحويل الصورة إلى base64
+  Future<String> _convertImageToBase64(File image) async {
+    final bytes = await image.readAsBytes();
+    return base64Encode(bytes);
+  }
+
+  // اختيار صورة التحقق
   Future<void> _pickVerificationImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
@@ -45,17 +52,17 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
         SnackbarHelper.show(context, "No image selected", isError: true);
         return;
       }
-
-      setState(() => _verificationImage = File(image.path));
-      _verificationController.text = image.path.split('/').last;
-      SnackbarHelper.show(context, "Image selected successfully",
-          isError: false);
+      setState(() {
+        _verificationImage = File(image.path);
+        _verificationController.text = image.path.split('/').last;
+      });
+      SnackbarHelper.show(context, "Image selected successfully", isError: false);
     } catch (error) {
-      SnackbarHelper.show(context, "Error picking image: \${error.toString()}",
-          isError: true);
+      SnackbarHelper.show(context, "Error picking image: $error", isError: true);
     }
   }
 
+  // نافذة اختيار المصدر
   void _showImageSourceDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -85,6 +92,7 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
     );
   }
 
+  // التسجيل
   Future<void> _signUpClinic() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -95,32 +103,34 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
     final location = _locationController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (_verificationImage == null) {
-      SnackbarHelper.show(context, "Please select a verification image",
-          isError: true);
+    if (_profileImage == null || _verificationImage == null) {
+      SnackbarHelper.show(context, "Please select all required images", isError: true);
       return;
     }
 
     setState(() => _isLoading = true);
 
-    final result = await AuthServiceClinic.registerClinic(
-      email: email,
-      userName: clinicName,
-      password: password,
-      address: location,
-      workingHours: workingHours,
-      phone: phone,
-      verificationImage: _verificationImage!,
-      profileImage: _profileImage,
-    );
+    try {
+      final profileImageBase64 = await _convertImageToBase64(_profileImage!);
+      final verificationImageBase64 = await _convertImageToBase64(_verificationImage!);
 
-    setState(() => _isLoading = false);
+      final result = await AuthServiceClinic.registerClinic(
+        email: email,
+        userName: clinicName,
+        password: password,
+        address: location,
+        workingHours: workingHours,
+        phone: phone,
+        verificationImageBase64: verificationImageBase64,
+        profileImageBase64: profileImageBase64,
+      );
 
-    SnackbarHelper.show(
-      context,
-      result["message"],
-      isError: !result["success"],
-    );
+      SnackbarHelper.show(context, result["message"], isError: !result["success"]);
+    } catch (e) {
+      SnackbarHelper.show(context, "Error during sign up: $e", isError: true);
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -143,13 +153,9 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                 Center(
                   child: Column(
                     children: [
-                      Text("Sign Up",
-                          style:
-                              Styles.textStyleQu28.copyWith(color: kWordColor)),
+                      Text("Sign Up", style: Styles.textStyleQu28.copyWith(color: kWordColor)),
                       const SizedBox(height: 8),
-                      Text("Please enter the details to continue",
-                          style: Styles.textStyleCom18
-                              .copyWith(color: kWordColor)),
+                      Text("Please enter the details to continue", style: Styles.textStyleCom18.copyWith(color: kWordColor)),
                     ],
                   ),
                 ),
@@ -159,8 +165,7 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                   alignment: Alignment.topCenter,
                   decoration: const BoxDecoration(
                     color: Colors.white,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(30)),
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -173,9 +178,7 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                           onImageSelected: (File? image) {
                             setState(() => _profileImage = image);
                             if (image != null) {
-                              SnackbarHelper.show(context,
-                                  "Profile picture updated successfully",
-                                  isError: false);
+                              SnackbarHelper.show(context, "Profile picture updated", isError: false);
                             }
                           },
                         ),
@@ -183,19 +186,13 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                         InputField(
                           label: 'Email address',
                           controller: _emailController,
-                          validator: (value) =>
-                              value == null || value.trim().isEmpty
-                                  ? 'Required'
-                                  : null,
+                          validator: (value) => value == null || value.trim().isEmpty ? 'Required' : null,
                         ),
                         const SizedBox(height: 20),
                         InputField(
                           label: "Clinic Name",
                           controller: _clinicNameController,
-                          validator: (value) =>
-                              value == null || value.trim().isEmpty
-                                  ? 'Required'
-                                  : null,
+                          validator: (value) => value == null || value.trim().isEmpty ? 'Required' : null,
                         ),
                         const SizedBox(height: 20),
                         Row(
@@ -204,10 +201,7 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                               child: InputField(
                                 label: "Working hours",
                                 controller: _workingHoursController,
-                                validator: (value) =>
-                                    value == null || value.trim().isEmpty
-                                        ? 'Required'
-                                        : null,
+                                validator: (value) => value == null || value.trim().isEmpty ? 'Required' : null,
                               ),
                             ),
                             const SizedBox(width: 10),
@@ -216,9 +210,7 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                                 label: "Phone Number",
                                 controller: _phoneNumberController,
                                 inputType: TextInputType.phone,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
+                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                 maxLength: 11,
                               ),
                             ),
@@ -231,11 +223,8 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                           onSelectImage: (File? image) {
                             if (image != null) {
                               setState(() => _verificationImage = image);
-                              _verificationController.text =
-                                  image.path.split('/').last;
-                              SnackbarHelper.show(
-                                  context, "Image selected successfully",
-                                  isError: false);
+                              _verificationController.text = image.path.split('/').last;
+                              SnackbarHelper.show(context, "Image selected successfully", isError: false);
                             }
                           },
                         ),
@@ -244,10 +233,7 @@ class _ClinicSignUpViewBodyState extends State<ClinicSignUpViewBody> {
                           label: 'Location',
                           icon: const Icon(Icons.place, color: kIconsColor),
                           controller: _locationController,
-                          validator: (value) =>
-                              value == null || value.trim().isEmpty
-                                  ? 'Required'
-                                  : null,
+                          validator: (value) => value == null || value.trim().isEmpty ? 'Required' : null,
                         ),
                         const SizedBox(height: 30),
                         PasswordField(

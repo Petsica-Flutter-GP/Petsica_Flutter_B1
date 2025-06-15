@@ -7,7 +7,7 @@ class AuthServiceSitter {
   static Future<Map<String, dynamic>> registerSitter({
     required String userName,
     required String email,
-    // required String nationalId,
+    required String nationalId,
     required String location,
     required String password,
   }) async {

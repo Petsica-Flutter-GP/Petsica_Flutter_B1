@@ -50,7 +50,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   padding: const EdgeInsets.all(16.0),
                   child: TextButton(
                     onPressed: () {
-                      context.go(AppRouter.kWhoAreYou);
+                      context.go(AppRouter.kWelcomeBack);
                     },
                     child: Text(
                       "Skip",
@@ -156,7 +156,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       TextButton(
                         onPressed: () {
                           if (_currentPage == widget.pages.length - 1) {
-                            context.go(AppRouter.kWhoAreYou);
+                            context.go(AppRouter.kWelcomeBack);
                           } else {
                             _pageController.animateToPage(
                               _currentPage + 1,

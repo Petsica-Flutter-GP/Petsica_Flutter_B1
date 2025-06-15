@@ -39,10 +39,10 @@ class PostCard extends StatelessWidget {
       onLongPress: () => _deletePost(context),
       child: Container(
         padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        margin: const EdgeInsets.symmetric( vertical: 8),
         decoration: BoxDecoration(
           color: kContainerColor,
-          borderRadius: BorderRadius.circular(16),
+         borderRadius: BorderRadius.circular(5),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

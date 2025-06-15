@@ -49,6 +49,7 @@ import 'package:petsica/features/profiles/user/widgets/user_settings_page.dart';
 import 'package:petsica/features/profiles/where.dart';
 
 import 'package:petsica/features/profiles/widgets/edit_profile.dart';
+import 'package:petsica/features/reminder/reminder_view.dart';
 
 import 'package:petsica/features/signup/presentation/views/seller/seller_signup_view.dart';
 import 'package:petsica/features/signup/presentation/views/user/user_signup_view.dart';
